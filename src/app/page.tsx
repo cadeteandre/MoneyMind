@@ -1,8 +1,43 @@
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
+import { SignedIn, SignedOut, SignIn, SignInButton, SignUp, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
+
+  const { userId, sessionId } = auth();
+  console.log("User ID:", userId);
+  console.log("Session ID:", sessionId);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <header>
+        <h1 className="text-3xl font-bold text-center">
+          Welcome to{" "}
+          <span className="text-foreground/70 dark:text-background/70">
+            MoneyMind
+          </span>
+        </h1>
+        <p className="text-sm/6 text-center text-foreground/50 dark:text-background/50">
+          Personal finance dashboard
+        </p>
+        <SignedOut>
+          <SignInButton>
+            <div className="flex gap-4">
+              <Button variant="ghost" className="bg-black text-white hover:text-black hover:bg-white border">
+                Login
+              </Button>
+              <Button className="bg-gradient-to-r from-red-500 to-amber-500 hover:from-red-600 hover:to-amber-600 text-white border-0">
+                Sign Up
+              </Button>
+            </div>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+            <UserButton showName={true} />
+        </SignedIn>
+      </header>
+      
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
