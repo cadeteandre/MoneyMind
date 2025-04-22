@@ -10,12 +10,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Welcome to your Dashboard 👋</h1>
-      <p className="text-muted-foreground">User ID: {userId}</p>
-      <div>
+      <section className="bg-card max-w-[400px] mt-4 p-6 rounded-xl shadow-sm mx-auto">
+        <h2 className="text-xl font-semibold mb-2">Add transaction</h2>
         <TransactionForm />
-      </div>
-    </div>
+      </section>
   );
 }
