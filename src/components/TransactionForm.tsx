@@ -1,5 +1,3 @@
-// src/components/TransactionForm.tsx
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -13,12 +11,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-
 import { CalendarIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   amount: z.number().positive(),
-  type: z.enum(["income", "expense"]),
+  type: z.enum(["INCOME", "EXPENSE"]),
   category: z.string().min(1),
   description: z.string().optional(),
   date: z.date(),
@@ -30,9 +28,10 @@ export function TransactionForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     watch,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,30 +41,69 @@ export function TransactionForm() {
 
   const date = watch("date");
 
-  const onSubmit = (data: FormData) => {
-    console.log(data); // Handle form submission here
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit transaction');
+      }
+
+      reset({
+        amount: 0,
+        type: undefined,
+        category: '',
+        description: '',
+        date: new Date(),
+      });
+
+      toast.success("Transaction added successfully!");
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error("Failed to add transaction");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md">
-      <Input type="number" placeholder="Amount" {...register("amount", { valueAsNumber: true })} />
+      <Input 
+        type="number" 
+        placeholder="Amount" 
+        {...register("amount", { valueAsNumber: true })} 
+      />
       {errors.amount && <p className="text-sm text-red-500">Enter a valid amount</p>}
 
-      <Select onValueChange={(val) => setValue("type", val as "income" | "expense")}>
+      <Select 
+        onValueChange={(val) => setValue("type", val as "INCOME" | "EXPENSE")}
+        {...register("type")}
+      >
         <SelectTrigger>
           <SelectValue placeholder="Type" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="income">Income</SelectItem>
-          <SelectItem value="expense">Expense</SelectItem>
+          <SelectItem value="INCOME">Income</SelectItem>
+          <SelectItem value="EXPENSE">Expense</SelectItem>
         </SelectContent>
       </Select>
       {errors.type && <p className="text-sm text-red-500">Select a type</p>}
 
-      <Input placeholder="Category" {...register("category")} />
+      <Input 
+        placeholder="Category" 
+        {...register("category")} 
+      />
       {errors.category && <p className="text-sm text-red-500">Category is required</p>}
 
-      <Textarea placeholder="Description (optional)" {...register("description")} />
+      <Textarea 
+        placeholder="Description (optional)" 
+        {...register("description")} 
+      />
 
       <Popover>
         <PopoverTrigger asChild>
@@ -84,7 +122,13 @@ export function TransactionForm() {
         </PopoverContent>
       </Popover>
 
-      <Button type="submit" className="w-full">Add Transaction</Button>
+      <Button 
+        type="submit" 
+        className="w-full"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Processing..." : "Add Transaction"}
+      </Button>
     </form>
   );
 }
