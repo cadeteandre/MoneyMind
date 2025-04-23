@@ -18,7 +18,7 @@ export function DateRangeFilter({ onFilter }: Props) {
 
   return (
     <div className="flex items-center gap-4">
-      {/* Data de início */}
+      {/* Start Date */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -26,7 +26,7 @@ export function DateRangeFilter({ onFilter }: Props) {
             className={cn("w-[140px] justify-start text-left", !startDate && "text-muted-foreground")}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {startDate ? format(startDate, "dd/MM/yyyy") : "Data início"}
+            {startDate ? format(startDate, "dd/MM/yyyy") : "Start date"}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
@@ -34,7 +34,7 @@ export function DateRangeFilter({ onFilter }: Props) {
         </PopoverContent>
       </Popover>
 
-      {/* Data de fim */}
+      {/* End date */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -42,7 +42,7 @@ export function DateRangeFilter({ onFilter }: Props) {
             className={cn("w-[140px] justify-start text-left", !endDate && "text-muted-foreground")}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {endDate ? format(endDate, "dd/MM/yyyy") : "Data fim"}
+            {endDate ? format(endDate, "dd/MM/yyyy") : "End date"}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
