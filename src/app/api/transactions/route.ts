@@ -10,11 +10,11 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Obtem dados do usuário autenticado
+    // Get authenticated user data
     const client = await clerkClient();
     const user = await client.users.getUser(userId);
 
-    // Garante que o usuário exista no banco de dados
+    // Ensures that the user exists in the database
     await prisma.user.upsert({
       where: { id: userId },
       update: {},
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       },
     });
 
-    // Processa o corpo da requisição
+    // Process the request body
     const body = await req.json();
     const { amount, type, category, description, date } = body;
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Cria a transação
+    // Create the transaction
     const transaction = await prisma.transaction.create({
       data: {
         amount: parseFloat(amount),
