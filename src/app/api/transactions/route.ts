@@ -2,6 +2,14 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
+type TransactionFilters = {
+  userId: string;
+  date?: {
+    gte: Date;
+    lte: Date;
+  };
+};
+
 export async function POST(req: Request) {
   const { userId } = await auth();
 
@@ -49,5 +57,44 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+export async function GET(req: Request) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const start = searchParams.get("start");
+  const end = searchParams.get("end");
+
+  const filters: TransactionFilters = {
+    userId,
+  };
+
+  if (start && end) {
+    const startDate = new Date(start);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999);
+    filters.date = {
+      gte: startDate,
+      lte: endDate,
+    };
+  }
+
+  try {
+    const transactions = await prisma.transaction.findMany({
+      where: filters,
+      orderBy: { date: "desc" },
+    });
+
+    return NextResponse.json(transactions);
+  } catch (error) {
+    console.error("GET /api/transactions error:", error);
+    return NextResponse.json({ error: "Failed to fetch transactions" }, { status: 500 });
   }
 }
