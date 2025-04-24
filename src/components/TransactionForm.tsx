@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
+import React from "react";
 
 const formSchema = z.object({
   amount: z.number().positive(),
@@ -24,7 +25,11 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function TransactionForm() {
+export interface TransactionFormProps {
+  onSuccess?: () => void;
+}
+
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) => {
   const {
     register,
     handleSubmit,
@@ -64,6 +69,7 @@ export function TransactionForm() {
       });
 
       toast.success("Transaction added successfully!");
+      if (onSuccess) onSuccess();
 
     } catch (error) {
       console.error('Error submitting form:', error);

@@ -9,8 +9,12 @@ import { TransactionStats, getTransactionStats } from "@/app/actions/getTransact
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MonthlyBarChart from "@/components/charts/MonthlyBarChart";
 import FinancialSummary from "@/components/FinancialSummary";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { TransactionForm } from "@/components/TransactionForm";
 
 export default function DashboardClient() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [stats, setStats] = useState<TransactionStats>({
     totalIncome: 0,
@@ -46,7 +50,20 @@ export default function DashboardClient() {
 
   return (
     <div className="space-y-6 p-4">
-      <DateRangeFilter onFilter={fetchData} />
+      <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
+        <DateRangeFilter onFilter={fetchData} />
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogTrigger asChild>
+            <Button>Add Transaction</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Transaction</DialogTitle>
+            </DialogHeader>
+            <TransactionForm onSuccess={() => { fetchData(); setIsModalOpen(false); }} />
+          </DialogContent>
+        </Dialog>
+      </div>
       
       <FinancialSummary stats={stats} />
       

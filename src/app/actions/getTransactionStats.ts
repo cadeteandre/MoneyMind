@@ -1,7 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { Transaction } from "@prisma/client";
 
 export type CategorySummary = {
   category: string;
