@@ -5,35 +5,60 @@ import { DateRangeFilter } from "@/components/DateRangeFilter";
 import TransactionList from "@/components/TransactionList";
 import { Transaction } from "@prisma/client";
 import { getTransactions } from "@/app/actions/getTransactions";
+import { TransactionStats, getTransactionStats } from "@/app/actions/getTransactionStats";
+import ExpensePieChart from "@/components/charts/ExpensePieChart";
+import MonthlyBarChart from "@/components/charts/MonthlyBarChart";
+import FinancialSummary from "@/components/FinancialSummary";
 
 export default function DashboardClient() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [stats, setStats] = useState<TransactionStats>({
+    totalIncome: 0,
+    totalExpense: 0,
+    balance: 0,
+    byCategory: [],
+    byMonth: []
+  });
 
-  const fetchTransactions = async (startDate?: Date, endDate?: Date) => {
-    const params = new URLSearchParams();
-    if (startDate) params.append("start", startDate.toISOString());
-    if (endDate) params.append("end", endDate.toISOString());
-
-    const res = await fetch(`/api/transactions?${params.toString()}`);
-    const data = await res.json();
-    setTransactions(data);
+  const fetchData = async (startDate?: Date, endDate?: Date) => {
+    try {
+      // Prepare date parameters
+      const params: { startDate?: string; endDate?: string } = {};
+      if (startDate) params.startDate = startDate.toISOString();
+      if (endDate) params.endDate = endDate.toISOString();
+      
+      // Fetch transactions and stats
+      const [transactionsData, statsData] = await Promise.all([
+        getTransactions(params),
+        getTransactionStats(params)
+      ]);
+      
+      setTransactions(transactionsData);
+      setStats(statsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getTransactions({});
-      setTransactions(data);
-    };
-
     fetchData();
   }, []);
 
   return (
-    <>
-      <section className="p-4 flex flex-col gap-4">
-        <DateRangeFilter onFilter={fetchTransactions} />
-        <TransactionList transactions={transactions} />
-      </section>
-    </>
+    <div className="space-y-6 p-4">
+      <DateRangeFilter onFilter={fetchData} />
+      
+      <FinancialSummary stats={stats} />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ExpensePieChart data={stats.byCategory} />
+        <MonthlyBarChart data={stats.byMonth} />
+      </div>
+      
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <TransactionList transactions={transactions.slice(0, 5)} />
+      </div>
+    </div>
   );
 }
