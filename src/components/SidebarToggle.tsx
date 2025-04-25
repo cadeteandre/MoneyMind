@@ -83,7 +83,7 @@ export default function SidebarToggle() {
           </li>
           <li>
             <Link 
-              href="/dashboard/perfil" 
+              href="/dashboard/profile" 
               className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
               onClick={handleLinkClick}
             >
