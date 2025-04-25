@@ -1,96 +1,90 @@
-import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ArrowRight, BarChart3, Wallet, PiggyBank, Shield } from "lucide-react";
 
 export default function Home() {
-
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <header className="flex flex-col items-center gap-2">
-        <h1 className="text-3xl font-bold text-center">
-          Welcome to{" "}
-          <span className="text-foreground/70 dark:text-foreground/70">
-            MoneyMind
-          </span>
-        </h1>
-        <p className="text-sm/6 text-center text-foreground/50 dark:text-foreground/50">
-          Personal finance dashboard
-        </p>
-        <div className="flex items-center mt-4">
-          <SignedOut>
-            <SignInButton>
-              <div className="flex gap-4">
-                <Button variant="ghost" className="bg-black dark:bg-white text-white dark:text-black hover:text-black hover:bg-white dark:hover:text-white dark:hover:bg-black border">
-                  Login
-                </Button>
-                <Button className="bg-gradient-to-r from-red-500 to-amber-500 hover:from-red-600 hover:to-amber-600 text-white border-0">
-                  Sign Up
-                </Button>
-              </div>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton showName={true} />
-          </SignedIn>
-          <div className="ml-4">
+    <div className="flex flex-col gap-4 min-h-screen bg-background">
+      {/* Header */}
+      <header className="fixed top-0 w-full bg-background/80 backdrop-blur-sm border-b z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wallet className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">MoneyMind</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <SignedOut>
+              <SignInButton>
+                <Button variant="ghost">Sign In</Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
             <ThemeToggle />
           </div>
         </div>
       </header>
-      
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Button>
-          <Link href={'/dashboard'}>Go to Dashboard</Link>
-        </Button>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4">
+        <div className="container mx-auto text-center">
+          <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+            Take Control of Your Finances
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            MoneyMind helps you track, analyze, and optimize your financial life with powerful insights and intuitive tools.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <SignedOut>
+              <SignInButton>
+                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80">
+                  Get Started
+                </Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <Button size="lg" asChild>
+                <Link href="/dashboard" className="flex items-center gap-2">
+                  Go to Dashboard <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </SignedIn>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Powerful Features</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 rounded-lg bg-background border">
+              <BarChart3 className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Financial Analytics</h3>
+              <p className="text-muted-foreground">Get detailed insights into your spending patterns and financial health.</p>
+            </div>
+            <div className="p-6 rounded-lg bg-background border">
+              <PiggyBank className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Smart Budgeting</h3>
+              <p className="text-muted-foreground">Create and track budgets that help you reach your financial goals.</p>
+            </div>
+            <div className="p-6 rounded-lg bg-background border">
+              <Shield className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
+              <p className="text-muted-foreground">Your financial data is protected with enterprise-grade security.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 border-t">
+        <div className="container mx-auto px-4 text-center text-muted-foreground">
+          <p>© {new Date().getFullYear()} MoneyMind. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
