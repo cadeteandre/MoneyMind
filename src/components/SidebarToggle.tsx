@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { ThemeToggle } from './theme-toggle';
 
 export default function SidebarToggle() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,7 +37,7 @@ export default function SidebarToggle() {
       {/* Overlay for mobile */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 z-20" 
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 z-20" 
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -45,7 +46,7 @@ export default function SidebarToggle() {
       <Button 
         variant="ghost" 
         size="icon" 
-        className="hover:bg-gray-200 md:hidden"
+        className="hover:bg-gray-200 dark:hover:bg-gray-800 md:hidden"
         onClick={() => setSidebarOpen(!sidebarOpen)}
         >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -53,16 +54,16 @@ export default function SidebarToggle() {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed md:relative z-20 w-64 bg-gray-100 p-4 border-r h-full transition-all duration-300
+        className={`fixed md:relative z-20 w-64 bg-gray-100 dark:bg-gray-900 p-4 border-r dark:border-gray-700 h-full transition-all duration-300
           ${sidebarOpen || !isMobile ? 'left-0' : '-left-64'}`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">Dashboard</h2>
+          <h2 className="text-lg font-bold dark:text-white">Dashboard</h2>
           {isMobile && (
             <Button 
               variant="ghost"
               size="icon"
-              className={`p-1 rounded hover:bg-gray-200`}
+              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-5 w-5" />
@@ -74,7 +75,7 @@ export default function SidebarToggle() {
           <li>
             <Link 
               href="/dashboard" 
-              className="hover:underline block py-2"
+              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
               onClick={handleLinkClick}
             >
               Overview
@@ -83,7 +84,7 @@ export default function SidebarToggle() {
           <li>
             <Link 
               href="/dashboard/perfil" 
-              className="hover:underline block py-2"
+              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
               onClick={handleLinkClick}
             >
               Profile
@@ -91,8 +92,9 @@ export default function SidebarToggle() {
           </li>
         </ul>
         
-        <div className="mt-10">
+        <div className="mt-10 flex items-center gap-3">
           <UserButton />
+          <ThemeToggle />
         </div>
       </aside>
     </>
