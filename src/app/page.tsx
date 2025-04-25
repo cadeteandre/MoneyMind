@@ -2,36 +2,42 @@ import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <header>
+      <header className="flex flex-col items-center gap-2">
         <h1 className="text-3xl font-bold text-center">
           Welcome to{" "}
-          <span className="text-foreground/70 dark:text-background/70">
+          <span className="text-foreground/70 dark:text-foreground/70">
             MoneyMind
           </span>
         </h1>
-        <p className="text-sm/6 text-center text-foreground/50 dark:text-background/50">
+        <p className="text-sm/6 text-center text-foreground/50 dark:text-foreground/50">
           Personal finance dashboard
         </p>
-        <SignedOut>
-          <SignInButton>
-            <div className="flex gap-4">
-              <Button variant="ghost" className="bg-black text-white hover:text-black hover:bg-white border">
-                Login
-              </Button>
-              <Button className="bg-gradient-to-r from-red-500 to-amber-500 hover:from-red-600 hover:to-amber-600 text-white border-0">
-                Sign Up
-              </Button>
-            </div>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
+        <div className="flex items-center mt-4">
+          <SignedOut>
+            <SignInButton>
+              <div className="flex gap-4">
+                <Button variant="ghost" className="bg-black dark:bg-white text-white dark:text-black hover:text-black hover:bg-white dark:hover:text-white dark:hover:bg-black border">
+                  Login
+                </Button>
+                <Button className="bg-gradient-to-r from-red-500 to-amber-500 hover:from-red-600 hover:to-amber-600 text-white border-0">
+                  Sign Up
+                </Button>
+              </div>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
             <UserButton showName={true} />
-        </SignedIn>
+          </SignedIn>
+          <div className="ml-4">
+            <ThemeToggle />
+          </div>
+        </div>
       </header>
       
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
