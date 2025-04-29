@@ -29,9 +29,18 @@ type FormData = z.infer<typeof formSchema>;
 
 export interface TransactionFormProps {
   onSuccess?: () => void;
+  transaction?: {
+    id: string;
+    amount: number;
+    type: "INCOME" | "EXPENSE";
+    category: string;
+    description?: string | null;
+    date: Date;
+    receiptUrl?: string | null;
+  };
 }
 
-export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) => {
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, transaction }) => {
   const {
     register,
     handleSubmit,
@@ -41,17 +50,24 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: transaction ? {
+      amount: transaction.amount,
+      type: transaction.type,
+      category: transaction.category,
+      description: transaction.description || '',
+      date: new Date(transaction.date),
+    } : {
       date: new Date(),
     },
   });
 
   const date = watch("date");
   const { userId } = useAuth();
+  const isEditing = !!transaction;
 
   const onSubmit = async (data: FormData) => {
     try {
-      let receiptUrl = undefined;
+      let receiptUrl = transaction?.receiptUrl;
       if (data.receipt && data.receipt.length > 0 && userId) {
         const formData = new FormData();
         formData.append("file", data.receipt[0]);
@@ -70,8 +86,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
         receiptUrl = uploadJson.url;
       }
 
-      const response = await fetch('/api/transactions', {
-        method: 'POST',
+      const endpoint = isEditing 
+        ? `/api/transactions/${transaction.id}` 
+        : '/api/transactions';
+      
+      const method = isEditing ? 'PUT' : 'POST';
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -79,7 +101,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit transaction');
+        throw new Error(`Failed to ${isEditing ? 'update' : 'submit'} transaction`);
       }
 
       reset({
@@ -90,12 +112,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
         date: new Date(),
       });
 
-      toast.success("Transaction added successfully!");
+      toast.success(`Transaction ${isEditing ? 'updated' : 'added'} successfully!`);
       if (onSuccess) onSuccess();
 
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error("Failed to add transaction");
+      toast.error(`Failed to ${isEditing ? 'update' : 'add'} transaction`);
     }
   };
 
@@ -110,6 +132,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
       {errors.amount && <p className="text-sm text-red-500">Enter a valid amount</p>}
 
       <Select 
+        defaultValue={transaction?.type}
         onValueChange={(val) => setValue("type", val as "INCOME" | "EXPENSE")}
         {...register("type")}
       >
@@ -151,18 +174,34 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
         </PopoverContent>
       </Popover>
 
-      <Input 
-        type="file" 
-        accept="image/*"
-        {...register("receipt")}
-      />
+      {!isEditing && (
+        <Input 
+          type="file" 
+          accept="image/*"
+          {...register("receipt")}
+        />
+      )}
+
+      {isEditing && transaction.receiptUrl && (
+        <div className="text-sm text-muted-foreground">
+          This transaction has a receipt attached. Uploading a new one will replace it.
+        </div>
+      )}
+
+      {isEditing && (
+        <Input 
+          type="file" 
+          accept="image/*"
+          {...register("receipt")}
+        />
+      )}
 
       <Button 
         type="submit" 
         className="w-full"
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Processing..." : "Add Transaction"}
+        {isSubmitting ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
       </Button>
     </form>
   );
