@@ -31,11 +31,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const { data: urlData } = supabase.storage
+    // Obter URL pública para buckets públicos
+    const { data } = supabase.storage
       .from("receipts")
       .getPublicUrl(filePath);
 
-    return NextResponse.json({ url: urlData.publicUrl });
+    if (!data?.publicUrl) {
+      return NextResponse.json({ error: "Failed to generate public URL" }, { status: 500 });
+    }
+
+    return NextResponse.json({ url: data.publicUrl });
   } catch (err) {
     console.error("Error uploading receipt:", err);
     return NextResponse.json({ error: "Failed to upload receipt" }, { status: 500 });
