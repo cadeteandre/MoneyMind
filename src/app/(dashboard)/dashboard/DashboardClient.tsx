@@ -74,7 +74,10 @@ export default function DashboardClient() {
       
       <div className="mt-6">
         <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-        <TransactionList transactions={transactions.slice(0, 5)} />
+        <TransactionList 
+          transactions={transactions.slice(0, 5)} 
+          onTransactionUpdated={fetchData}
+        />
       </div>
     </div>
   );
