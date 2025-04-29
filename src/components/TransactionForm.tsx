@@ -15,10 +15,9 @@ import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import React from "react";
 import { useAuth } from "@clerk/nextjs";
-import { uploadReceipt } from "@/utils/uploadReceipt";
 
 const formSchema = z.object({
-  amount: z.number().positive(),
+  amount: z.number().positive().multipleOf(0.01),
   type: z.enum(["INCOME", "EXPENSE"]),
   category: z.string().min(1),
   description: z.string().optional(),
@@ -48,15 +47,29 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
   });
 
   const date = watch("date");
-  const { getToken, userId } = useAuth();
+  const { userId } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     try {
       let receiptUrl = undefined;
       if (data.receipt && data.receipt.length > 0 && userId) {
-        const token = await getToken();
-        receiptUrl = await uploadReceipt(data.receipt[0], userId, token!);
+        const formData = new FormData();
+        formData.append("file", data.receipt[0]);
+        formData.append("userId", userId);
+
+        const uploadRes = await fetch("/api/upload-receipt", {
+          method: "POST", 
+          body: formData,
+        });
+        
+        if (!uploadRes.ok) {
+          throw new Error("Failed to upload receipt");
+        }
+        
+        const uploadJson = await uploadRes.json();
+        receiptUrl = uploadJson.url;
       }
+
       const response = await fetch('/api/transactions', {
         method: 'POST',
         headers: {
@@ -90,6 +103,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md">
       <Input 
         type="number" 
+        step="0.01"
         placeholder="Amount" 
         {...register("amount", { valueAsNumber: true })} 
       />
