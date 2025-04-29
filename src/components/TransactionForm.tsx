@@ -14,6 +14,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import React from "react";
+import { useAuth } from "@clerk/nextjs";
+import { uploadReceipt } from "@/utils/uploadReceipt";
 
 const formSchema = z.object({
   amount: z.number().positive(),
@@ -21,6 +23,7 @@ const formSchema = z.object({
   category: z.string().min(1),
   description: z.string().optional(),
   date: z.date(),
+  receipt: z.any().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -45,15 +48,21 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
   });
 
   const date = watch("date");
+  const { getToken, userId } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     try {
+      let receiptUrl = undefined;
+      if (data.receipt && data.receipt.length > 0 && userId) {
+        const token = await getToken();
+        receiptUrl = await uploadReceipt(data.receipt[0], userId, token!);
+      }
       const response = await fetch('/api/transactions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, receiptUrl }),
       });
 
       if (!response.ok) {
@@ -127,6 +136,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess }) =
           />
         </PopoverContent>
       </Popover>
+
+      <Input 
+        type="file" 
+        accept="image/*"
+        {...register("receipt")}
+      />
 
       <Button 
         type="submit" 
