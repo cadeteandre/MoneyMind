@@ -28,4 +28,5 @@ model Transaction {
   category    String
   description String?
   date        DateTime         @default(now())
+  receiptUrl  String?          // URL of the uploaded receipt (optional)
 }
