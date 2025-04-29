@@ -2,6 +2,7 @@ import { Transaction as PrismaTransaction } from "@prisma/client";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState } from "react";
+import Image from "next/image";
 
 // Extend the Transaction type to include receiptUrl
 interface Transaction extends PrismaTransaction {
@@ -47,14 +48,25 @@ export default function TransactionList({ transactions }: TransactionListProps) 
                 setImgUrl(open ? transaction.receiptUrl ?? null : null);
               }}>
                 <DialogTrigger asChild>
-                  <button className="text-blue-600 underline text-xs">View Receipt</button>
+                  <button className="cursor-pointer text-blue-600 underline text-xs">View Receipt</button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Receipt</DialogTitle>
                   </DialogHeader>
                   {imgUrl && (
-                    <img src={imgUrl} alt="Receipt" className="max-w-full max-h-[60vh] mx-auto rounded shadow" />
+                    <>
+                      <Image 
+                        src={imgUrl} 
+                        alt="Receipt" 
+                        width={400}
+                        height={600}
+                        className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
+                        onError={() => {
+                          console.error("Failed to load image:", imgUrl);
+                        }}
+                      />
+                    </>
                   )}
                   <DialogClose />
                 </DialogContent>
