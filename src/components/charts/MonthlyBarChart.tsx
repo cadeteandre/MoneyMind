@@ -1,11 +1,20 @@
 "use client";
 
 import { MonthlyData } from "@/app/actions/getTransactionStats";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
 interface MonthlyBarChartProps {
   data: MonthlyData[];
+}
+
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  payload?: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
 }
 
 export default function MonthlyBarChart({ data }: MonthlyBarChartProps) {
@@ -24,14 +33,14 @@ export default function MonthlyBarChart({ data }: MonthlyBarChartProps) {
   }
 
   // Custom tooltip for the bar chart
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-background p-3 border rounded-lg shadow-sm">
           <p className="font-medium">{label}</p>
-          {payload.map((item: any, index: number) => (
+          {payload.map((item, index) => (
             <p key={index} className="text-sm" style={{ color: item.color }}>
-              {item.name}: R$ {item.value.toFixed(2)}
+              {item.name}: {formatCurrency(item.value)}
             </p>
           ))}
         </div>
