@@ -90,6 +90,15 @@ export default function SidebarToggle() {
               Profile
             </Link>
           </li>
+          <li>
+            <Link 
+              href="/dashboard/transactions" 
+              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
+              onClick={handleLinkClick}
+            >
+              Transactions
+            </Link>
+          </li>
         </ul>
         
         <div className="mt-10 flex items-center gap-3">
