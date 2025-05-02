@@ -170,7 +170,8 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
               onSuccess={() => {
                 setIsEditModalOpen(false);
                 if (onTransactionUpdated) onTransactionUpdated();
-              }} 
+              }}
+              onClose={() => setIsEditModalOpen(false)}
             />
           )}
         </DialogContent>

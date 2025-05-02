@@ -12,7 +12,6 @@ import FinancialSummary from "@/components/FinancialSummary";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/TransactionForm";
-import { X } from "lucide-react";
 
 export default function DashboardClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +23,6 @@ export default function DashboardClient() {
     byCategory: [],
     byMonth: []
   });
-  const [dateRange, setDateRange] = useState<{ startDate?: Date; endDate?: Date }>({});
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     try {
@@ -41,7 +39,6 @@ export default function DashboardClient() {
       
       setTransactions(transactionsData);
       setStats(statsData);
-      setDateRange({ startDate, endDate });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -51,23 +48,11 @@ export default function DashboardClient() {
     fetchData();
   }, []);
 
-  const handleClearFilters = () => {
-    fetchData(undefined, undefined);
-  };
-
-  const hasActiveFilters = dateRange.startDate || dateRange.endDate;
-
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          {hasActiveFilters && (
-            <Button variant="outline" onClick={handleClearFilters} className="gap-2">
-              <X className="h-4 w-4" />
-              Clear Filters
-            </Button>
-          )}
         </div>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
@@ -77,7 +62,10 @@ export default function DashboardClient() {
             <DialogHeader>
               <DialogTitle>Add New Transaction</DialogTitle>
             </DialogHeader>
-            <TransactionForm onSuccess={() => { fetchData(); setIsModalOpen(false); }} />
+            <TransactionForm 
+              onSuccess={() => { fetchData(); setIsModalOpen(false); }} 
+              onClose={() => setIsModalOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>

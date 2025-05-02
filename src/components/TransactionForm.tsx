@@ -29,6 +29,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export interface TransactionFormProps {
   onSuccess?: () => void;
+  onClose?: () => void;
   transaction?: {
     id: string;
     amount: number;
@@ -40,7 +41,7 @@ export interface TransactionFormProps {
   };
 }
 
-export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, transaction }) => {
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onClose, transaction }) => {
   const {
     register,
     handleSubmit,
@@ -196,13 +197,26 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, tra
         />
       )}
 
-      <Button 
-        type="submit" 
-        className="w-full"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
-      </Button>
+      <div className="flex gap-6">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            reset();
+            if (onClose) onClose();
+          }}
+        >
+          Cancel
+        </Button>
+
+        <Button 
+          type="submit" 
+          className="self-end"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
+        </Button>
+      </div>
     </form>
   );
 }
