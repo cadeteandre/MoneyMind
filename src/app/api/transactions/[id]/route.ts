@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 // PUT - Update a transaction
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   const { userId } = await auth();
 
@@ -15,7 +15,7 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = params.id;
+  const id = context.params.id;
   
   try {
     // Find the transaction to update
@@ -63,7 +63,7 @@ export async function PUT(
 // DELETE - Delete a transaction
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   const { userId } = await auth();
 
@@ -71,7 +71,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = params.id;
+  const id = context.params.id;
 
   try {
     // Find the transaction to delete
