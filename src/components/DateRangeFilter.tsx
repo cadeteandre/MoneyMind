@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -15,6 +15,12 @@ interface Props {
 export function DateRangeFilter({ onFilter }: Props) {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+
+  const handleClear = () => {
+    setStartDate(undefined);
+    setEndDate(undefined);
+    onFilter(undefined, undefined);
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -50,8 +56,16 @@ export function DateRangeFilter({ onFilter }: Props) {
         </PopoverContent>
       </Popover>
 
-      {/* Botão de filtro */}
-      <Button onClick={() => onFilter(startDate, endDate)}>Filtrar</Button>
+      {/* Filter and Clear buttons */}
+      <div className="flex gap-2">
+        <Button onClick={() => onFilter(startDate, endDate)}>Filter</Button>
+        {(startDate || endDate) && (
+          <Button variant="outline" onClick={handleClear} className="gap-2">
+            <X className="h-4 w-4" />
+            Clear
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
