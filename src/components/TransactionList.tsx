@@ -74,7 +74,7 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
   return (
     <div className="flex flex-col gap-4 items-center justify-center">
       {transactions.map((transaction) => (
-        <Card key={transaction.id} className="p-4 flex justify-between items-center w-full">
+        <Card key={transaction.id} className="p-4 flex justify-between items-center w-full relative">
           <div>
             <p className="font-medium text-center">{transaction.category}</p>
             {transaction.description ? (
@@ -90,34 +90,6 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
               >
                 {transaction.type === "INCOME" ? "+" : "-"} R$ {transaction.amount.toFixed(2)}
               </p>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger className="focus:outline-none">
-                  <MoreVertical className="h-5 w-5 text-gray-500 hover:text-gray-700 cursor-pointer" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem 
-                    onClick={() => {
-                      setEditTransaction(transaction);
-                      setIsEditModalOpen(true);
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => {
-                      setDeleteTransaction(transaction);
-                      setIsDeleteAlertOpen(true);
-                    }}
-                    className="cursor-pointer text-red-500 focus:text-red-500"
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
             
             <p className="text-xs text-muted-foreground">
@@ -153,6 +125,35 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                 </DialogContent>
               </Dialog>
             )}
+          </div>
+          <div className="absolute top-2 right-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <MoreVertical className="h-5 w-5 text-gray-500 hover:text-gray-700 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem 
+                  onClick={() => {
+                    setEditTransaction(transaction);
+                    setIsEditModalOpen(true);
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => {
+                    setDeleteTransaction(transaction);
+                    setIsDeleteAlertOpen(true);
+                  }}
+                  className="cursor-pointer text-red-500 focus:text-red-500"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </Card>
       ))}
