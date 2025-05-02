@@ -4,6 +4,7 @@ import { CategorySummary } from "@/app/actions/getTransactionStats";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { formatCurrency } from "@/lib/utils";
 
 // Colors for the pie chart segments
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28FD0", "#FF6B6B", "#54C8FF", "#2DD4BF"];
@@ -37,7 +38,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
       return (
         <div className="bg-background p-3 border rounded-lg shadow-sm">
           <p className="font-medium">{data.category}</p>
-          <p className="text-sm">R$ {data.total.toFixed(2)}</p>
+          <p className="text-sm">{formatCurrency(data.total)}</p>
           <p className="text-xs text-muted-foreground">{data.count} transaction(s)</p>
         </div>
       );

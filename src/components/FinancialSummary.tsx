@@ -3,6 +3,7 @@
 import { TransactionStats } from "@/app/actions/getTransactionStats";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDownIcon, ArrowUpIcon, ScaleIcon } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 interface FinancialSummaryProps {
   stats: TransactionStats;
@@ -20,7 +21,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-green-500">
-            R$ {totalIncome.toFixed(2)}
+            {formatCurrency(totalIncome)}
           </div>
         </CardContent>
       </Card>
@@ -32,7 +33,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-red-500">
-            R$ {totalExpense.toFixed(2)}
+            {formatCurrency(totalExpense)}
           </div>
         </CardContent>
       </Card>
@@ -44,7 +45,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className={`text-2xl font-bold ${balance >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            R$ {balance.toFixed(2)}
+            {formatCurrency(balance)}
           </div>
         </CardContent>
       </Card>

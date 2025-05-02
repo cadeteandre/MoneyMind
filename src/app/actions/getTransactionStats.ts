@@ -88,7 +88,7 @@ export async function getTransactionStats({
   const monthlyData: Record<string, { income: number; expense: number }> = {};
   
   transactions.forEach(t => {
-    const month = new Date(t.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    const month = new Date(t.date).toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
     
     if (!monthlyData[month]) {
       monthlyData[month] = { income: 0, expense: 0 };

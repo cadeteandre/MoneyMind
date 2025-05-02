@@ -22,10 +22,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TransactionForm } from "./TransactionForm";
 import { toast } from "sonner";
+import { formatCurrency } from "@/lib/utils";
 
 // Extend the Transaction type to include receiptUrl
 interface Transaction extends PrismaTransaction {
-  receiptUrl?: string | null;
+  receiptUrl: string | null;
 }
 
 interface TransactionListProps {
@@ -88,12 +89,12 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                   transaction.type === "INCOME" ? "text-green-500" : "text-red-500"
                 }`}
               >
-                {transaction.type === "INCOME" ? "+" : "-"} R$ {transaction.amount.toFixed(2)}
+                {transaction.type === "INCOME" ? "+" : "-"} {formatCurrency(transaction.amount)}
               </p>
             </div>
             
             <p className="text-xs text-muted-foreground">
-              {new Date(transaction.date).toLocaleDateString("pt-BR")}
+              {new Date(transaction.date).toLocaleDateString("de-DE")}
             </p>
             {transaction.receiptUrl && (
               <Dialog open={openId === transaction.id} onOpenChange={(open) => {
