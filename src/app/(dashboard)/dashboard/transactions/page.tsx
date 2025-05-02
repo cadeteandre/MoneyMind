@@ -78,7 +78,10 @@ export default function TransactionsPage() {
               <DialogHeader>
                 <DialogTitle>Add New Transaction</DialogTitle>
               </DialogHeader>
-              <TransactionForm onSuccess={() => { fetchData(); setIsModalOpen(false); }} />
+              <TransactionForm 
+                onSuccess={() => { fetchData(); setIsModalOpen(false); }} 
+                onClose={() => setIsModalOpen(false)}
+              />
             </DialogContent>
           </Dialog>
         </div>
