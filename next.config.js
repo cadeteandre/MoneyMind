@@ -1,5 +1,4 @@
-import type { NextConfig } from "next";
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     serverActions: true,
@@ -7,6 +6,6 @@ const nextConfig = {
   images: {
     domains: ["qujgsyngpismiyphgkip.supabase.co"],
   },
-} as unknown as NextConfig;
+};
 
-export default nextConfig;
+module.exports = nextConfig; 
