@@ -7,16 +7,15 @@ import { Prisma } from "@prisma/client";
 // PUT - Update a transaction
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = params.id;
-  
   try {
     // Find the transaction to update
     const existingTransaction = await prisma.transaction.findUnique({
@@ -63,15 +62,14 @@ export async function PUT(
 // DELETE - Delete a transaction
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const id = params.id;
 
   try {
     // Find the transaction to delete
