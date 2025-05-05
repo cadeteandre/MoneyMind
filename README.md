@@ -37,7 +37,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 - Prisma (if using an ORM)
 - PostgreSQL (or your preferred database)
 
-## �� Project Structure
+## 📁 Project Structure
 
 ```
 app/           # Main application pages and components

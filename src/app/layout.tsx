@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'MoneyMind',
   description: 'Personal finance dashboard',
+  icons: {
+    icon: '/money_mind_icon.ico',
+  },
 }
 
 export default function RootLayout({
