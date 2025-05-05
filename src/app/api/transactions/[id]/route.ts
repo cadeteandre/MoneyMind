@@ -1,20 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@supabase/supabase-js";
 import { Prisma } from "@prisma/client";
 
-// Adicionando tipagem correta para o Next.js 15
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
-
 // PUT - Update a transaction
 export async function PUT(
-  req: Request,
-  { params }: RouteParams
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   const { userId } = await auth();
 
@@ -69,8 +62,8 @@ export async function PUT(
 
 // DELETE - Delete a transaction
 export async function DELETE(
-  req: Request,
-  { params }: RouteParams
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   const { userId } = await auth();
 
