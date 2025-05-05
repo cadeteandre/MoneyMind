@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
 const formSchema = z.object({
@@ -65,6 +65,17 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   const date = watch("date");
   const { userId } = useAuth();
   const isEditing = !!transaction;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if we're on a mobile device
+    const checkMobile = () => {
+      const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent || navigator.vendor : '';
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
+    };
+    
+    checkMobile();
+  }, []);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -158,22 +169,41 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         {...register("description")} 
       />
 
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" className={cn("w-full justify-start text-left", !date && "text-muted-foreground")}>
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(d) => d && setValue("date", d)}
-            initialFocus
+      {isMobile ? (
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="date-input" className="text-sm font-medium">
+            Date
+          </label>
+          <Input
+            id="date-input"
+            type="date"
+            value={date ? format(date, "yyyy-MM-dd") : ""}
+            onChange={(e) => {
+              const newDate = e.target.value ? new Date(e.target.value) : null;
+              if (newDate) {
+                setValue("date", newDate);
+              }
+            }}
           />
-        </PopoverContent>
-      </Popover>
+        </div>
+      ) : (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className={cn("w-full justify-start text-left", !date && "text-muted-foreground")}>
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(d) => d && setValue("date", d)}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      )}
 
       {!isEditing && (
         <Input 
