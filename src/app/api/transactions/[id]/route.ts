@@ -4,10 +4,17 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@supabase/supabase-js";
 import { Prisma } from "@prisma/client";
 
+// Adicionando tipagem correta para o Next.js 15
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
 // PUT - Update a transaction
 export async function PUT(
   req: Request,
-  context: { params: { id: string } }
+  { params }: RouteParams
 ) {
   const { userId } = await auth();
 
@@ -15,7 +22,7 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = context.params.id;
+  const id = params.id;
   
   try {
     // Find the transaction to update
@@ -63,7 +70,7 @@ export async function PUT(
 // DELETE - Delete a transaction
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  { params }: RouteParams
 ) {
   const { userId } = await auth();
 
@@ -71,7 +78,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = context.params.id;
+  const id = params.id;
 
   try {
     // Find the transaction to delete
