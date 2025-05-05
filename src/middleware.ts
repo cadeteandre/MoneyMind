@@ -12,9 +12,11 @@ export default clerkMiddleware(async (auth, req) => {
     // vamos salvar seus dados no banco de dados
     if (userId && !req.url.includes('/api/')) {
       try {
-        // Chamamos nossa API para salvar/atualizar os dados do usuário
-        const baseUrl = new URL(req.url).origin;
-        const response = await fetch(`${baseUrl}/api/user`, {
+        // Usar req.nextUrl.origin para garantir URL correta
+        const baseUrl = req.nextUrl?.origin || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        const apiUrl = `${baseUrl}/api/user`;
+        console.log('[middleware] Saving user data to:', apiUrl);
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -23,10 +25,11 @@ export default clerkMiddleware(async (auth, req) => {
         });
 
         if (!response.ok) {
-          console.error('Failed to save user data');
+          const text = await response.text();
+          console.error('[middleware] Failed to save user data:', text);
         }
       } catch (error) {
-        console.error('Error saving user data:', error);
+        console.error('[middleware] Error saving user data:', error, req.url);
       }
     }
   }
