@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'MoneyMind',
   description: 'Personal finance dashboard',
   icons: {
-    icon: '/money_mind_icon.ico',
+    icon: '/money_mind_logo.ico',
   },
 }
 
