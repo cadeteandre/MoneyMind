@@ -7,7 +7,7 @@ export const maxDuration = 60;
 export const bodyParser = false; // Desativa o parser automático de corpo para lidar manualmente com FormData
 
 // Configuração de CORS para solicitações cross-origin
-export async function OPTIONS(req: Request) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
