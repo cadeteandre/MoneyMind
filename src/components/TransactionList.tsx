@@ -2,7 +2,6 @@ import { Transaction as PrismaTransaction } from "@prisma/client";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { MoreVertical, Edit, Trash2, ExternalLink } from "lucide-react";
 import { 
   DropdownMenu, 
@@ -82,6 +81,22 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
     }
   };
 
+  const openReceipt = (transaction: Transaction) => {
+    // Preferir a URL de download direta se disponível
+    const imgUrl = transaction.receiptDownloadUrl || transaction.receiptUrl;
+    
+    if (isMobile) {
+      // Em dispositivos móveis, abrir diretamente no navegador
+      window.open(imgUrl || '', '_blank');
+    } else {
+      // Em desktop, abrir no modal
+      setOpenId(transaction.id);
+      setImgUrl(imgUrl);
+      setImgLoaded(false);
+      setImgError(false);
+    }
+  };
+
   if (transactions.length === 0) {
     return <p className="text-muted-foreground text-center">No transactions found.</p>;
   }
@@ -111,88 +126,74 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
               {new Date(transaction.date).toLocaleDateString("de-DE")}
             </p>
             {transaction.receiptUrl && (
-              <Dialog open={openId === transaction.id} onOpenChange={(open) => {
-                if (open) {
-                  setOpenId(transaction.id);
-                  setImgUrl(transaction.receiptDownloadUrl || transaction.receiptUrl);
-                  setImgLoaded(false);
-                  setImgError(false);
-                } else {
-                  setOpenId(null);
-                  setImgUrl(null);
-                }
-              }}>
-                <DialogTrigger asChild>
-                  <button className="cursor-pointer text-blue-600 underline text-xs">View Receipt</button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Receipt</DialogTitle>
-                  </DialogHeader>
-                  {imgUrl && (
-                    <div className="flex flex-col items-center gap-2">
-                      <a 
-                        href={imgUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center text-blue-600 mb-2"
-                      >
-                        <ExternalLink className="h-4 w-4 mr-1" />
-                        Open in browser
-                      </a>
-                      
-                      {isMobile ? (
-                        // Para dispositivos móveis, usamos a tag img nativa em vez do componente Image
-                        <div className="w-full max-w-md flex justify-center">
-                          <img 
-                            src={imgUrl} 
-                            alt="Receipt"
-                            className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
-                            onLoad={() => setImgLoaded(true)}
-                            onError={() => {
-                              console.error("Native img failed to load:", imgUrl);
-                              setImgError(true);
-                            }}
-                          />
-                          {!imgLoaded && !imgError && (
-                            <p className="text-center text-muted-foreground">Loading receipt...</p>
-                          )}
-                          {imgError && (
-                            <div className="text-center text-red-500">
-                              <p>Failed to load image</p>
-                              <p className="text-xs mt-2">Please use &quot;Open in browser&quot; instead</p>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        // Para desktop, mantemos o componente Image do Next.js
-                        <div className="relative w-full max-w-md">
-                          <Image 
-                            src={imgUrl} 
-                            alt="Receipt" 
-                            width={400}
-                            height={600}
-                            loading="eager"
-                            priority={true}
-                            className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
-                            onError={() => {
-                              console.error("Failed to load image:", imgUrl);
-                              setImgError(true);
-                            }}
-                          />
-                          {imgError && (
-                            <div className="text-center text-red-500 mt-2">
-                              <p>Failed to load image</p>
-                              <p className="text-xs mt-1">Please use &quot;Open in browser&quot; instead</p>
-                            </div>
-                          )}
+              <>
+                {isMobile ? (
+                  <button 
+                    onClick={() => openReceipt(transaction)}
+                    className="cursor-pointer text-blue-600 underline text-xs"
+                  >
+                    Ver recibo
+                  </button>
+                ) : (
+                  <Dialog open={openId === transaction.id} onOpenChange={(open) => {
+                    if (open) {
+                      setOpenId(transaction.id);
+                      // Preferir a URL de download direta se disponível
+                      setImgUrl(transaction.receiptDownloadUrl || transaction.receiptUrl);
+                      setImgLoaded(false);
+                      setImgError(false);
+                    } else {
+                      setOpenId(null);
+                      setImgUrl(null);
+                    }
+                  }}>
+                    <DialogTrigger asChild>
+                      <button className="cursor-pointer text-blue-600 underline text-xs">Ver recibo</button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Recibo</DialogTitle>
+                      </DialogHeader>
+                      {imgUrl && (
+                        <div className="flex flex-col items-center gap-2">
+                          <a 
+                            href={imgUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center text-blue-600 mb-2"
+                          >
+                            <ExternalLink className="h-4 w-4 mr-1" />
+                            Abrir no navegador
+                          </a>
+                          
+                          <div className="w-full max-w-md flex justify-center">
+                            <img 
+                              src={imgUrl} 
+                              alt="Receipt"
+                              className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
+                              onLoad={() => setImgLoaded(true)}
+                              onError={() => {
+                                console.error("Image failed to load:", imgUrl);
+                                setImgError(true);
+                              }}
+                            />
+                            {!imgLoaded && !imgError && (
+                              <p className="text-center text-muted-foreground">Carregando recibo...</p>
+                            )}
+                            {imgError && (
+                              <div className="text-center text-red-500">
+                                <p>Falha ao carregar a imagem</p>
+                                <p className="text-xs mt-2">Por favor, use &quot;Abrir no navegador&quot;</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
-                    </div>
-                  )}
-                  <DialogClose />
-                </DialogContent>
-              </Dialog>
+                      <DialogClose />
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </>
             )}
           </div>
           <div className="absolute top-2 right-2">

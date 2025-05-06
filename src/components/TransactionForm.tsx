@@ -84,22 +84,46 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       let receiptDownloadUrl = transaction?.receiptDownloadUrl || transaction?.receiptUrl;
       
       if (data.receipt && data.receipt.length > 0 && userId) {
+        const file = data.receipt[0];
+        console.log("Uploading file:", file.name, "Size:", file.size, "Type:", file.type);
+        
+        // Verifica tamanho mínimo do arquivo
+        if (file.size < 100) {
+          toast.error("O arquivo selecionado parece estar vazio ou corrompido.");
+          return;
+        }
+        
+        // Verifica se é uma imagem
+        if (!file.type.startsWith('image/')) {
+          toast.error("Por favor, selecione um arquivo de imagem válido.");
+          return;
+        }
+        
         const formData = new FormData();
-        formData.append("file", data.receipt[0]);
+        formData.append("file", file);
         formData.append("userId", userId);
 
+        toast.loading("Fazendo upload do recibo...");
+        
         const uploadRes = await fetch("/api/upload-receipt", {
           method: "POST", 
           body: formData,
         });
         
         if (!uploadRes.ok) {
-          throw new Error("Failed to upload receipt");
+          const errorData = await uploadRes.json();
+          console.error("Upload error:", errorData);
+          throw new Error(`Falha no upload do recibo: ${errorData.error || 'Erro desconhecido'}`);
         }
         
         const uploadJson = await uploadRes.json();
+        console.log("Upload response:", uploadJson);
+        
         receiptUrl = uploadJson.url;
         receiptDownloadUrl = uploadJson.downloadUrl || uploadJson.url;
+        
+        toast.dismiss();
+        toast.success("Recibo enviado com sucesso!");
       }
 
       const endpoint = isEditing 
@@ -108,6 +132,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       
       const method = isEditing ? 'PUT' : 'POST';
 
+      toast.loading(`${isEditing ? 'Atualizando' : 'Adicionando'} transação...`);
+      
       const response = await fetch(endpoint, {
         method,
         headers: {
@@ -121,7 +147,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${isEditing ? 'update' : 'submit'} transaction`);
+        const errorData = await response.json();
+        throw new Error(`Falha ao ${isEditing ? 'atualizar' : 'adicionar'} transação: ${errorData.error || 'Erro desconhecido'}`);
       }
 
       reset({
@@ -132,12 +159,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         date: new Date(),
       });
 
-      toast.success(`Transaction ${isEditing ? 'updated' : 'added'} successfully!`);
+      toast.dismiss();
+      toast.success(`Transação ${isEditing ? 'atualizada' : 'adicionada'} com sucesso!`);
       if (onSuccess) onSuccess();
 
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error(`Failed to ${isEditing ? 'update' : 'add'} transaction`);
+      toast.dismiss();
+      toast.error(`${error instanceof Error ? error.message : 'Erro desconhecido ao processar a transação'}`);
     }
   };
 
