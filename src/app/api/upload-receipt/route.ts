@@ -4,7 +4,6 @@ import { createClient } from "@supabase/supabase-js";
 // Configurações para ambiente de produção no Vercel
 export const runtime = "nodejs"; // Alterado de "edge" para "nodejs" para melhor compatibilidade
 export const maxDuration = 60;
-export const bodyParser = false; // Desativa o parser automático de corpo para lidar manualmente com FormData
 
 // Configuração de CORS para solicitações cross-origin
 export async function OPTIONS() {
