@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@supabase/supabase-js";
 import { Prisma } from "@prisma/client";
+import { supabase } from "@/lib/supabase/client";
 
 // PUT - Update a transaction
 export async function PUT(
@@ -86,12 +87,6 @@ export async function DELETE(
     // Delete the transaction's receipt from storage if it exists
     if (transaction.receiptUrl) {
       try {
-        // Initialize Supabase client with service role key
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.SUPABASE_SERVICE_ROLE_KEY!
-        );
-
         // Extract the file path from the URL
         // The URL format is typically like: https://...supabase.co/storage/v1/object/public/receipts/userId/filename
         const urlParts = transaction.receiptUrl.split('/');
