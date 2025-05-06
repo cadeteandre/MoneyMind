@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
-import { createClient } from "@supabase/supabase-js";
 import { Prisma } from "@prisma/client";
 import { supabase } from "@/lib/supabase/client";
 
