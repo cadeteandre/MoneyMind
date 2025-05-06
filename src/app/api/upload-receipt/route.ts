@@ -6,159 +6,165 @@ export const maxDuration = 60; // Aumenta o tempo máximo de execução para 60 
 
 export async function POST(req: Request) {
   try {
-    const formData = await req.formData();
-    const file = formData.get("file") as unknown;
-    const userId = formData.get("userId") as unknown;
-
-    console.log("File upload debug:");
-    console.log("File type:", typeof file);
+    // Recriar o FormData a partir do Request original para preservar os tipos dos arquivos
+    const originalFormData = await req.formData();
+    const formData = new FormData();
     
-    if (!file) {
-      return NextResponse.json({ error: "Missing file" }, { status: 400 });
+    // Iterar sobre todos os campos do FormData original e copiá-los
+    for (const [key, value] of originalFormData.entries()) {
+      formData.append(key, value);
     }
     
-    if (typeof userId !== "string") {
-      return NextResponse.json({ error: "Missing or invalid userId" }, { status: 400 });
-    }
-
-    // Verifica se o arquivo é um Blob ou File (ambos têm as mesmas propriedades que precisamos)
-    const isFileOrBlob = 
-      typeof file === 'object' && 
-      file !== null && 
-      'arrayBuffer' in file && 
-      'size' in file && 
-      'type' in file;
+    // Extrair campos específicos
+    const file = formData.get("file") as File | null;
+    const userId = formData.get("userId") as string | null;
     
-    if (!isFileOrBlob) {
-      return NextResponse.json({ error: "Invalid file format" }, { status: 400 });
+    // Log detalhado para diagnóstico
+    console.log("=== UPLOAD REQUEST DEBUG ===");
+    console.log("Request Content-Type:", req.headers.get("content-type"));
+    console.log("FormData keys:", Array.from(formData.keys()));
+    console.log("File présent:", !!file);
+    console.log("File type:", file ? `${file.type} (${typeof file})` : "N/A");
+    console.log("File name:", file ? file.name : "N/A");
+    console.log("File size:", file ? file.size : "N/A");
+    console.log("UserId present:", !!userId);
+    console.log("UserId:", userId);
+    
+    if (!file || !userId) {
+      return NextResponse.json({ 
+        error: `Required params missing: ${!file ? "file" : ""} ${!userId ? "userId" : ""}`.trim() 
+      }, { status: 400 });
     }
-
-    // Agora podemos fazer um cast seguro para File
-    const fileObj = file as File;
-    console.log("File content type:", fileObj.type);
-    console.log("File size:", fileObj.size, "bytes");
-
-    // Verifica se o arquivo tem um tamanho razoável
-    if (fileObj.size < 100) {
-      return NextResponse.json({ error: "File seems to be corrupted or too small" }, { status: 400 });
+    
+    // Verificar se o arquivo é válido
+    if (file.size < 100) {
+      return NextResponse.json({ error: "File too small, possibly corrupted" }, { status: 400 });
     }
-
-    let fileBuffer: ArrayBuffer;
+    
+    // Obter conteúdo do arquivo como ArrayBuffer para preservar o formato exato
+    let fileArrayBuffer: ArrayBuffer;
     try {
-      // Converte o arquivo para um ArrayBuffer
-      fileBuffer = await fileObj.arrayBuffer();
-      console.log("Successfully read file buffer, size:", fileBuffer.byteLength, "bytes");
-    } catch (error) {
-      console.error("Error reading file:", error);
-      return NextResponse.json({ error: "Failed to read file content" }, { status: 500 });
+      fileArrayBuffer = await file.arrayBuffer();
+      console.log("Successfully read file as ArrayBuffer:", fileArrayBuffer.byteLength, "bytes");
+    } catch (e) {
+      console.error("Error reading file as ArrayBuffer:", e);
+      return NextResponse.json({ error: "Failed to read file contents" }, { status: 400 });
     }
-
-    // Detecta o tipo MIME real do arquivo baseado nos primeiros bytes
-    const realFileType = detectMimeType(fileBuffer);
-    console.log("Detected MIME type:", realFileType);
     
-    if (!realFileType.startsWith('image/')) {
+    // Determinar o tipo de imagem com base nos bytes iniciais
+    let fileType = file.type;
+    if (!fileType || fileType === "text/plain" || fileType === "application/octet-stream") {
+      fileType = detectMimeTypeFromArrayBuffer(fileArrayBuffer);
+      console.log("Detected MIME type from bytes:", fileType);
+    }
+    
+    if (!fileType.startsWith("image/")) {
       return NextResponse.json({ error: "File must be an image" }, { status: 400 });
     }
-
-    // Inicializa o cliente Supabase
+    
+    // Criar blob com o tipo MIME correto
+    const fileBlob = new Blob([fileArrayBuffer], { type: fileType });
+    console.log("Created Blob with explicit type:", fileType, "Size:", fileBlob.size);
+    
+    // Inicializar o Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
       {
-        auth: {
-          persistSession: false,
-        }
+        auth: { persistSession: false }
       }
     );
-
-    // Gera um nome de arquivo único baseado no timestamp e ID do usuário
-    const timestamp = Date.now();
-    // Determine a extensão correta baseada no tipo MIME real
-    const extension = getMimeExtension(realFileType);
     
-    // Use extensões confiáveis para melhor compatibilidade
-    const safeName = `receipt-${timestamp}.${extension}`;
-    const filePath = `receipts/${userId}/${safeName}`;
-
-    console.log("Uploading to path:", filePath);
-    console.log("Using extension:", extension);
-
-    // Converte o ArrayBuffer de volta para um Blob com o tipo MIME correto
-    const fileBlob = new Blob([fileBuffer], { type: realFileType });
-
-    // Faz o upload com configurações adicionais
-    const { error, data } = await supabase.storage
+    // Gerar nome de arquivo único
+    const timestamp = Date.now();
+    const extension = getExtensionFromMimeType(fileType);
+    const fileName = `receipt-${timestamp}.${extension}`;
+    const filePath = `receipts/${userId}/${fileName}`;
+    
+    console.log("Uploading file to path:", filePath, "with type:", fileType);
+    
+    // Fazer upload do arquivo
+    const { error: uploadError, data: uploadData } = await supabase.storage
       .from("receipts")
       .upload(filePath, fileBlob, {
-        cacheControl: "public, max-age=31536000", // Cache por 1 ano
-        upsert: true, // Sobrescreve o arquivo se já existir
-        contentType: realFileType, // Define explicitamente o tipo de conteúdo correto
+        contentType: fileType,
+        cacheControl: "public, max-age=31536000",
+        upsert: true // Sobrescrever se já existir
       });
-
-    if (error) {
-      console.error("Supabase storage error:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      
+    if (uploadError) {
+      console.error("Supabase upload error:", JSON.stringify(uploadError));
+      return NextResponse.json({ error: uploadError.message }, { status: 500 });
     }
-
-    console.log("Upload successful, data:", data);
-
-    // Obter URL pública
-    const { data: publicUrlData } = supabase.storage
+    
+    console.log("Upload successful! Data:", uploadData);
+    
+    // Gerar URL pública
+    const { data: urlData } = supabase.storage
       .from("receipts")
       .getPublicUrl(filePath);
-
-    if (!publicUrlData?.publicUrl) {
+      
+    if (!urlData?.publicUrl) {
       return NextResponse.json({ error: "Failed to generate public URL" }, { status: 500 });
     }
-
-    // URL pública direta
-    const publicUrl = publicUrlData.publicUrl;
-    console.log("Generated public URL:", publicUrl);
     
-    return NextResponse.json({ 
-      url: publicUrl,
-      downloadUrl: publicUrl,
-      fileType: realFileType,
-      fileName: safeName
+    // Retornar URL ao cliente
+    return NextResponse.json({
+      url: urlData.publicUrl,
+      downloadUrl: urlData.publicUrl,
+      fileType,
+      fileName,
+      size: fileBlob.size,
+      path: filePath
     });
-  } catch (err) {
-    console.error("Error uploading receipt:", err);
-    return NextResponse.json({ error: "Failed to upload receipt" }, { status: 500 });
+    
+  } catch (error) {
+    console.error("Unexpected error during upload:", error);
+    return NextResponse.json({ 
+      error: error instanceof Error ? error.message : "Unknown error during upload" 
+    }, { status: 500 });
   }
 }
 
-// Função para detectar o tipo MIME real baseado nos primeiros bytes do arquivo
-function detectMimeType(buffer: ArrayBuffer): string {
-  const arr = new Uint8Array(buffer.slice(0, 4));
-  const header = Array.from(arr).map(byte => byte.toString(16).padStart(2, '0')).join('');
+// Função para detectar o tipo MIME a partir dos bytes iniciais
+function detectMimeTypeFromArrayBuffer(buffer: ArrayBuffer): string {
+  if (buffer.byteLength < 4) return "image/jpeg"; // Default fallback
   
-  // Assinaturas comuns de arquivos
-  if (header.startsWith('89504e47')) return 'image/png';
-  if (header.startsWith('ffd8ff')) return 'image/jpeg';
-  if (header.startsWith('47494638')) return 'image/gif';
-  if (header.startsWith('52494646') && buffer.byteLength > 8) {
-    // WEBP começa com RIFF e tem "WEBP" no byte 8
-    const webpArr = new Uint8Array(buffer.slice(8, 12));
-    const webpHeader = Array.from(webpArr).map(byte => String.fromCharCode(byte)).join('');
-    if (webpHeader === 'WEBP') return 'image/webp';
+  const uint8Arr = new Uint8Array(buffer.slice(0, 12));
+  const signature = Array.from(uint8Arr.slice(0, 4))
+    .map(byte => byte.toString(16).padStart(2, '0'))
+    .join('');
+    
+  console.log("File signature (hex):", signature);
+  
+  // Magic numbers for common image formats
+  if (signature.startsWith('89504e47')) return 'image/png';                   // PNG
+  if (signature.startsWith('ffd8ff')) return 'image/jpeg';                    // JPEG
+  if (signature.startsWith('47494638')) return 'image/gif';                   // GIF
+  if (signature.startsWith('52494646')) {                                     // WEBP starts with "RIFF"
+    // Check for "WEBP" at position 8
+    if (buffer.byteLength >= 12) {
+      const webpSignature = String.fromCharCode(...uint8Arr.slice(8, 12));
+      if (webpSignature === 'WEBP') return 'image/webp';
+    }
   }
+  if (signature.startsWith('424d')) return 'image/bmp';                       // BMP
   
-  // Se não conseguimos identificar, assumimos um JPEG
+  // Default to JPEG if unknown
   return 'image/jpeg';
 }
 
-// Retorna a extensão apropriada para um tipo MIME
-function getMimeExtension(mimeType: string): string {
-  const mimeExtMap: Record<string, string> = {
+// Função para obter a extensão de arquivo a partir do tipo MIME
+function getExtensionFromMimeType(mimeType: string): string {
+  const extensions: Record<string, string> = {
     'image/jpeg': 'jpg',
     'image/png': 'png',
     'image/gif': 'gif',
     'image/webp': 'webp',
-    'image/svg+xml': 'svg',
     'image/bmp': 'bmp',
+    'image/svg+xml': 'svg',
     'image/tiff': 'tiff'
   };
   
-  return mimeExtMap[mimeType] || 'jpg'; // Retorna jpg como fallback
+  return extensions[mimeType] || 'jpg';
 } 
