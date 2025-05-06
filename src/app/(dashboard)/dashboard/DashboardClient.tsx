@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { DateRangeFilter } from "@/components/DateRangeFilter";
 import TransactionList from "@/components/TransactionList";
-import { Transaction } from "@prisma/client";
+import { Transaction as PrismaTransaction } from "@prisma/client";
 import { getTransactions } from "@/app/actions/getTransactions";
 import { TransactionStats, getTransactionStats } from "@/app/actions/getTransactionStats";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
@@ -13,9 +13,14 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from 
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/TransactionForm";
 
+// Definir o tipo de Transaction compatível com TransactionList
+interface TransactionWithDownload extends PrismaTransaction {
+  receiptDownloadUrl: string | null;
+}
+
 export default function DashboardClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TransactionWithDownload[]>([]);
   const [stats, setStats] = useState<TransactionStats>({
     totalIncome: 0,
     totalExpense: 0,
@@ -32,12 +37,18 @@ export default function DashboardClient() {
       if (endDate) params.endDate = endDate.toISOString();
       
       // Fetch transactions and stats
-      const [transactionsData, statsData] = await Promise.all([
+      const [rawTransactions, statsData] = await Promise.all([
         getTransactions(params),
         getTransactionStats(params)
       ]);
       
-      setTransactions(transactionsData);
+      // Adicionar o campo receiptDownloadUrl a cada transação
+      const processedTransactions = rawTransactions.map(transaction => ({
+        ...transaction,
+        receiptDownloadUrl: transaction.receiptUrl  // Usar a mesma URL como fallback
+      }));
+      
+      setTransactions(processedTransactions);
       setStats(statsData);
     } catch (error) {
       console.error("Error fetching data:", error);
