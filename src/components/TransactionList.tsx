@@ -1,9 +1,9 @@
 import { Transaction as PrismaTransaction } from "@prisma/client";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { MoreVertical, Edit, Trash2 } from "lucide-react";
+import { MoreVertical, Edit, Trash2, ExternalLink } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -37,11 +37,22 @@ interface TransactionListProps {
 export default function TransactionList({ transactions, onTransactionUpdated }: TransactionListProps) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteTransaction, setDeleteTransaction] = useState<Transaction | null>(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    // Check if we're on a mobile device
+    const checkMobile = () => {
+      const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent || navigator.vendor : '';
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
+    };
+    
+    checkMobile();
+  }, []);
 
   const handleDelete = async () => {
     if (!deleteTransaction) return;
@@ -99,7 +110,11 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
             {transaction.receiptUrl && (
               <Dialog open={openId === transaction.id} onOpenChange={(open) => {
                 setOpenId(open ? transaction.id : null);
-                setImgUrl(open ? transaction.receiptUrl ?? null : null);
+                if (open) {
+                  setImgUrl(transaction.receiptUrl);
+                } else {
+                  setImgUrl(null);
+                }
               }}>
                 <DialogTrigger asChild>
                   <button className="cursor-pointer text-blue-600 underline text-xs">View Receipt</button>
@@ -108,19 +123,50 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                   <DialogHeader>
                     <DialogTitle>Receipt</DialogTitle>
                   </DialogHeader>
-                  {imgUrl && (
-                    <>
-                      <Image 
-                        src={imgUrl} 
-                        alt="Receipt" 
-                        width={400}
-                        height={600}
-                        className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
-                        onError={() => {
-                          console.error("Failed to load image:", imgUrl);
-                        }}
-                      />
-                    </>
+                  {imgUrl ? (
+                    <div className="flex flex-col items-center gap-2">
+                      {isMobile ? (
+                        // Para dispositivos móveis, oferecemos um link direto que abre no navegador nativo
+                        <a 
+                          href={imgUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center text-blue-600 mb-2"
+                        >
+                          <ExternalLink className="h-4 w-4 mr-1" />
+                          Open in browser
+                        </a>
+                      ) : null}
+                      
+                      <div className="relative w-full max-w-md">
+                        <Image 
+                          src={imgUrl} 
+                          alt="Receipt" 
+                          width={400}
+                          height={600}
+                          loading="eager"
+                          priority={true}
+                          unoptimized={isMobile} // Desabilita a otimização do Next.js em dispositivos móveis
+                          className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
+                          onError={(e) => {
+                            console.error("Failed to load image:", imgUrl);
+                            // Fallback para img nativo quando o componente Image falha
+                            const target = e.target as HTMLImageElement;
+                            const container = target.parentElement;
+                            if (container) {
+                              const fallbackImg = document.createElement('img');
+                              fallbackImg.src = imgUrl;
+                              fallbackImg.alt = "Receipt";
+                              fallbackImg.className = "max-w-full max-h-[60vh] mx-auto rounded shadow object-contain";
+                              container.innerHTML = '';
+                              container.appendChild(fallbackImg);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-center text-muted-foreground">Loading receipt...</p>
                   )}
                   <DialogClose />
                 </DialogContent>

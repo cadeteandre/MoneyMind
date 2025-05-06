@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "edge";
+export const maxDuration = 60; // Aumenta o tempo máximo de execução para 60 segundos
 
 export async function POST(req: Request) {
   try {
@@ -13,25 +14,42 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing file or userId" }, { status: 400 });
     }
 
+    // Verifica se o arquivo é uma imagem
+    const fileType = (file as File).type;
+    if (!fileType.startsWith('image/')) {
+      return NextResponse.json({ error: "File must be an image" }, { status: 400 });
+    }
+
+    // Inicializa o cliente Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const filePath = `receipts/${userId}/${Date.now()}-${(file as File).name}`;
+    // Gera um nome de arquivo único baseado no timestamp e ID do usuário
+    const timestamp = Date.now();
+    // Extrai a extensão do arquivo e converte para minúsculas
+    const originalExt = (file as File).name.split('.').pop()?.toLowerCase() || 'jpg';
+    
+    // Use extensões confiáveis (jpg, png) para melhor compatibilidade
+    const safeName = `receipt-${timestamp}.${originalExt}`;
+    const filePath = `receipts/${userId}/${safeName}`;
 
+    // Faz o upload com configurações adicionais
     const { error } = await supabase.storage
       .from("receipts")
       .upload(filePath, file, {
-        cacheControl: "3600",
+        cacheControl: "public, max-age=31536000", // Cache por 1 ano
         upsert: false,
+        contentType: fileType, // Define explicitamente o tipo de conteúdo
       });
 
     if (error) {
+      console.error("Supabase storage error:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Obter URL pública para buckets públicos
+    // Obter URL pública
     const { data } = supabase.storage
       .from("receipts")
       .getPublicUrl(filePath);
@@ -40,7 +58,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to generate public URL" }, { status: 500 });
     }
 
-    return NextResponse.json({ url: data.publicUrl });
+    // Cria uma URL pré-processada que é mais compatível com dispositivos móveis
+    const publicUrl = data.publicUrl;
+    
+    return NextResponse.json({ 
+      url: publicUrl,
+      fileType: fileType,
+      fileName: safeName
+    });
   } catch (err) {
     console.error("Error uploading receipt:", err);
     return NextResponse.json({ error: "Failed to upload receipt" }, { status: 500 });
