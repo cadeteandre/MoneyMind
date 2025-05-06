@@ -20,13 +20,14 @@ model User {
 }
 
 model Transaction {
-  id          String           @id @default(cuid())
-  userId      String
-  user        User             @relation(fields: [userId], references: [id])
-  amount      Float
-  type        TransactionType
-  category    String
-  description String?
-  date        DateTime         @default(now())
-  receiptUrl  String?          // URL of the uploaded receipt (optional)
+  id                 String           @id @default(cuid())
+  userId             String
+  user               User             @relation(fields: [userId], references: [id])
+  amount             Float
+  type               TransactionType
+  category           String
+  description        String?
+  date               DateTime         @default(now())
+  receiptUrl         String?          // URL of the uploaded receipt (optional)
+  receiptDownloadUrl String?          // URL de download direto para o recibo (opcional)
 }

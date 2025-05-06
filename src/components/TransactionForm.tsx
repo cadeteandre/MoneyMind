@@ -38,6 +38,7 @@ export interface TransactionFormProps {
     description?: string | null;
     date: Date;
     receiptUrl?: string | null;
+    receiptDownloadUrl?: string | null;
   };
 }
 
@@ -80,6 +81,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   const onSubmit = async (data: FormData) => {
     try {
       let receiptUrl = transaction?.receiptUrl;
+      let receiptDownloadUrl = transaction?.receiptDownloadUrl || transaction?.receiptUrl;
+      
       if (data.receipt && data.receipt.length > 0 && userId) {
         const formData = new FormData();
         formData.append("file", data.receipt[0]);
@@ -96,6 +99,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         
         const uploadJson = await uploadRes.json();
         receiptUrl = uploadJson.url;
+        receiptDownloadUrl = uploadJson.downloadUrl || uploadJson.url;
       }
 
       const endpoint = isEditing 
@@ -109,7 +113,11 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...data, receiptUrl }),
+        body: JSON.stringify({ 
+          ...data, 
+          receiptUrl,
+          receiptDownloadUrl
+        }),
       });
 
       if (!response.ok) {

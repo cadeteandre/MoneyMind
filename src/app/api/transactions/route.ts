@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     // Process the request body
     const body = await req.json();
-    const { amount, type, category, description, date, receiptUrl } = body;
+    const { amount, type, category, description, date, receiptUrl, receiptDownloadUrl } = body;
 
     if (!amount || !type || !category) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -51,6 +51,7 @@ export async function POST(req: Request) {
         date: date ? new Date(date) : new Date(),
         userId,
         receiptUrl,
+        receiptDownloadUrl
       } as import('@prisma/client').Prisma.TransactionUncheckedCreateInput,
     });
 
