@@ -232,7 +232,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md max-h-[90vh] overflow-y-auto">
       <Input 
         type="number" 
         step="0.01"
@@ -306,7 +306,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       {/* Campo de upload de recibo com pré-visualização */}
       <div className="space-y-2">
         <label className="text-sm font-medium">
-          {isEditing ? "Atualizar recibo" : "Adicionar recibo"} (opcional)
+          {isEditing ? "Update receipt" : "Add receipt"} (opcional)
         </label>
         
         <Input 
@@ -319,11 +319,11 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         />
         
         {filePreview && (
-          <div className="mt-2 relative">
+          <div className="mt-2 relative max-h-[150px] overflow-scroll">
             <img 
               src={filePreview} 
-              alt="Pré-visualização do recibo" 
-              className="max-w-full max-h-[200px] rounded border object-contain"
+              alt="Receipt Preview" 
+              className="w-full h-full object-contain rounded border"
             />
             <Button
               type="button"
@@ -345,7 +345,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         
         {transaction?.receiptUrl && !filePreview && (
           <div className="text-sm text-muted-foreground">
-            Esta transação já possui um recibo. Enviar um novo substituirá o atual.
+            This transaction already has a receipt. Sending a new one will replace the current one.
           </div>
         )}
       </div>
@@ -368,7 +368,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           className="self-end"
           disabled={isUploading}
         >
-          {isUploading ? "Processando..." : isEditing ? "Atualizar Transação" : "Adicionar Transação"}
+          {isUploading ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
         </Button>
       </div>
     </form>

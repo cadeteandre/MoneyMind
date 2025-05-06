@@ -5,6 +5,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, TooltipProps
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { formatCurrency } from "@/lib/utils";
+import React from "react";
+
+// Function to normalize category names
+const normalizeCategory = (category: string) => {
+  return category.trim().toLowerCase();
+};
 
 // Colors for the pie chart segments
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28FD0", "#FF6B6B", "#54C8FF", "#2DD4BF"];
@@ -17,8 +23,30 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
+  // Normalize and aggregate data by category
+  const normalizedData = React.useMemo(() => {
+    const categoryMap = new Map<string, CategorySummary>();
+    
+    data.forEach(item => {
+      const normalizedCategory = normalizeCategory(item.category);
+      const existing = categoryMap.get(normalizedCategory);
+      
+      if (existing) {
+        existing.total += item.total;
+        existing.count += item.count;
+      } else {
+        categoryMap.set(normalizedCategory, {
+          ...item,
+          category: item.category.trim() // Keep original case for display
+        });
+      }
+    });
+    
+    return Array.from(categoryMap.values());
+  }, [data]);
+
   // If there's no data, show a message
-  if (!data || data.length === 0) {
+  if (!normalizedData || normalizedData.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -80,7 +108,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={normalizedData}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -92,7 +120,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
                 `${name}: ${(percent * 100).toFixed(0)}%`
               }
             >
-              {data.map((entry, index) => (
+              {normalizedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
