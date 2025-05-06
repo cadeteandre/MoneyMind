@@ -4,6 +4,12 @@ import { createClient } from "@supabase/supabase-js";
 export const runtime = "edge";
 export const maxDuration = 60;
 
+// Cliente com permissões de administrador (apenas para uso no servidor)
+const adminSupabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
 export async function POST(req: Request) {
   try {
     // Log para diagnóstico
@@ -49,11 +55,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "File too small or possibly corrupted" }, { status: 400 });
     }
     
-    // Configurar cliente Supabase com opções mínimas
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    // Usando adminSupabase para ignorar RLS
     
     // Gerar caminho direto com timestamp para evitar conflitos
     // Preservar nome original e extensão
@@ -64,7 +66,8 @@ export async function POST(req: Request) {
     console.log("Uploading to:", filePath);
     
     // Upload simples - evitar transformações ou manipulações adicionais
-    const { error: uploadError, data: uploadData } = await supabase.storage
+    // Usando adminSupabase para ignorar políticas de segurança
+    const { error: uploadError, data: uploadData } = await adminSupabase.storage
       .from("receipts")
       .upload(filePath, file, {
         contentType: file.type || 'image/jpeg', // Preservar tipo MIME original
@@ -79,7 +82,7 @@ export async function POST(req: Request) {
     console.log("Upload successful:", uploadData);
     
     // Obter URL pública sem transformações
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = adminSupabase.storage
       .from("receipts")
       .getPublicUrl(filePath);
     
