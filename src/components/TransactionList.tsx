@@ -160,7 +160,7 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                           {imgError && (
                             <div className="text-center text-red-500">
                               <p>Failed to load image</p>
-                              <p className="text-xs mt-2">Please use "Open in browser" instead</p>
+                              <p className="text-xs mt-2">Please use &quot;Open in browser&quot; instead</p>
                             </div>
                           )}
                         </div>
@@ -183,7 +183,7 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                           {imgError && (
                             <div className="text-center text-red-500 mt-2">
                               <p>Failed to load image</p>
-                              <p className="text-xs mt-1">Please use "Open in browser" instead</p>
+                              <p className="text-xs mt-1">Please use &quot;Open in browser&quot; instead</p>
                             </div>
                           )}
                         </div>
