@@ -27,6 +27,7 @@ import { formatCurrency } from "@/lib/utils";
 // Extend the Transaction type to include receiptUrl
 interface Transaction extends PrismaTransaction {
   receiptUrl: string | null;
+  receiptDownloadUrl: string | null;
 }
 
 interface TransactionListProps {
@@ -43,6 +44,8 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
   const [deleteTransaction, setDeleteTransaction] = useState<Transaction | null>(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -109,10 +112,13 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
             </p>
             {transaction.receiptUrl && (
               <Dialog open={openId === transaction.id} onOpenChange={(open) => {
-                setOpenId(open ? transaction.id : null);
                 if (open) {
-                  setImgUrl(transaction.receiptUrl);
+                  setOpenId(transaction.id);
+                  setImgUrl(transaction.receiptDownloadUrl || transaction.receiptUrl);
+                  setImgLoaded(false);
+                  setImgError(false);
                 } else {
+                  setOpenId(null);
                   setImgUrl(null);
                 }
               }}>
@@ -123,50 +129,66 @@ export default function TransactionList({ transactions, onTransactionUpdated }: 
                   <DialogHeader>
                     <DialogTitle>Receipt</DialogTitle>
                   </DialogHeader>
-                  {imgUrl ? (
+                  {imgUrl && (
                     <div className="flex flex-col items-center gap-2">
-                      {isMobile ? (
-                        // Para dispositivos móveis, oferecemos um link direto que abre no navegador nativo
-                        <a 
-                          href={imgUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center text-blue-600 mb-2"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-1" />
-                          Open in browser
-                        </a>
-                      ) : null}
+                      <a 
+                        href={imgUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-blue-600 mb-2"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-1" />
+                        Open in browser
+                      </a>
                       
-                      <div className="relative w-full max-w-md">
-                        <Image 
-                          src={imgUrl} 
-                          alt="Receipt" 
-                          width={400}
-                          height={600}
-                          loading="eager"
-                          priority={true}
-                          unoptimized={isMobile} // Desabilita a otimização do Next.js em dispositivos móveis
-                          className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
-                          onError={(e) => {
-                            console.error("Failed to load image:", imgUrl);
-                            // Fallback para img nativo quando o componente Image falha
-                            const target = e.target as HTMLImageElement;
-                            const container = target.parentElement;
-                            if (container) {
-                              const fallbackImg = document.createElement('img');
-                              fallbackImg.src = imgUrl;
-                              fallbackImg.alt = "Receipt";
-                              fallbackImg.className = "max-w-full max-h-[60vh] mx-auto rounded shadow object-contain";
-                              container.innerHTML = '';
-                              container.appendChild(fallbackImg);
-                            }
-                          }}
-                        />
-                      </div>
+                      {isMobile ? (
+                        // Para dispositivos móveis, usamos a tag img nativa em vez do componente Image
+                        <div className="w-full max-w-md flex justify-center">
+                          <img 
+                            src={imgUrl} 
+                            alt="Receipt"
+                            className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
+                            onLoad={() => setImgLoaded(true)}
+                            onError={() => {
+                              console.error("Native img failed to load:", imgUrl);
+                              setImgError(true);
+                            }}
+                          />
+                          {!imgLoaded && !imgError && (
+                            <p className="text-center text-muted-foreground">Loading receipt...</p>
+                          )}
+                          {imgError && (
+                            <div className="text-center text-red-500">
+                              <p>Failed to load image</p>
+                              <p className="text-xs mt-2">Please use "Open in browser" instead</p>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        // Para desktop, mantemos o componente Image do Next.js
+                        <div className="relative w-full max-w-md">
+                          <Image 
+                            src={imgUrl} 
+                            alt="Receipt" 
+                            width={400}
+                            height={600}
+                            loading="eager"
+                            priority={true}
+                            className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
+                            onError={() => {
+                              console.error("Failed to load image:", imgUrl);
+                              setImgError(true);
+                            }}
+                          />
+                          {imgError && (
+                            <div className="text-center text-red-500 mt-2">
+                              <p>Failed to load image</p>
+                              <p className="text-xs mt-1">Please use "Open in browser" instead</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <p className="text-center text-muted-foreground">Loading receipt...</p>
                   )}
                   <DialogClose />
                 </DialogContent>

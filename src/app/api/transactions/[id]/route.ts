@@ -17,44 +17,41 @@ export async function PUT(
   }
 
   try {
-    // Find the transaction to update
-    const existingTransaction = await prisma.transaction.findUnique({
+    // Get the transaction
+    const transaction = await prisma.transaction.findUnique({
       where: { id },
     });
 
-    if (!existingTransaction) {
+    if (!transaction) {
       return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
     }
 
     // Check if user owns this transaction
-    if (existingTransaction.userId !== userId) {
+    if (transaction.userId !== userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    // Process the request body
+    // Parse request body
     const body = await req.json();
-    const { amount, type, category, description, date, receiptUrl } = body;
-
-    if (!amount || !type || !category) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-    }
+    const { amount, type, category, description, date, receiptUrl, receiptDownloadUrl } = body;
 
     // Update the transaction
-    const transaction = await prisma.transaction.update({
+    const updatedTransaction = await prisma.transaction.update({
       where: { id },
       data: {
         amount: parseFloat(amount),
         type,
         category,
         description,
-        date: date ? new Date(date) : new Date(),
+        date: date ? new Date(date) : undefined,
         receiptUrl,
+        receiptDownloadUrl
       } as Prisma.TransactionUncheckedUpdateInput,
     });
 
-    return NextResponse.json(transaction);
+    return NextResponse.json(updatedTransaction);
   } catch (error) {
-    console.error("Update Transaction Error:", error);
+    console.error("API Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

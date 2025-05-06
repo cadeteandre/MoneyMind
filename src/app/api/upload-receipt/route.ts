@@ -49,20 +49,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Obter URL pública
-    const { data } = supabase.storage
+    // Obter URL pública com o método correto para garantir acesso direto
+    const { data: publicUrlData } = supabase.storage
       .from("receipts")
-      .getPublicUrl(filePath);
+      .getPublicUrl(filePath, {
+        download: false, // Não força download, abrir no navegador
+        transform: {
+          width: 800, // Define uma largura máxima para melhor compatibilidade
+          quality: 80, // Define qualidade para jpeg
+        },
+      });
 
-    if (!data?.publicUrl) {
+    if (!publicUrlData?.publicUrl) {
       return NextResponse.json({ error: "Failed to generate public URL" }, { status: 500 });
     }
 
-    // Cria uma URL pré-processada que é mais compatível com dispositivos móveis
-    const publicUrl = data.publicUrl;
+    // Garantir que a URL seja acessível diretamente
+    const publicUrl = publicUrlData.publicUrl;
+    
+    // Como fallback, também gerar uma URL direta de download caso necessário
+    const { data: downloadUrlData } = supabase.storage
+      .from("receipts")
+      .getPublicUrl(filePath, { download: true });
     
     return NextResponse.json({ 
       url: publicUrl,
+      downloadUrl: downloadUrlData?.publicUrl || publicUrl,
       fileType: fileType,
       fileName: safeName
     });
