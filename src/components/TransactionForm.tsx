@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@clerk/nextjs";
 
 const formSchema = z.object({
@@ -46,7 +46,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
     reset,
@@ -67,6 +67,9 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   const { userId } = useAuth();
   const isEditing = !!transaction;
   const [isMobile, setIsMobile] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(transaction?.receiptUrl || null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -78,54 +81,85 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
     checkMobile();
   }, []);
 
+  // Função separada para upload de arquivo
+  const uploadReceipt = async (file: File): Promise<{url: string, downloadUrl: string} | null> => {
+    if (!userId || !file) return null;
+    
+    try {
+      // Verifica o arquivo
+      console.log("Processing file for upload:", file.name, "Size:", file.size, "Type:", file.type);
+      
+      if (file.size < 100) {
+        throw new Error("O arquivo selecionado parece estar vazio ou muito pequeno.");
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        throw new Error("Por favor, selecione uma imagem válida (JPG, PNG, etc).");
+      }
+      
+      // Cria um novo FormData
+      const formData = new FormData();
+      
+      // Importante: aqui usamos o nome original para preservar o tipo MIME
+      formData.append("file", file, file.name);
+      formData.append("userId", userId);
+      
+      console.log("FormData created with file", file.name);
+      
+      // Faz a requisição
+      const response = await fetch("/api/upload-receipt", {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Falha ao fazer upload do recibo");
+      }
+      
+      const result = await response.json();
+      console.log("Upload success:", result);
+      
+      return {
+        url: result.url,
+        downloadUrl: result.downloadUrl || result.url
+      };
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw error;
+    }
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
+      setIsUploading(true);
+      
       let receiptUrl = transaction?.receiptUrl;
       let receiptDownloadUrl = transaction?.receiptDownloadUrl || transaction?.receiptUrl;
       
-      if (data.receipt && data.receipt.length > 0 && userId) {
-        const file = data.receipt[0];
-        console.log("Uploading file:", file.name, "Size:", file.size, "Type:", file.type);
+      // Tenta fazer upload do recibo se um arquivo foi selecionado
+      const fileList = data.receipt as FileList;
+      if (fileList && fileList.length > 0) {
+        const file = fileList[0];
         
-        // Verifica tamanho mínimo do arquivo
-        if (file.size < 100) {
-          toast.error("O arquivo selecionado parece estar vazio ou corrompido.");
-          return;
+        toast.loading("Enviando recibo...");
+        
+        try {
+          const uploadResult = await uploadReceipt(file);
+          if (uploadResult) {
+            receiptUrl = uploadResult.url;
+            receiptDownloadUrl = uploadResult.downloadUrl;
+            toast.dismiss();
+            toast.success("Recibo enviado com sucesso!");
+          }
+        } catch (error) {
+          toast.dismiss();
+          toast.error(error instanceof Error ? error.message : "Erro ao enviar recibo");
+          // Não interrompe o fluxo se o upload falhar
         }
-        
-        // Verifica se é uma imagem
-        if (!file.type.startsWith('image/')) {
-          toast.error("Por favor, selecione um arquivo de imagem válido.");
-          return;
-        }
-        
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("userId", userId);
-
-        toast.loading("Fazendo upload do recibo...");
-        
-        const uploadRes = await fetch("/api/upload-receipt", {
-          method: "POST", 
-          body: formData,
-        });
-        
-        if (!uploadRes.ok) {
-          const errorData = await uploadRes.json();
-          console.error("Upload error:", errorData);
-          throw new Error(`Falha no upload do recibo: ${errorData.error || 'Erro desconhecido'}`);
-        }
-        
-        const uploadJson = await uploadRes.json();
-        console.log("Upload response:", uploadJson);
-        
-        receiptUrl = uploadJson.url;
-        receiptDownloadUrl = uploadJson.downloadUrl || uploadJson.url;
-        
-        toast.dismiss();
-        toast.success("Recibo enviado com sucesso!");
       }
 
+      // Continua com o envio da transação
       const endpoint = isEditing 
         ? `/api/transactions/${transaction.id}` 
         : '/api/transactions';
@@ -161,13 +195,40 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
 
       toast.dismiss();
       toast.success(`Transação ${isEditing ? 'atualizada' : 'adicionada'} com sucesso!`);
+      
+      // Limpa o campo de arquivo
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setFilePreview(null);
+      
       if (onSuccess) onSuccess();
-
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.dismiss();
       toast.error(`${error instanceof Error ? error.message : 'Erro desconhecido ao processar a transação'}`);
+    } finally {
+      setIsUploading(false);
     }
+  };
+
+  // Manipula a pré-visualização do arquivo
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setFilePreview(null);
+      return;
+    }
+    
+    // Cria uma URL temporária para pré-visualização
+    const objectUrl = URL.createObjectURL(file);
+    setFilePreview(objectUrl);
+    
+    // Registra o arquivo manualmente
+    setValue("receipt", event.target.files);
+    
+    // Limpa a URL ao desmontar o componente
+    return () => URL.revokeObjectURL(objectUrl);
   };
 
   return (
@@ -242,27 +303,52 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         </Popover>
       )}
 
-      {!isEditing && (
+      {/* Campo de upload de recibo com pré-visualização */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          {isEditing ? "Atualizar recibo" : "Adicionar recibo"} (opcional)
+        </label>
+        
         <Input 
           type="file" 
           accept="image/*"
-          {...register("receipt")}
+          onChange={handleFileChange}
+          ref={fileInputRef}
+          disabled={isUploading}
+          className="cursor-pointer"
         />
-      )}
-
-      {isEditing && transaction.receiptUrl && (
-        <div className="text-sm text-muted-foreground">
-          This transaction has a receipt attached. Uploading a new one will replace it.
-        </div>
-      )}
-
-      {isEditing && (
-        <Input 
-          type="file" 
-          accept="image/*"
-          {...register("receipt")}
-        />
-      )}
+        
+        {filePreview && (
+          <div className="mt-2 relative">
+            <img 
+              src={filePreview} 
+              alt="Pré-visualização do recibo" 
+              className="max-w-full max-h-[200px] rounded border object-contain"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full"
+              onClick={() => {
+                setFilePreview(null);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = '';
+                }
+                setValue("receipt", null);
+              }}
+            >
+              ×
+            </Button>
+          </div>
+        )}
+        
+        {transaction?.receiptUrl && !filePreview && (
+          <div className="text-sm text-muted-foreground">
+            Esta transação já possui um recibo. Enviar um novo substituirá o atual.
+          </div>
+        )}
+      </div>
 
       <div className="flex gap-6">
         <Button
@@ -272,16 +358,17 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
             reset();
             if (onClose) onClose();
           }}
+          disabled={isUploading}
         >
-          Cancel
+          Cancelar
         </Button>
 
         <Button 
           type="submit" 
           className="self-end"
-          disabled={isSubmitting}
+          disabled={isUploading}
         >
-          {isSubmitting ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
+          {isUploading ? "Processando..." : isEditing ? "Atualizar Transação" : "Adicionar Transação"}
         </Button>
       </div>
     </form>
