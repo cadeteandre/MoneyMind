@@ -77,9 +77,6 @@ export async function DELETE(
     if (!transaction) {
       return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
     }
-
-    // Verificar propriedade receiptUrl com segurança de tipo
-    const transactionWithReceipt = transaction as unknown as { receiptUrl?: string | null };
     
     // Check if user owns this transaction
     if (transaction.userId !== userId) {
@@ -87,7 +84,7 @@ export async function DELETE(
     }
 
     // Delete the transaction's receipt from storage if it exists
-    if (transactionWithReceipt.receiptUrl) {
+    if (transaction.receiptUrl) {
       try {
         // Initialize Supabase client with service role key
         const supabase = createClient(
@@ -97,7 +94,7 @@ export async function DELETE(
 
         // Extract the file path from the URL
         // The URL format is typically like: https://...supabase.co/storage/v1/object/public/receipts/userId/filename
-        const urlParts = transactionWithReceipt.receiptUrl.split('/');
+        const urlParts = transaction.receiptUrl.split('/');
         const receiptPath = urlParts.slice(urlParts.indexOf('receipts')).join('/');
         
         // Delete the file from storage
