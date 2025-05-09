@@ -65,7 +65,7 @@ export default function TransactionsPage() {
         <h1 className="text-2xl font-bold">Transactions</h1>
         <div className="flex gap-2">
           {hasActiveFilters && (
-            <Button variant="outline" onClick={handleClearAllFilters} className="gap-2">
+            <Button variant="outline" onClick={handleClearAllFilters} className="gap-2 cursor-pointer">
               <X className="h-4 w-4" />
               Clear All Filters
             </Button>
@@ -84,7 +84,7 @@ export default function TransactionsPage() {
             }}
           >
             <DialogTrigger asChild>
-              <Button size="sm">
+              <Button size="sm" className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
                 New Transaction
               </Button>
@@ -101,7 +101,7 @@ export default function TransactionsPage() {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="h-8 w-8 p-0 rounded-full" 
+                    className="h-8 w-8 p-0 rounded-full cursor-pointer" 
                     onClick={() => setIsTransactionsHeaderModalOpen(false)}
                   >
                     ×
@@ -131,24 +131,24 @@ export default function TransactionsPage() {
           />
           
           <Select value={typeFilter} onValueChange={(value: "ALL" | "INCOME" | "EXPENSE") => setTypeFilter(value)}>
-            <SelectTrigger>
+            <SelectTrigger className="cursor-pointer">
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">All Types</SelectItem>
-              <SelectItem value="INCOME">Income</SelectItem>
-              <SelectItem value="EXPENSE">Expense</SelectItem>
+              <SelectItem value="ALL" className="cursor-pointer">All Types</SelectItem>
+              <SelectItem value="INCOME" className="cursor-pointer">Income</SelectItem>
+              <SelectItem value="EXPENSE" className="cursor-pointer">Expense</SelectItem>
             </SelectContent>
           </Select>
 
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger>
+            <SelectTrigger className="cursor-pointer">
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">All Categories</SelectItem>
+              <SelectItem value="ALL" className="cursor-pointer">All Categories</SelectItem>
               {categories.map(category => (
-                <SelectItem key={category} value={category}>{category}</SelectItem>
+                <SelectItem key={category} value={category} className="cursor-pointer">{category}</SelectItem>
               ))}
             </SelectContent>
           </Select>

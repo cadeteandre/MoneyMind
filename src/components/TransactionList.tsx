@@ -155,6 +155,7 @@ export default function TransactionList({
         <p className="text-muted-foreground mb-4">No transactions found.</p>
         <Button
           variant="outline"
+          className="cursor-pointer"
           onClick={() => {
             // Create an empty transaction to open the form
             setEditTransaction({
@@ -420,10 +421,10 @@ export default function TransactionList({
             </p>
           </div>
           <div className="flex justify-end gap-3 mt-2">
-            <Button variant="outline" onClick={() => setIsDeleteAlertOpen(false)}>
+            <Button variant="outline" className="cursor-pointer" onClick={() => setIsDeleteAlertOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleDelete} disabled={isDeleting} className="bg-red-500 hover:bg-red-600 text-white">
+            <Button onClick={handleDelete} disabled={isDeleting} className="bg-red-500 hover:bg-red-600 text-white cursor-pointer">
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </div>

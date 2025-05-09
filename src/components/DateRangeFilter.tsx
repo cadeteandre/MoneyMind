@@ -26,9 +26,9 @@ export function DateRangeFilter({ onFilter }: Props) {
     <div className="flex items-center justify-between flex-col gap-2">
       {/* Filter and Clear buttons */}
       <div className="flex self-end gap-2">
-        <Button onClick={() => onFilter(startDate, endDate)}>Filter</Button>
+        <Button variant="outline" onClick={() => onFilter(startDate, endDate)} className="dark:bg-black dark:text-gray-300 cursor-pointer">Filter</Button>
         {(startDate || endDate) && (
-          <Button variant="outline" onClick={handleClear} className="gap-2">
+          <Button variant="outline" onClick={handleClear} className="gap-2 dark:bg-black dark:text-gray-300 cursor-pointer">
             <X className="h-4 w-4" />
             Clear
           </Button>
@@ -40,7 +40,7 @@ export function DateRangeFilter({ onFilter }: Props) {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className={cn("w-[140px] justify-start text-left", !startDate && "text-muted-foreground")}
+              className={cn("w-[140px] justify-start text-left", !startDate && "text-muted-foreground dark:bg-black cursor-pointer")}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {startDate ? format(startDate, "dd/MM/yyyy") : "Start date"}
@@ -56,7 +56,7 @@ export function DateRangeFilter({ onFilter }: Props) {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className={cn("w-[140px] justify-start text-left", !endDate && "text-muted-foreground")}
+              className={cn("w-[140px] justify-start text-left", !endDate && "text-muted-foreground dark:bg-black cursor-pointer")}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {endDate ? format(endDate, "dd/MM/yyyy") : "End date"}

@@ -85,7 +85,7 @@ export default function DashboardClient() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={isLoading} className="h-9">
+          <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={isLoading} className="h-9 cursor-pointer">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             {isLoading ? "Updating..." : "Update"}
           </Button>
@@ -104,7 +104,7 @@ export default function DashboardClient() {
             }}
           >
             <DialogTrigger asChild>
-              <Button size="sm" className="h-9">
+              <Button size="sm" className="h-9 cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
                 New Transaction
               </Button>
@@ -121,7 +121,7 @@ export default function DashboardClient() {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="h-8 w-8 p-0 rounded-full" 
+                    className="h-8 w-8 p-0 rounded-full cursor-pointer" 
                     onClick={() => setIsHeaderModalOpen(false)}
                   >
                     ×
@@ -163,9 +163,9 @@ export default function DashboardClient() {
       {/* Tabs para alternar entre visões */}
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-between items-center mb-4">
-          <TabsList className="grid grid-cols-2 w-[400px]">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
+          <TabsList className="grid grid-cols-2 w-[400px] gap-2">
+            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700">Overview</TabsTrigger>
+            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700">Transactions</TabsTrigger>
           </TabsList>
         </div>
 
@@ -262,7 +262,7 @@ export default function DashboardClient() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-sm font-medium"
+                  className="text-sm font-medium cursor-pointer"
                   onClick={() => setActiveTab("transactions")}
                 >
                   View all
@@ -307,7 +307,7 @@ export default function DashboardClient() {
                     }}
                   >
                     <DialogTrigger asChild>
-                      <Button className="mt-4">
+                      <Button className="mt-4 cursor-pointer">
                         Add Transaction
                       </Button>
                     </DialogTrigger>
@@ -323,7 +323,7 @@ export default function DashboardClient() {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-8 w-8 p-0 rounded-full" 
+                            className="h-8 w-8 p-0 rounded-full cursor-pointer" 
                             onClick={() => setIsOverviewEmptyModalOpen(false)}
                           >
                             ×
@@ -370,7 +370,7 @@ export default function DashboardClient() {
                   }}
                 >
                   <DialogTrigger asChild>
-                    <Button size="sm">
+                    <Button size="sm" className="cursor-pointer">
                       <Plus className="h-4 w-4 mr-2" />
                       New Transaction
                     </Button>
@@ -387,7 +387,7 @@ export default function DashboardClient() {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="h-8 w-8 p-0 rounded-full" 
+                          className="h-8 w-8 p-0 rounded-full cursor-pointer" 
                           onClick={() => setIsTransactionsHeaderModalOpen(false)}
                         >
                           ×
@@ -447,7 +447,7 @@ export default function DashboardClient() {
                     }}
                   >
                     <DialogTrigger asChild>
-                      <Button className="mt-4">
+                      <Button className="mt-4 cursor-pointer">
                         Add Transaction
                       </Button>
                     </DialogTrigger>
@@ -463,7 +463,7 @@ export default function DashboardClient() {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-8 w-8 p-0 rounded-full" 
+                            className="h-8 w-8 p-0 rounded-full cursor-pointer" 
                             onClick={() => setIsTransactionsEmptyModalOpen(false)}
                           >
                             ×

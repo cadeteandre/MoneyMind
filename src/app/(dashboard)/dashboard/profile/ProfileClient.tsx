@@ -140,7 +140,7 @@ export default function ProfileClient() {
             </div>
 
             <div className="flex justify-end">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-2 cursor-pointer">
                 <Edit className="h-4 w-4" />
                 Edit Profile
               </Button>
