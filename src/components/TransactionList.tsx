@@ -72,6 +72,7 @@ export default function TransactionList({
       setOpenId(null)
       setEditTransaction(null)
       setDeleteTransaction(null)
+      setIsDeleting(false)
     }
   }, [])
 
@@ -91,6 +92,7 @@ export default function TransactionList({
 
       toast.success("Transaction deleted successfully")
       setIsDeleteAlertOpen(false)
+      setDeleteTransaction(null)
       if (onTransactionUpdated) onTransactionUpdated()
     } catch (error) {
       console.error("Error deleting transaction:", error)
@@ -250,7 +252,7 @@ export default function TransactionList({
                         </button>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Recibo</DialogTitle>
+                            <DialogTitle>Receipt</DialogTitle>
                           </DialogHeader>
                           {imgUrl && (
                             <div className="flex flex-col items-center gap-2">
@@ -261,17 +263,17 @@ export default function TransactionList({
                                 className="flex items-center text-blue-600 mb-2"
                               >
                                 <ArrowUpRight className="h-4 w-4 mr-1" />
-                                Abrir no navegador
+                                Open in browser
                               </a>
 
                               <div className="w-full max-w-md flex justify-center">
                                 {!imgLoaded && !imgError && (
-                                  <p className="text-center text-muted-foreground">Carregando recibo...</p>
+                                  <p className="text-center text-muted-foreground">Loading receipt...</p>
                                 )}
                                 {imgError ? (
                                   <div className="text-center text-red-500">
-                                    <p>Falha ao carregar a imagem</p>
-                                    <p className="text-xs mt-2">Por favor, use &quot;Abrir no navegador&quot;</p>
+                                    <p>Failed to load image</p>
+                                    <p className="text-xs mt-2">Please use &quot;Open in browser&quot;</p>
                                   </div>
                                 ) : (
                                   <img
@@ -333,7 +335,7 @@ export default function TransactionList({
                       <DropdownMenuItem
                         onClick={() => {
                           openReceipt(transaction)
-                          // Fechar o dropdown menu quando abrir o modal
+                          // Close the dropdown menu when opening the modal
                           const closeEvent = new Event("keydown")
                           Object.defineProperty(closeEvent, "key", { value: "Escape" })
                           document.dispatchEvent(closeEvent)
@@ -351,6 +353,10 @@ export default function TransactionList({
                     onClick={() => {
                       setDeleteTransaction(transaction)
                       setIsDeleteAlertOpen(true)
+                      // Close the dropdown menu when opening the modal
+                      const closeEvent = new Event("keydown")
+                      Object.defineProperty(closeEvent, "key", { value: "Escape" })
+                      document.dispatchEvent(closeEvent)
                     }}
                     className="cursor-pointer text-red-500 focus:text-red-500"
                   >
@@ -370,10 +376,8 @@ export default function TransactionList({
         onOpenChange={(open) => {
           setIsEditModalOpen(open)
           if (!open) {
-            // Limpar o estado quando o modal for fechado
-            setTimeout(() => {
-              if (!open) setEditTransaction(null)
-            }, 100)
+            // Clean up state immediately when modal closes
+            setEditTransaction(null)
           }
         }}
       >
@@ -400,10 +404,8 @@ export default function TransactionList({
         onOpenChange={(open) => {
           setIsDeleteAlertOpen(open)
           if (!open) {
-            // Limpar o estado quando o modal for fechado
-            setTimeout(() => {
-              if (!open) setDeleteTransaction(null)
-            }, 100)
+            // Clean up state immediately when dialog closes
+            setDeleteTransaction(null)
           }
         }}
       >
