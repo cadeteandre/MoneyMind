@@ -2,6 +2,8 @@
 
 MoneyMind is a Next.js web application designed for personal finance management, enabling users to track income, expenses, and gain better control over their finances.
 
+🔗 **Live-Demo:** [MoneyMind](https://moneymind-six.vercel.app/)  
+
 ## ✨ Key Features
 
 - User registration and authentication
