@@ -246,12 +246,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         onValueChange={(val) => setValue("type", val as "INCOME" | "EXPENSE")}
         {...register("type")}
       >
-        <SelectTrigger>
+        <SelectTrigger className="cursor-pointer">
           <SelectValue placeholder="Type" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="INCOME">Income</SelectItem>
-          <SelectItem value="EXPENSE">Expense</SelectItem>
+          <SelectItem value="INCOME" className="cursor-pointer">Income</SelectItem>
+          <SelectItem value="EXPENSE" className="cursor-pointer">Expense</SelectItem>
         </SelectContent>
       </Select>
       {errors.type && <p className="text-sm text-red-500">Select a type</p>}
@@ -286,7 +286,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         </div>
       ) : (
         <Popover>
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild className="cursor-pointer">
             <Button variant="outline" className={cn("w-full justify-start text-left", !date && "text-muted-foreground")}>
               <CalendarIcon className="mr-2 h-4 w-4" />
               {date ? format(date, "PPP") : <span>Pick a date</span>}
@@ -329,7 +329,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
               type="button"
               variant="outline"
               size="sm"
-              className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full"
+              className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full cursor-pointer"
               onClick={() => {
                 setFilePreview(null);
                 if (fileInputRef.current) {
@@ -354,6 +354,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         <Button
           type="button"
           variant="outline"
+          className="cursor-pointer"
           onClick={() => {
             reset();
             if (onClose) onClose();
@@ -365,7 +366,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
 
         <Button 
           type="submit" 
-          className="self-end"
+          className="self-end cursor-pointer"
           disabled={isUploading}
         >
           {isUploading ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}

@@ -46,7 +46,7 @@ export default function SidebarToggle() {
       <Button 
         variant="ghost" 
         size="icon" 
-        className="hover:bg-gray-200 dark:hover:bg-gray-800 md:hidden"
+        className="hover:bg-gray-200 dark:hover:bg-neutral-800 md:hidden cursor-pointer mt-2 ml-2"
         onClick={() => setSidebarOpen(!sidebarOpen)}
         >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -54,7 +54,7 @@ export default function SidebarToggle() {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed md:relative z-20 w-64 bg-gray-100 dark:bg-gray-900 p-4 border-r dark:border-gray-700 h-full transition-all duration-300
+        className={`fixed md:relative z-20 w-64 bg-gray-100 dark:bg-neutral-800 p-4 border-r h-full transition-all duration-300
           ${sidebarOpen || !isMobile ? 'left-0' : '-left-64'}`}
       >
         <div className="flex justify-between items-center mb-4">
@@ -63,7 +63,7 @@ export default function SidebarToggle() {
             <Button 
               variant="ghost"
               size="icon"
-              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-black cursor-pointer"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-5 w-5" />
@@ -71,32 +71,49 @@ export default function SidebarToggle() {
           )}
         </div>
         
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           <li>
-            <Link 
-              href="/dashboard" 
-              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
+            <Link
+              href="/dashboard"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
               Overview
             </Link>
           </li>
           <li>
-            <Link 
-              href="/dashboard/profile" 
-              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
+            <Link
+              href="/dashboard/profile"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
               Profile
             </Link>
           </li>
           <li>
-            <Link 
-              href="/dashboard/transactions" 
-              className="hover:underline block py-2 dark:text-gray-200 dark:hover:text-white"
+            <Link
+              href="/dashboard/transactions"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
               Transactions
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
+              onClick={handleLinkClick}
+            >
+              Home
             </Link>
           </li>
         </ul>
