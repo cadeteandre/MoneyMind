@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/TransactionForm";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 export default function TransactionsPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL");
@@ -70,17 +70,50 @@ export default function TransactionsPage() {
               Clear All Filters
             </Button>
           )}
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Dialog 
+            open={isTransactionsHeaderModalOpen} 
+            modal={true}
+            onOpenChange={(open) => {
+              // Se estiver tentando abrir, permitir
+              if (open) {
+                setIsTransactionsHeaderModalOpen(true);
+                return;
+              }
+              // Se estiver tentando fechar, impedir
+              return;
+            }}
+          >
             <DialogTrigger asChild>
-              <Button>Add Transaction</Button>
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                New Transaction
+              </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent 
+              className="sm:max-w-md"
+              onPointerDownOutside={e => e.preventDefault()}
+              onInteractOutside={e => e.preventDefault()}
+              onEscapeKeyDown={e => e.preventDefault()}
+            >
               <DialogHeader>
-                <DialogTitle>Add New Transaction</DialogTitle>
+                <div className="flex justify-between items-center">
+                  <DialogTitle>Add New Transaction</DialogTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 w-8 p-0 rounded-full" 
+                    onClick={() => setIsTransactionsHeaderModalOpen(false)}
+                  >
+                    ×
+                  </Button>
+                </div>
               </DialogHeader>
-              <TransactionForm 
-                onSuccess={() => { fetchData(); setIsModalOpen(false); }} 
-                onClose={() => setIsModalOpen(false)}
+              <TransactionForm
+                onSuccess={() => {
+                  fetchData()
+                  setIsTransactionsHeaderModalOpen(false)
+                }}
+                onClose={() => setIsTransactionsHeaderModalOpen(false)}
               />
             </DialogContent>
           </Dialog>
