@@ -1,3 +1,4 @@
+import { Transaction } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -11,3 +12,31 @@ export function formatCurrency(amount: number): string {
     currency: 'EUR',
   }).format(amount);
 }
+
+export const handleClearAllFilters = (setSearchTerm: (value: string) => void, setTypeFilter: (value: "ALL" | "INCOME" | "EXPENSE") => void, setCategoryFilter: (value: string) => void, fetchData: (startDate?: Date, endDate?: Date) => void) => {
+  setSearchTerm("");
+  setTypeFilter("ALL");
+  setCategoryFilter("ALL");
+  fetchData(undefined, undefined);
+};
+
+export const filteredTransactions = (transactions: Transaction[], searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): Transaction[] => {
+  return transactions.filter(transaction => {
+    const matchesSearch = transaction.description?.toLowerCase().includes(searchTerm.toLowerCase()) || transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = typeFilter === "ALL" || transaction.type === typeFilter;
+    const matchesCategory = categoryFilter === "ALL" || transaction.category === categoryFilter;
+    
+    return matchesSearch && matchesType && matchesCategory;
+  });
+};
+
+export const categories = (transactions: Transaction[]): string[] => {
+  return Array.from(new Set(transactions.map(t => t.category)));
+};
+
+export const hasActiveFilters = (searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): boolean => {
+  if (searchTerm || typeFilter !== "ALL" || categoryFilter !== "ALL") {
+    return true;
+  }
+  return false;
+};
