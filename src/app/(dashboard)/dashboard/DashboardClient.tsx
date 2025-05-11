@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { DateRangeFilter } from "@/components/DateRangeFilter"
 import TransactionList from "@/components/TransactionList"
 import type { Transaction as PrismaTransaction } from "@prisma/client"
 import { getTransactions } from "@/app/actions/getTransactions"
@@ -14,9 +13,11 @@ import { Button } from "@/components/ui/button"
 import { TransactionForm } from "@/components/TransactionForm"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus } from "lucide-react"
+import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus, X } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import FilterContainer from "@/components/FilterContainer"
+import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils"
 
 // Definir o tipo de Transaction compatível com TransactionList
 interface TransactionWithDownload extends PrismaTransaction {
@@ -41,6 +42,11 @@ export default function DashboardClient() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("overview")
+
+  // Estados para filtros
+  const [searchTerm, setSearchTerm] = useState("")
+  const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL")
+  const [categoryFilter, setCategoryFilter] = useState<string>("ALL")
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
@@ -85,6 +91,12 @@ export default function DashboardClient() {
         </div>
 
         <div className="flex flex-wrap gap-2">
+          {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
+            <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="h-9 cursor-pointer">
+              <X className="h-4 w-4 mr-2" />
+              Clear All Filters
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={isLoading} className="h-9 cursor-pointer">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             {isLoading ? "Updating..." : "Update"}
@@ -150,15 +162,17 @@ export default function DashboardClient() {
       )}
 
       {/* Filtros de data */}
-      <Card className="border shadow-sm overflow-hidden">
-        <CardHeader className="pb-0">
-          <CardTitle className="text-lg">Filters</CardTitle>
-          <CardDescription>Select a period to analyze your data</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4">
-          <DateRangeFilter onFilter={fetchData} />
-        </CardContent>
-      </Card>
+      <FilterContainer
+        transactions={transactions}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        typeFilter={typeFilter}
+        setTypeFilter={setTypeFilter}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        categories={categories(transactions)}
+        fetchData={fetchData}
+      />
 
       {/* Tabs para alternar entre visões */}
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -342,7 +356,7 @@ export default function DashboardClient() {
                 </div>
               ) : (
                 <TransactionList
-                  transactions={transactions.slice(0, 3)}
+                  transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter).slice(0, 3)}
                   onTransactionUpdated={() => fetchData()}
                   isLoading={isLoading}
                 />
@@ -483,7 +497,7 @@ export default function DashboardClient() {
               ) : (
                 <div className="max-h-[500px] overflow-y-auto pr-4">
                   <TransactionList
-                    transactions={transactions}
+                    transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter)}
                     onTransactionUpdated={() => fetchData()}
                     isLoading={isLoading}
                   />

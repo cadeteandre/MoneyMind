@@ -10,6 +10,7 @@ import { TransactionForm } from "@/components/TransactionForm";
 import { Calendar, Plus, X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import FilterContainer from "@/components/FilterContainer";
+import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
 
 export default function TransactionsPage() {
   const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
@@ -43,32 +44,13 @@ export default function TransactionsPage() {
     fetchData();
   }, []);
 
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesSearch = transaction.description?.toLowerCase().includes(searchTerm.toLowerCase()) || transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = typeFilter === "ALL" || transaction.type === typeFilter;
-    const matchesCategory = categoryFilter === "ALL" || transaction.category === categoryFilter;
-    
-    return matchesSearch && matchesType && matchesCategory;
-  });
-
-  const categories = Array.from(new Set(transactions.map(t => t.category)));
-
-  const handleClearAllFilters = () => {
-    setSearchTerm("");
-    setTypeFilter("ALL");
-    setCategoryFilter("ALL");
-    fetchData(undefined, undefined);
-  };
-
-  const hasActiveFilters = searchTerm || typeFilter !== "ALL" || categoryFilter !== "ALL" || dateRange.startDate || dateRange.endDate;
-
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">Transactions</h1>
         <div className="flex gap-2">
-          {hasActiveFilters && (
-            <Button variant="outline" onClick={handleClearAllFilters} className="gap-2 cursor-pointer">
+          {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
+            <Button variant="outline" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="gap-2 cursor-pointer">
               <X className="h-4 w-4" />
               Clear All Filters
             </Button>
@@ -132,7 +114,7 @@ export default function TransactionsPage() {
         setTypeFilter={setTypeFilter}
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
-        categories={categories}
+        categories={categories(transactions)}
         fetchData={fetchData}
       />
         
@@ -208,8 +190,8 @@ export default function TransactionsPage() {
         ) : (
           <div className="max-h-[500px] overflow-y-auto pr-4">
             <TransactionList
-              transactions={filteredTransactions}
-              onTransactionUpdated={() => fetchData()}
+              transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter)}
+              onTransactionUpdated={() => fetchData(dateRange.startDate, dateRange.endDate)}
               isLoading={isLoading}
             />
           </div>
