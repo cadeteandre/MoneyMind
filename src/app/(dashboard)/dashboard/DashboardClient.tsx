@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import TransactionList from "@/components/TransactionList"
-import type { Transaction as PrismaTransaction } from "@prisma/client"
+import type { ITransaction } from "@/interfaces/ITransaction"
 import { getTransactions } from "@/app/actions/getTransactions"
 import { type TransactionStats, getTransactionStats } from "@/app/actions/getTransactionStats"
 import ExpensePieChart from "@/components/charts/ExpensePieChart"
@@ -20,9 +20,7 @@ import FilterContainer from "@/components/FilterContainer"
 import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils"
 
 // Definir o tipo de Transaction compatível com TransactionList
-interface TransactionWithDownload extends PrismaTransaction {
-  receiptDownloadUrl: string | null
-}
+type TransactionWithDownload = ITransaction;
 
 export default function DashboardClient() {
   // Estado para cada modal
@@ -61,13 +59,8 @@ export default function DashboardClient() {
       // Fetch transactions and stats
       const [rawTransactions, statsData] = await Promise.all([getTransactions(params), getTransactionStats(params)])
 
-      // Adicionar o campo receiptDownloadUrl a cada transação
-      const processedTransactions = rawTransactions.map((transaction) => ({
-        ...transaction,
-        receiptDownloadUrl: transaction.receiptUrl, // Usar a mesma URL como fallback
-      }))
-
-      setTransactions(processedTransactions)
+      // O backend já garante que date seja um Date e adiciona receiptDownloadUrl
+      setTransactions(rawTransactions)
       setStats(statsData)
     } catch (error) {
       console.error("Error fetching data:", error)

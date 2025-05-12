@@ -57,7 +57,7 @@ export async function getTransactionStats({
     orderBy: { date: "asc" },
   });
 
-  // Converter amount para number
+  // Converter amount para number e garantir que date seja sempre um Date
   const transactions = transactionsRaw.map(t => ({
     ...t,
     amount:
@@ -67,6 +67,7 @@ export async function getTransactionStats({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ? (t.amount as any).toNumber()
         : Number(t.amount),
+    date: new Date(t.date) // Garantir que date seja sempre um Date
   }));
 
   // Calculate totals

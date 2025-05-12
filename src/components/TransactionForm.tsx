@@ -15,6 +15,7 @@ import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@clerk/nextjs";
+import type { ITransaction } from "@/interfaces/ITransaction";
 
 const formSchema = z.object({
   amount: z.number().positive().multipleOf(0.01),
@@ -30,15 +31,8 @@ type FormData = z.infer<typeof formSchema>;
 export interface TransactionFormProps {
   onSuccess?: () => void;
   onClose?: () => void;
-  transaction?: {
-    id: string;
+  transaction?: Omit<ITransaction, 'amount'> & {
     amount: number | string;
-    type: "INCOME" | "EXPENSE";
-    category: string;
-    description?: string | null;
-    date: Date;
-    receiptUrl?: string | null;
-    receiptDownloadUrl?: string | null;
   };
 }
 
