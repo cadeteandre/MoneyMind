@@ -306,7 +306,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       {/* Campo de upload de recibo com pré-visualização */}
       <div className="space-y-2">
         <label className="text-sm font-medium">
-          {isEditing ? "Update receipt" : "Add receipt"} (opcional)
+          {isEditing ? "Update receipt" : "Add receipt"} (optional)
         </label>
         
         <Input 
@@ -361,7 +361,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           }}
           disabled={isUploading}
         >
-          Cancelar
+          Cancel
         </Button>
 
         <Button 

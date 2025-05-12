@@ -17,7 +17,7 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <SignedOut>
               <SignInButton>
-                <Button variant="ghost">Sign In</Button>
+                <Button variant="ghost" className="cursor-pointer">Sign In</Button>
               </SignInButton>
             </SignedOut>
             <SignedIn>
@@ -40,7 +40,7 @@ export default function Home() {
           <div className="flex gap-4 justify-center">
             <SignedOut>
               <SignInButton>
-                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80">
+                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 cursor-pointer">
                   Get Started
                 </Button>
               </SignInButton>
