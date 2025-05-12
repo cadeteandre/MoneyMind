@@ -85,7 +85,7 @@ export default function ProfileClient() {
   }
 
   // Format data for display
-  const joinDate = new Date(user.createdAt || new Date()).toLocaleDateString('pt-BR', {
+  const joinDate = new Date(user.createdAt || new Date()).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
