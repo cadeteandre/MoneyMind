@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     // Create the transaction
     const transaction = await prisma.transaction.create({
       data: {
-        amount: parseFloat(amount),
+        amount: amount.toString(),
         type,
         category,
         description,
