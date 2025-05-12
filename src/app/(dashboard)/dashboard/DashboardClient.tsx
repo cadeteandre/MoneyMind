@@ -28,6 +28,7 @@ export default function DashboardClient() {
   const [isOverviewEmptyModalOpen, setIsOverviewEmptyModalOpen] = useState(false)
   const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
   const [isTransactionsEmptyModalOpen, setIsTransactionsEmptyModalOpen] = useState(false)
+  const [showFiltersContainer, setShowFiltersContainer] = useState(false)
   
   const [transactions, setTransactions] = useState<TransactionWithDownload[]>([])
   const [stats, setStats] = useState<TransactionStats>({
@@ -155,6 +156,7 @@ export default function DashboardClient() {
       )}
 
       {/* Filtros de data */}
+      {showFiltersContainer ? (
       <FilterContainer
         transactions={transactions}
         searchTerm={searchTerm}
@@ -166,13 +168,14 @@ export default function DashboardClient() {
         categories={categories(transactions)}
         fetchData={fetchData}
       />
+      ) : null}
 
       {/* Tabs para alternar entre visões */}
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-between items-center mb-4">
           <TabsList className="grid grid-cols-2 w-[400px] gap-2">
-            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700">Overview</TabsTrigger>
-            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700">Transactions</TabsTrigger>
+            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>Overview</TabsTrigger>
+            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(true)}>Transactions</TabsTrigger>
           </TabsList>
         </div>
 
