@@ -6,11 +6,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number): string {
+export function formatCurrency(amount: number | string): string {
+  const num = typeof amount === 'string' ? parseFloat(amount) : amount;
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: 'EUR',
-  }).format(amount);
+  }).format(num);
 }
 
 export const handleClearAllFilters = (setSearchTerm: (value: string) => void, setTypeFilter: (value: "ALL" | "INCOME" | "EXPENSE") => void, setCategoryFilter: (value: string) => void, fetchData: (startDate?: Date, endDate?: Date) => void) => {

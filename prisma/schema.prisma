@@ -23,7 +23,7 @@ model Transaction {
   id                 String           @id @default(cuid())
   userId             String
   user               User             @relation(fields: [userId], references: [id])
-  amount             Float
+  amount             Decimal          @db.Decimal(19, 4)
   type               TransactionType
   category           String
   description        String?
