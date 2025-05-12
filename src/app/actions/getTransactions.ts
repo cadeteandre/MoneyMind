@@ -35,7 +35,7 @@ export async function getTransactions({
     },
   });
 
-  // Converter amount para number
+  // Converter amount para number e garantir que date seja sempre um Date
   return transactions.map(t => ({
     ...t,
     amount:
@@ -45,5 +45,6 @@ export async function getTransactions({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ? (t.amount as any).toNumber()
         : Number(t.amount),
+    date: new Date(t.date) // Garantir que date seja sempre um Date
   }));
 }

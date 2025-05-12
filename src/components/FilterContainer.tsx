@@ -1,11 +1,11 @@
-import { Transaction } from "@prisma/client";
+import type { ITransaction } from "@/interfaces/ITransaction";
 import { DateRangeFilter } from "./DateRangeFilter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface FilterContainerProps {
-    transactions: Transaction[];
+    transactions: ITransaction[];
     searchTerm: string;
     setSearchTerm: (value: string) => void;
     typeFilter: "ALL" | "INCOME" | "EXPENSE";

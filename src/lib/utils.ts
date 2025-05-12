@@ -1,4 +1,4 @@
-import { Transaction } from "@prisma/client";
+import type { ITransaction } from "@/interfaces/ITransaction";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -21,7 +21,7 @@ export const handleClearAllFilters = (setSearchTerm: (value: string) => void, se
   fetchData(undefined, undefined);
 };
 
-export const filteredTransactions = (transactions: Transaction[], searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): Transaction[] => {
+export const filteredTransactions = (transactions: ITransaction[], searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): ITransaction[] => {
   return transactions.filter(transaction => {
     const matchesSearch = transaction.description?.toLowerCase().includes(searchTerm.toLowerCase()) || transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = typeFilter === "ALL" || transaction.type === typeFilter;
@@ -31,7 +31,7 @@ export const filteredTransactions = (transactions: Transaction[], searchTerm: st
   });
 };
 
-export const categories = (transactions: Transaction[]): string[] => {
+export const categories = (transactions: ITransaction[]): string[] => {
   return Array.from(new Set(transactions.map(t => t.category)));
 };
 

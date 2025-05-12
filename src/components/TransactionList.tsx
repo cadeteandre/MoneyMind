@@ -1,6 +1,6 @@
 "use client"
 
-import type { Transaction as PrismaTransaction } from "@prisma/client"
+import type { ITransaction } from "@/interfaces/ITransaction"
 import { Card } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
@@ -18,11 +18,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { TransactionForm } from "./TransactionForm"
 
-// Extend the Transaction type to include receiptUrl
-interface Transaction extends PrismaTransaction {
-  receiptUrl: string | null
-  receiptDownloadUrl: string | null
-}
+// Usar a interface do frontend
+type Transaction = ITransaction;
 
 interface TransactionListProps {
   transactions: Transaction[]
@@ -163,7 +160,7 @@ export default function TransactionList({
               userId: "",
               amount: 0,
               category: "",
-              description: "",
+              description: null,
               date: new Date(),
               type: "EXPENSE",
               receiptUrl: null,
@@ -388,7 +385,11 @@ export default function TransactionList({
           </DialogHeader>
           {editTransaction && (
             <TransactionForm
-              transaction={editTransaction}
+              transaction={{
+                ...editTransaction,
+                // Garantir que date seja sempre um Date
+                date: editTransaction.date instanceof Date ? editTransaction.date : new Date(editTransaction.date)
+              }}
               onSuccess={() => {
                 setIsEditModalOpen(false)
                 if (onTransactionUpdated) onTransactionUpdated()

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import TransactionList from "@/components/TransactionList";
-import { Transaction } from "@prisma/client";
+import type { ITransaction } from "@/interfaces/ITransaction";
 import { getTransactions } from "@/app/actions/getTransactions";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilte
 
 export default function TransactionsPage() {
   const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
@@ -31,7 +31,10 @@ export default function TransactionsPage() {
       if (endDate) params.endDate = endDate.toISOString();
       
       const transactionsData = await getTransactions(params);
+      
+      // O backend já converte date para Date, não é necessário fazer novamente
       setTransactions(transactionsData);
+      
       setDateRange({ startDate, endDate });
     } catch (error) {
       console.error("Error fetching transactions:", error);
