@@ -52,10 +52,22 @@ export async function getTransactionStats({
   };
 
   // Get all transactions based on filter
-  const transactions = await prisma.transaction.findMany({
+  const transactionsRaw = await prisma.transaction.findMany({
     where,
     orderBy: { date: "asc" },
   });
+
+  // Converter amount para number
+  const transactions = transactionsRaw.map(t => ({
+    ...t,
+    amount:
+      typeof t.amount === 'string'
+        ? parseFloat(t.amount)
+        : typeof t.amount === 'object' && t.amount !== null && 'toNumber' in t.amount
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? (t.amount as any).toNumber()
+        : Number(t.amount),
+  }));
 
   // Calculate totals
   const totalIncome = transactions

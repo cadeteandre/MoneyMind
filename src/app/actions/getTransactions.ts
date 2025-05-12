@@ -17,7 +17,7 @@ export async function getTransactions({
 
   if (!userId) return [];
 
-  return await prisma.transaction.findMany({
+  const transactions = await prisma.transaction.findMany({
     where: {
       userId,
       ...(type && { type }),
@@ -34,4 +34,16 @@ export async function getTransactions({
       date: "desc",
     },
   });
+
+  // Converter amount para number
+  return transactions.map(t => ({
+    ...t,
+    amount:
+      typeof t.amount === 'string'
+        ? parseFloat(t.amount)
+        : typeof t.amount === 'object' && t.amount !== null && 'toNumber' in t.amount
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? (t.amount as any).toNumber()
+        : Number(t.amount),
+  }));
 }

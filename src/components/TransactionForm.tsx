@@ -32,7 +32,7 @@ export interface TransactionFormProps {
   onClose?: () => void;
   transaction?: {
     id: string;
-    amount: number;
+    amount: number | string;
     type: "INCOME" | "EXPENSE";
     category: string;
     description?: string | null;
@@ -53,7 +53,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: transaction ? {
-      amount: transaction.amount,
+      amount: typeof transaction.amount === 'string' ? parseFloat(transaction.amount) : transaction.amount,
       type: transaction.type,
       category: transaction.category,
       description: transaction.description || '',
