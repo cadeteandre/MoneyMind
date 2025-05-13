@@ -17,6 +17,7 @@ import { formatCurrency } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { TransactionForm } from "./TransactionForm"
+import { useCurrency } from "./providers/currency-provider"
 
 // Usar a interface do frontend
 type Transaction = ITransaction;
@@ -42,6 +43,7 @@ export default function TransactionList({
   const [isDeleting, setIsDeleting] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [imgError, setImgError] = useState(false)
+  const { userCurrency } = useCurrency();
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -303,7 +305,7 @@ export default function TransactionList({
               <p
                 className={`font-semibold text-lg ${transaction.type === "INCOME" ? "text-green-600" : "text-red-600"}`}
               >
-                {transaction.type === "INCOME" ? "+" : "-"} {formatCurrency(transaction.amount)}
+                {transaction.type === "INCOME" ? "+" : "-"} {formatCurrency(transaction.amount, userCurrency)}
               </p>
             </div>
 

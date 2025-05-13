@@ -6,12 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, Edit, Mail, User } from 'lucide-react';
+import { Calendar, Edit, Mail, User, Coins } from 'lucide-react';
+import { CurrencySelector } from '@/components/CurrencySelector';
 
 interface UserData {
   id: string;
   email: string;
   name: string | null;
+  currency?: string;
   _count: {
     transactions: number;
   };
@@ -139,39 +141,30 @@ export default function ProfileClient() {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <Button variant="outline" className="flex items-center gap-2 cursor-pointer">
                 <Edit className="h-4 w-4" />
                 Edit Profile
               </Button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
-        {/* Right column - Activity */}
+        {/* Right column - Settings */}
         <Card>
           <CardHeader>
-            <CardTitle>Account Activity</CardTitle>
-            <CardDescription>Recent activity in your account</CardDescription>
+            <CardTitle>Settings</CardTitle>
+            <CardDescription>
+              Manage your application preferences
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="border-l-2 border-primary pl-4 py-2">
-                <p className="text-sm font-medium">Last Login</p>
-                <p className="text-xs text-muted-foreground">Today, {new Date().toLocaleTimeString()}</p>
-              </div>
-              
-              {userData && userData._count && userData._count.transactions > 0 ? (
-                <div className="border-l-2 border-primary pl-4 py-2">
-                  <p className="text-sm font-medium">Transactions Registered</p>
-                  <p className="text-xs text-muted-foreground">{userData._count.transactions} transactions total</p>
-                </div>
-              ) : (
-                <div className="border-l-2 border-gray-300 pl-4 py-2">
-                  <p className="text-sm font-medium">No Transactions</p>
-                  <p className="text-xs text-muted-foreground">You haven&apos;t added any transactions yet</p>
-                </div>
-              )}
+          <CardContent className="space-y-4">
+            <div>
+              <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
+                <Coins className="h-4 w-4" />
+                Currency
+              </h3>
+              <CurrencySelector />
             </div>
           </CardContent>
         </Card>
