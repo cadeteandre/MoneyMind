@@ -3,6 +3,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/providers/theme-provider'
+import { CurrencyProvider } from '@/components/providers/currency-provider'
+import { CurrencyDebug } from '@/components/CurrencyDebug'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +26,10 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <CurrencyProvider>
+              {children}
+              <CurrencyDebug />
+            </CurrencyProvider>
           </ThemeProvider>
         </body>
       </html>

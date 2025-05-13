@@ -15,22 +15,36 @@ export async function POST() {
     const client = await clerkClient();
     const clerkUser = await client.users.getUser(userId);
 
-    // Salvar ou atualizar o usuário no banco de dados
-    const user = await prisma.user.upsert({
-      where: { id: userId },
-      update: {
-        name: clerkUser.firstName 
-          ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
-          : clerkUser.username || "",
-      },
-      create: {
-        id: userId,
-        email: clerkUser.emailAddresses[0].emailAddress,
-        name: clerkUser.firstName 
-          ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
-          : clerkUser.username || "",
-      },
+    // Verificar se o usuário já existe
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
     });
+
+    let user;
+    
+    if (existingUser) {
+      // Atualizar usuário existente
+      user = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: clerkUser.firstName 
+            ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
+            : clerkUser.username || ""
+        }
+      });
+    } else {
+      // Criar um novo usuário
+      user = await prisma.user.create({
+        data: {
+          id: userId,
+          email: clerkUser.emailAddresses[0].emailAddress,
+          name: clerkUser.firstName 
+            ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
+            : clerkUser.username || "",
+          // O valor padrão 'EUR' será usado para currency conforme o schema
+        }
+      });
+    }
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
@@ -48,7 +62,9 @@ export async function GET() {
   }
 
   try {
-    // Buscar usuário do banco de dados
+    console.log("GET /api/user - Buscando usuário:", userId);
+    
+    // Buscar usuário do banco de dados com contagem de transações
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -57,9 +73,9 @@ export async function GET() {
         }
       }
     });
-
+    
     if (!user) {
-      // Se o usuário não existir no banco de dados, vamos criá-lo
+      console.log("Usuário não encontrado, criando novo usuário");
       const client = await clerkClient();
       const clerkUser = await client.users.getUser(userId);
       
@@ -71,6 +87,7 @@ export async function GET() {
           name: clerkUser.firstName 
             ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
             : clerkUser.username || "",
+          // O valor padrão 'EUR' será usado para currency conforme o schema
         },
         include: {
           _count: {
@@ -79,9 +96,11 @@ export async function GET() {
         }
       });
       
+      console.log("Novo usuário criado:", newUser);
       return NextResponse.json(newUser);
     }
-
+    
+    console.log("Usuário encontrado:", user);
     return NextResponse.json(user);
   } catch (error) {
     console.error("GET /api/user error:", error);

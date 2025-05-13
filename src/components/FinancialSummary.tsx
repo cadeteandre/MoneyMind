@@ -4,6 +4,7 @@ import { TransactionStats } from "@/app/actions/getTransactionStats";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDownIcon, ArrowUpIcon, ScaleIcon } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "./providers/currency-provider";
 
 interface FinancialSummaryProps {
   stats: TransactionStats;
@@ -11,6 +12,7 @@ interface FinancialSummaryProps {
 
 export default function FinancialSummary({ stats }: FinancialSummaryProps) {
   const { totalIncome, totalExpense, balance } = stats;
+  const { userCurrency } = useCurrency();
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -21,7 +23,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-green-500">
-            {formatCurrency(totalIncome)}
+            {formatCurrency(totalIncome, userCurrency)}
           </div>
         </CardContent>
       </Card>
@@ -33,7 +35,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-red-500">
-            {formatCurrency(totalExpense)}
+            {formatCurrency(totalExpense, userCurrency)}
           </div>
         </CardContent>
       </Card>
@@ -45,7 +47,7 @@ export default function FinancialSummary({ stats }: FinancialSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className={`text-2xl font-bold ${balance >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {formatCurrency(balance)}
+            {formatCurrency(balance, userCurrency)}
           </div>
         </CardContent>
       </Card>

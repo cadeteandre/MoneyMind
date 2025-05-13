@@ -6,11 +6,28 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number | string): string {
+export type CurrencyConfig = {
+  code: string;
+  locale: string;
+}
+
+export const CURRENCY_OPTIONS: Record<string, CurrencyConfig> = {
+  EUR: { code: 'EUR', locale: 'de-DE' },
+  USD: { code: 'USD', locale: 'en-US' },
+  GBP: { code: 'GBP', locale: 'en-GB' },
+  BRL: { code: 'BRL', locale: 'pt-BR' },
+  JPY: { code: 'JPY', locale: 'ja-JP' },
+  CNY: { code: 'CNY', locale: 'zh-CN' },
+  INR: { code: 'INR', locale: 'en-IN' },
+};
+
+export function formatCurrency(amount: number | string, currency: string = 'EUR'): string {
   const num = typeof amount === 'string' ? parseFloat(amount) : amount;
-  return new Intl.NumberFormat('de-DE', {
+  const currencyConfig = CURRENCY_OPTIONS[currency] || CURRENCY_OPTIONS.EUR;
+  
+  return new Intl.NumberFormat(currencyConfig.locale, {
     style: 'currency',
-    currency: 'EUR',
+    currency: currencyConfig.code,
   }).format(num);
 }
 
