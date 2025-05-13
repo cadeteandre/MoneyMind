@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, Edit, Mail, User, Coins } from 'lucide-react';
+import { Calendar, Mail, User, Coins } from 'lucide-react';
+// import { Edit } from 'lucide-react';
 import { CurrencySelector } from '@/components/CurrencySelector';
 
 interface UserData {
