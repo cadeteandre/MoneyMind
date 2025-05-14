@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const { i18n } = require('./next-i18next.config');
+
 const nextConfig = {
   images: {
     domains: [
@@ -20,6 +22,11 @@ const nextConfig = {
         pathname: '/storage/v1/object/public/**',
       }
     ],
+  },
+  i18n: {
+    defaultLocale: 'pt',
+    locales: ['pt', 'en', 'es', 'de'],
+    localeDetection: true,
   },
 };
 
