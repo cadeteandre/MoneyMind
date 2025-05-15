@@ -18,11 +18,139 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import FilterContainer from "@/components/FilterContainer"
 import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils"
+import { useLanguage } from "@/components/providers/language-provider"
+
+// Traduções para o dashboard
+const translations = {
+  pt: {
+    dashboard: {
+      title: 'Dashboard Financeiro',
+      subtitle: 'Acompanhe suas finanças em um só lugar',
+      clearFilters: 'Limpar Filtros',
+      updating: 'Atualizando...',
+      update: 'Atualizar',
+      newTransaction: 'Nova Transação',
+      addTransaction: 'Adicionar Transação',
+      error: 'Erro',
+      overview: 'Visão Geral',
+      transactions: 'Transações',
+      latestTransactions: 'Transações Recentes',
+      viewAll: 'Ver Todas',
+      noData: 'Nenhum dado disponível para exibir.',
+      addYourFirst: 'Adicione sua primeira transação para começar a acompanhar suas finanças.',
+      errorLoading: 'Não foi possível carregar os dados. Por favor, tente novamente.',
+      // Gráficos
+      expensesByCategory: 'Despesas por Categoria',
+      expensesDistribution: 'Distribuição de suas despesas por categoria',
+      monthlyOverview: 'Visão Mensal',
+      revenueAndExpenses: 'Receitas e despesas ao longo do tempo',
+      noExpenseData: 'Sem dados de despesas disponíveis para este período',
+      noMonthlyData: 'Sem dados mensais disponíveis para este período',
+      allTransactions: 'Todas as Transações',
+      showing: 'Mostrando',
+      transactions_count: 'transações',
+      noTransactionsFound: 'Nenhuma transação encontrada'
+    }
+  },
+  en: {
+    dashboard: {
+      title: 'Financial Dashboard',
+      subtitle: 'Track your finances in one place',
+      clearFilters: 'Clear All Filters',
+      updating: 'Updating...',
+      update: 'Update',
+      newTransaction: 'New Transaction',
+      addTransaction: 'Add Transaction',
+      error: 'Error',
+      overview: 'Overview',
+      transactions: 'Transactions',
+      latestTransactions: 'Latest Transactions',
+      viewAll: 'View All',
+      noData: 'No data available to display.',
+      addYourFirst: 'Add your first transaction to start tracking your finances.',
+      errorLoading: 'Failed to load data. Please try again.',
+      // Charts
+      expensesByCategory: 'Expenses by Category',
+      expensesDistribution: 'Distribution of your expenses by category',
+      monthlyOverview: 'Monthly Overview',
+      revenueAndExpenses: 'Revenue and expenses over time',
+      noExpenseData: 'No expense data available for this period',
+      noMonthlyData: 'No monthly data available for this period',
+      allTransactions: 'All Transactions',
+      showing: 'Showing',
+      transactions_count: 'transactions',
+      noTransactionsFound: 'No transactions found'
+    }
+  },
+  es: {
+    dashboard: {
+      title: 'Panel Financiero',
+      subtitle: 'Controle sus finanzas en un solo lugar',
+      clearFilters: 'Borrar Filtros',
+      updating: 'Actualizando...',
+      update: 'Actualizar',
+      newTransaction: 'Nueva Transacción',
+      addTransaction: 'Añadir Transacción',
+      error: 'Error',
+      overview: 'Vista General',
+      transactions: 'Transacciones',
+      latestTransactions: 'Transacciones Recientes',
+      viewAll: 'Ver Todo',
+      noData: 'No hay datos disponibles para mostrar.',
+      addYourFirst: 'Añada su primera transacción para comenzar a rastrear sus finanzas.',
+      errorLoading: 'No se pudieron cargar los datos. Por favor, inténtelo de nuevo.',
+      // Gráficos
+      expensesByCategory: 'Gastos por Categoría',
+      expensesDistribution: 'Distribución de sus gastos por categoría',
+      monthlyOverview: 'Resumen Mensual',
+      revenueAndExpenses: 'Ingresos y gastos a lo largo del tiempo',
+      noExpenseData: 'No hay datos de gastos disponibles para este período',
+      noMonthlyData: 'No hay datos mensuales disponibles para este período',
+      allTransactions: 'Todas las Transacciones',
+      showing: 'Mostrando',
+      transactions_count: 'transacciones',
+      noTransactionsFound: 'No se encontraron transacciones'
+    }
+  },
+  de: {
+    dashboard: {
+      title: 'Finanz-Dashboard',
+      subtitle: 'Verfolgen Sie Ihre Finanzen an einem Ort',
+      clearFilters: 'Filter Löschen',
+      updating: 'Wird aktualisiert...',
+      update: 'Aktualisieren',
+      newTransaction: 'Neue Transaktion',
+      addTransaction: 'Transaktion Hinzufügen',
+      error: 'Fehler',
+      overview: 'Übersicht',
+      transactions: 'Transaktionen',
+      latestTransactions: 'Neueste Transaktionen',
+      viewAll: 'Alle Anzeigen',
+      noData: 'Keine Daten zum Anzeigen verfügbar.',
+      addYourFirst: 'Fügen Sie Ihre erste Transaktion hinzu, um Ihre Finanzen zu verfolgen.',
+      errorLoading: 'Daten konnten nicht geladen werden. Bitte versuchen Sie es erneut.',
+      // Diagramme
+      expensesByCategory: 'Ausgaben nach Kategorie',
+      expensesDistribution: 'Verteilung Ihrer Ausgaben nach Kategorie',
+      monthlyOverview: 'Monatliche Übersicht',
+      revenueAndExpenses: 'Einnahmen und Ausgaben im Zeitverlauf',
+      noExpenseData: 'Keine Ausgabendaten für diesen Zeitraum verfügbar',
+      noMonthlyData: 'Keine monatlichen Daten für diesen Zeitraum verfügbar',
+      allTransactions: 'Alle Transaktionen',
+      showing: 'Anzeigen von',
+      transactions_count: 'Transaktionen',
+      noTransactionsFound: 'Keine Transaktionen gefunden'
+    }
+  }
+};
 
 // Definir o tipo de Transaction compatível com TransactionList
 type TransactionWithDownload = ITransaction;
 
 export default function DashboardClient() {
+  const { userLocale } = useLanguage();
+  const t = translations[userLocale as keyof typeof translations]?.dashboard || translations.en.dashboard;
+  
   // Estado para cada modal
   const [isHeaderModalOpen, setIsHeaderModalOpen] = useState(false)
   const [isOverviewEmptyModalOpen, setIsOverviewEmptyModalOpen] = useState(false)
@@ -65,7 +193,7 @@ export default function DashboardClient() {
       setStats(statsData)
     } catch (error) {
       console.error("Error fetching data:", error)
-      setError("Não foi possível carregar os dados. Por favor, tente novamente.")
+      setError(t.errorLoading)
     } finally {
       setIsLoading(false)
     }
@@ -80,20 +208,20 @@ export default function DashboardClient() {
       {/* Header com título e ações */}
       <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Financial Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Track your finances in one place</p>
+          <h1 className="text-2xl font-bold">{t.title}</h1>
+          <p className="text-muted-foreground mt-1">{t.subtitle}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
             <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="h-9 cursor-pointer">
               <X className="h-4 w-4 mr-2" />
-              Clear All Filters
+              {t.clearFilters}
             </Button>
           )}
           <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={isLoading} className="h-9 cursor-pointer">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
-            {isLoading ? "Updating..." : "Update"}
+            {isLoading ? t.updating : t.update}
           </Button>
 
           <Dialog 
@@ -112,7 +240,7 @@ export default function DashboardClient() {
             <DialogTrigger asChild>
               <Button size="sm" className="h-9 cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                New Transaction
+                {t.newTransaction}
               </Button>
             </DialogTrigger>
             <DialogContent 
@@ -123,7 +251,7 @@ export default function DashboardClient() {
             >
               <DialogHeader>
                 <div className="flex justify-between items-center">
-                  <DialogTitle>Add New Transaction</DialogTitle>
+                  <DialogTitle>{t.addTransaction}</DialogTitle>
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -150,7 +278,7 @@ export default function DashboardClient() {
       {error && (
         <Alert variant="destructive" className="animate-in fade-in-50">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Erro</AlertTitle>
+          <AlertTitle>{t.error}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -174,8 +302,8 @@ export default function DashboardClient() {
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-between items-center mb-4">
           <TabsList className="grid grid-cols-2 w-[400px] gap-2">
-            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>Overview</TabsTrigger>
-            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(true)}>Transactions</TabsTrigger>
+            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>{t.overview}</TabsTrigger>
+            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(true)}>{t.transactions}</TabsTrigger>
           </TabsList>
         </div>
 
@@ -231,13 +359,13 @@ export default function DashboardClient() {
               <>
                 <Card className="border shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle>Expenses by Category</CardTitle>
-                    <CardDescription>Distribution of your expenses by category</CardDescription>
+                    <CardTitle>{t.expensesByCategory}</CardTitle>
+                    <CardDescription>{t.expensesDistribution}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     {stats.byCategory.length === 0 ? (
                       <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                        No expense data available for this period
+                        {t.noExpenseData}
                       </div>
                     ) : (
                       <ExpensePieChart data={stats.byCategory} />
@@ -247,13 +375,13 @@ export default function DashboardClient() {
 
                 <Card className="border shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle>Monthly Overview</CardTitle>
-                    <CardDescription>Revenue and expenses over time</CardDescription>
+                    <CardTitle>{t.monthlyOverview}</CardTitle>
+                    <CardDescription>{t.revenueAndExpenses}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     {stats.byMonth.length === 0 ? (
                       <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                        No monthly data available for this period
+                        {t.noMonthlyData}
                       </div>
                     ) : (
                       <MonthlyBarChart data={stats.byMonth} />
@@ -268,14 +396,14 @@ export default function DashboardClient() {
           <Card className="border shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-2">
               <div className="flex justify-between items-center">
-                <CardTitle>Recent Transactions</CardTitle>
+                <CardTitle>{t.latestTransactions}</CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-sm font-medium cursor-pointer"
                   onClick={() => setActiveTab("transactions")}
                 >
-                  View all
+                  {t.viewAll}
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
@@ -299,9 +427,9 @@ export default function DashboardClient() {
               ) : transactions.length === 0 ? (
                 <div className="text-center py-8">
                   <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text-lg font-semibold">No transactions found</h3>
+                  <h3 className="mt-4 text-lg font-semibold">{t.noData}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Add your first transaction to start tracking your finances.
+                    {t.addYourFirst}
                   </p>
                   <Dialog 
                     open={isOverviewEmptyModalOpen} 
@@ -318,7 +446,7 @@ export default function DashboardClient() {
                   >
                     <DialogTrigger asChild>
                       <Button className="mt-4 cursor-pointer">
-                        Add Transaction
+                        {t.addTransaction}
                       </Button>
                     </DialogTrigger>
                     <DialogContent 
@@ -329,7 +457,7 @@ export default function DashboardClient() {
                     >
                       <DialogHeader>
                         <div className="flex justify-between items-center">
-                          <DialogTitle>Add New Transaction</DialogTitle>
+                          <DialogTitle>{t.addTransaction}</DialogTitle>
                           <Button 
                             variant="ghost" 
                             size="sm" 
@@ -365,7 +493,7 @@ export default function DashboardClient() {
           <Card className="border shadow-sm">
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>All Transactions</CardTitle>
+                <CardTitle>{t.allTransactions}</CardTitle>
                 <Dialog 
                   open={isTransactionsHeaderModalOpen} 
                   modal={true}
@@ -382,7 +510,7 @@ export default function DashboardClient() {
                   <DialogTrigger asChild>
                     <Button size="sm" className="cursor-pointer">
                       <Plus className="h-4 w-4 mr-2" />
-                      New Transaction
+                      {t.addTransaction}
                     </Button>
                   </DialogTrigger>
                   <DialogContent 
@@ -393,7 +521,7 @@ export default function DashboardClient() {
                   >
                     <DialogHeader>
                       <div className="flex justify-between items-center">
-                        <DialogTitle>Add New Transaction</DialogTitle>
+                        <DialogTitle>{t.addTransaction}</DialogTitle>
                         <Button 
                           variant="ghost" 
                           size="sm" 
@@ -416,8 +544,8 @@ export default function DashboardClient() {
               </div>
               <CardDescription>
                 {transactions.length > 0
-                  ? `Showing ${transactions.length} transactions`
-                  : "No transactions found"}
+                  ? `${t.showing} ${transactions.length} ${t.transactions_count}`
+                  : t.noTransactionsFound}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -439,9 +567,9 @@ export default function DashboardClient() {
               ) : transactions.length === 0 ? (
                 <div className="text-center py-8">
                   <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text-lg font-semibold">No transactions found</h3>
+                  <h3 className="mt-4 text-lg font-semibold">{t.noTransactionsFound}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Add your first transaction to start tracking your finances.
+                    {t.addYourFirst}
                   </p>
                   <Dialog 
                     open={isTransactionsEmptyModalOpen} 
@@ -458,7 +586,7 @@ export default function DashboardClient() {
                   >
                     <DialogTrigger asChild>
                       <Button className="mt-4 cursor-pointer">
-                        Add Transaction
+                        {t.addTransaction}
                       </Button>
                     </DialogTrigger>
                     <DialogContent 
@@ -469,7 +597,7 @@ export default function DashboardClient() {
                     >
                       <DialogHeader>
                         <div className="flex justify-between items-center">
-                          <DialogTitle>Add New Transaction</DialogTitle>
+                          <DialogTitle>{t.addTransaction}</DialogTitle>
                           <Button 
                             variant="ghost" 
                             size="sm" 

@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { CurrencyProvider } from '@/components/providers/currency-provider'
+import { LanguageProvider } from '@/components/providers/language-provider'
 // import { CurrencyDebug } from '@/components/CurrencyDebug'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,8 +28,10 @@ export default function RootLayout({
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <CurrencyProvider>
-              {children}
-              {/* <CurrencyDebug /> */}
+              <LanguageProvider>
+                {children}
+                {/* <CurrencyDebug /> */}
+              </LanguageProvider>
             </CurrencyProvider>
           </ThemeProvider>
         </body>
