@@ -38,8 +38,18 @@ const translations = {
       viewAll: 'Ver Todas',
       noData: 'Nenhum dado disponível para exibir.',
       addYourFirst: 'Adicione sua primeira transação para começar a acompanhar suas finanças.',
-      addTransaction: 'Adicionar Transação',
-      errorLoading: 'Não foi possível carregar os dados. Por favor, tente novamente.'
+      errorLoading: 'Não foi possível carregar os dados. Por favor, tente novamente.',
+      // Gráficos
+      expensesByCategory: 'Despesas por Categoria',
+      expensesDistribution: 'Distribuição de suas despesas por categoria',
+      monthlyOverview: 'Visão Mensal',
+      revenueAndExpenses: 'Receitas e despesas ao longo do tempo',
+      noExpenseData: 'Sem dados de despesas disponíveis para este período',
+      noMonthlyData: 'Sem dados mensais disponíveis para este período',
+      allTransactions: 'Todas as Transações',
+      showing: 'Mostrando',
+      transactions_count: 'transações',
+      noTransactionsFound: 'Nenhuma transação encontrada'
     }
   },
   en: {
@@ -50,7 +60,7 @@ const translations = {
       updating: 'Updating...',
       update: 'Update',
       newTransaction: 'New Transaction',
-      addTransaction: 'Add New Transaction',
+      addTransaction: 'Add Transaction',
       error: 'Error',
       overview: 'Overview',
       transactions: 'Transactions',
@@ -58,8 +68,18 @@ const translations = {
       viewAll: 'View All',
       noData: 'No data available to display.',
       addYourFirst: 'Add your first transaction to start tracking your finances.',
-      addTransaction: 'Add Transaction',
-      errorLoading: 'Failed to load data. Please try again.'
+      errorLoading: 'Failed to load data. Please try again.',
+      // Charts
+      expensesByCategory: 'Expenses by Category',
+      expensesDistribution: 'Distribution of your expenses by category',
+      monthlyOverview: 'Monthly Overview',
+      revenueAndExpenses: 'Revenue and expenses over time',
+      noExpenseData: 'No expense data available for this period',
+      noMonthlyData: 'No monthly data available for this period',
+      allTransactions: 'All Transactions',
+      showing: 'Showing',
+      transactions_count: 'transactions',
+      noTransactionsFound: 'No transactions found'
     }
   },
   es: {
@@ -78,8 +98,18 @@ const translations = {
       viewAll: 'Ver Todo',
       noData: 'No hay datos disponibles para mostrar.',
       addYourFirst: 'Añada su primera transacción para comenzar a rastrear sus finanzas.',
-      addTransaction: 'Añadir Transacción',
-      errorLoading: 'No se pudieron cargar los datos. Por favor, inténtelo de nuevo.'
+      errorLoading: 'No se pudieron cargar los datos. Por favor, inténtelo de nuevo.',
+      // Gráficos
+      expensesByCategory: 'Gastos por Categoría',
+      expensesDistribution: 'Distribución de sus gastos por categoría',
+      monthlyOverview: 'Resumen Mensual',
+      revenueAndExpenses: 'Ingresos y gastos a lo largo del tiempo',
+      noExpenseData: 'No hay datos de gastos disponibles para este período',
+      noMonthlyData: 'No hay datos mensuales disponibles para este período',
+      allTransactions: 'Todas las Transacciones',
+      showing: 'Mostrando',
+      transactions_count: 'transacciones',
+      noTransactionsFound: 'No se encontraron transacciones'
     }
   },
   de: {
@@ -98,8 +128,18 @@ const translations = {
       viewAll: 'Alle Anzeigen',
       noData: 'Keine Daten zum Anzeigen verfügbar.',
       addYourFirst: 'Fügen Sie Ihre erste Transaktion hinzu, um Ihre Finanzen zu verfolgen.',
-      addTransaction: 'Transaktion Hinzufügen',
-      errorLoading: 'Daten konnten nicht geladen werden. Bitte versuchen Sie es erneut.'
+      errorLoading: 'Daten konnten nicht geladen werden. Bitte versuchen Sie es erneut.',
+      // Diagramme
+      expensesByCategory: 'Ausgaben nach Kategorie',
+      expensesDistribution: 'Verteilung Ihrer Ausgaben nach Kategorie',
+      monthlyOverview: 'Monatliche Übersicht',
+      revenueAndExpenses: 'Einnahmen und Ausgaben im Zeitverlauf',
+      noExpenseData: 'Keine Ausgabendaten für diesen Zeitraum verfügbar',
+      noMonthlyData: 'Keine monatlichen Daten für diesen Zeitraum verfügbar',
+      allTransactions: 'Alle Transaktionen',
+      showing: 'Anzeigen von',
+      transactions_count: 'Transaktionen',
+      noTransactionsFound: 'Keine Transaktionen gefunden'
     }
   }
 };
@@ -319,13 +359,13 @@ export default function DashboardClient() {
               <>
                 <Card className="border shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle>Expenses by Category</CardTitle>
-                    <CardDescription>Distribution of your expenses by category</CardDescription>
+                    <CardTitle>{t.expensesByCategory}</CardTitle>
+                    <CardDescription>{t.expensesDistribution}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     {stats.byCategory.length === 0 ? (
                       <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                        No expense data available for this period
+                        {t.noExpenseData}
                       </div>
                     ) : (
                       <ExpensePieChart data={stats.byCategory} />
@@ -335,13 +375,13 @@ export default function DashboardClient() {
 
                 <Card className="border shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle>Monthly Overview</CardTitle>
-                    <CardDescription>Revenue and expenses over time</CardDescription>
+                    <CardTitle>{t.monthlyOverview}</CardTitle>
+                    <CardDescription>{t.revenueAndExpenses}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     {stats.byMonth.length === 0 ? (
                       <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                        No monthly data available for this period
+                        {t.noMonthlyData}
                       </div>
                     ) : (
                       <MonthlyBarChart data={stats.byMonth} />
@@ -453,7 +493,7 @@ export default function DashboardClient() {
           <Card className="border shadow-sm">
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>All Transactions</CardTitle>
+                <CardTitle>{t.allTransactions}</CardTitle>
                 <Dialog 
                   open={isTransactionsHeaderModalOpen} 
                   modal={true}
@@ -504,8 +544,8 @@ export default function DashboardClient() {
               </div>
               <CardDescription>
                 {transactions.length > 0
-                  ? `Showing ${transactions.length} transactions`
-                  : "No transactions found"}
+                  ? `${t.showing} ${transactions.length} ${t.transactions_count}`
+                  : t.noTransactionsFound}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -527,9 +567,9 @@ export default function DashboardClient() {
               ) : transactions.length === 0 ? (
                 <div className="text-center py-8">
                   <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text-lg font-semibold">No transactions found</h3>
+                  <h3 className="mt-4 text-lg font-semibold">{t.noTransactionsFound}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Add your first transaction to start tracking your finances.
+                    {t.addYourFirst}
                   </p>
                   <Dialog 
                     open={isTransactionsEmptyModalOpen} 

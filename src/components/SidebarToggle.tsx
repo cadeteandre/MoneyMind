@@ -160,9 +160,9 @@ export default function SidebarToggle() {
           <div className="flex items-center gap-3">
             <UserButton />
             <ThemeToggle />
-          </div>
-          <div className="w-full">
-            <LanguageSelector />
+            <div>
+              <LanguageSelector />
+            </div>
           </div>
         </div>
       </aside>

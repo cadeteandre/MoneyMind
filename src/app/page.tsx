@@ -4,12 +4,27 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { ArrowRight, BarChart3, Wallet, PiggyBank, Shield } from "lucide-react";
+import { ArrowRight, BarChart3, Wallet, PiggyBank, Shield, Loader2 } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { LanguageSelector } from "@/components/LanguageSelector";
 
+// Loading component 
+function LoadingScreen() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+      <p className="text-muted-foreground">Loading...</p>
+    </div>
+  )
+}
+
 export default function Home() {
-  const { userLocale } = useLanguage();
+  const { userLocale, isLoading } = useLanguage();
+
+  // If language is still loading, show loading screen
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   // Traduções para a página inicial
   const translations = {
@@ -115,10 +130,11 @@ export default function Home() {
             <Wallet className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">{t.appName}</span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="w-32">
+          <div className="flex items-center gap-2">
+            <div>
               <LanguageSelector />
             </div>
+            <ThemeToggle />
             <SignedOut>
               <SignInButton>
                 <Button variant="ghost" className="cursor-pointer">{t.signIn}</Button>
@@ -127,7 +143,6 @@ export default function Home() {
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
-            <ThemeToggle />
           </div>
         </div>
       </header>

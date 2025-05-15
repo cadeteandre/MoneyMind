@@ -177,7 +177,7 @@ export default function ProfileClient() {
                 <Globe className="h-4 w-4" />
                 {t('profile.language')}
               </h3>
-              <LanguageSelector />
+              <LanguageSelector isProfilePage={true} />
             </div>
           </CardContent>
         </Card>

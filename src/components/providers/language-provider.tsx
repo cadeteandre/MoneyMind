@@ -24,7 +24,7 @@ i18next
   ))
   .init({
     ...getOptions(),
-    lng: 'pt', // Idioma padrão
+    lng: 'en', // Idioma padrão
     interpolation: {
       escapeValue: false,
     }
@@ -33,7 +33,7 @@ i18next
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [userLocale, setLocale] = useState<Locale>('pt')
+  const [userLocale, setLocale] = useState<Locale>('en')
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
