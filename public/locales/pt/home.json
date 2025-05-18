@@ -1,0 +1,23 @@
+{
+  "signIn": "Entrar",
+  "appName": "MoneyMind",
+  "title": "Assuma o Controle das Suas Finanças",
+  "description": "MoneyMind ajuda você a rastrear, analisar e otimizar sua vida financeira com insights poderosos e ferramentas intuitivas.",
+  "getStarted": "Começar",
+  "goToDashboard": "Ir para o Dashboard",
+  "features": "Recursos Poderosos",
+  "analytics": {
+      "title": "Análise Financeira",
+      "description": "Obtenha insights detalhados sobre seus padrões de gastos e saúde financeira."
+  },
+  "budgeting": {
+      "title": "Orçamento Inteligente",
+      "description": "Crie e acompanhe orçamentos que ajudam você a atingir seus objetivos financeiros."
+  },
+  "security": {
+      "title": "Seguro e Privado",
+      "description": "Seus dados financeiros são protegidos com segurança de nível empresarial."
+  },
+  "footer": "Todos os direitos reservados.",
+  "loading": "Carregando..."
+}

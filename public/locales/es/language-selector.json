@@ -1,0 +1,13 @@
+{
+  "loading": "Cargando...",
+  "selectLanguage": "Seleccione el idioma",
+  "noLanguageFound": "No se encontró ningún idioma.",
+  "languageChanged": "Idioma cambiado a",
+  "languageChangeFailed": "Error al cambiar el idioma",
+  "languageLabels": {
+    "pt": "Portugués",
+    "en": "Inglés",
+    "es": "Español",
+    "de": "Alemán"
+  }
+} 

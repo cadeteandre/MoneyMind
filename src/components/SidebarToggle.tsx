@@ -8,46 +8,13 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from './theme-toggle';
 import { useLanguage } from './providers/language-provider';
 import { LanguageSelector } from './LanguageSelector';
-
-// Traduções para o sidebar
-const translations = {
-  pt: {
-    dashboard: 'Dashboard',
-    overview: 'Visão Geral',
-    profile: 'Perfil',
-    transactions: 'Transações',
-    home: 'Página Inicial'
-  },
-  en: {
-    dashboard: 'Dashboard',
-    overview: 'Overview',
-    profile: 'Profile',
-    transactions: 'Transactions',
-    home: 'Home'
-  },
-  es: {
-    dashboard: 'Panel',
-    overview: 'Vista General',
-    profile: 'Perfil',
-    transactions: 'Transacciones',
-    home: 'Inicio'
-  },
-  de: {
-    dashboard: 'Dashboard',
-    overview: 'Übersicht',
-    profile: 'Profil',
-    transactions: 'Transaktionen',
-    home: 'Startseite'
-  }
-};
+import { useTranslation } from '@/app/i18n/client';
 
 export default function SidebarToggle() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { userLocale } = useLanguage();
-  
-  // Seleciona a tradução baseada no idioma atual
-  const t = translations[userLocale as keyof typeof translations] || translations.en;
+  const { t } = useTranslation(userLocale, 'sidebar');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -96,7 +63,7 @@ export default function SidebarToggle() {
           ${sidebarOpen || !isMobile ? 'left-0' : '-left-64'}`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold dark:text-white">{t.dashboard}</h2>
+          <h2 className="text-lg font-bold dark:text-white">{t('dashboard')}</h2>
           {isMobile && (
             <Button 
               variant="ghost"
@@ -118,7 +85,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t.overview}
+              {t('overview')}
             </Link>
           </li>
           <li>
@@ -129,7 +96,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t.profile}
+              {t('profile')}
             </Link>
           </li>
           <li>
@@ -140,7 +107,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t.transactions}
+              {t('transactions')}
             </Link>
           </li>
           <li>
@@ -151,7 +118,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t.home}
+              {t('home')}
             </Link>
           </li>
         </ul>

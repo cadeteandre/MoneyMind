@@ -1,0 +1,20 @@
+{
+  "filters": "Filters",
+  "selectPeriod": "Select a period to analyze your data",
+  "searchTransactions": "Search transactions...",
+  "filterByType": "Filter by type",
+  "allTypes": "All Types",
+  "income": "Income",
+  "expense": "Expense",
+  "filterByCategory": "Filter by category",
+  "allCategories": "All Categories",
+  "dateRange": "Date Range",
+  "clear": "Clear",
+  "thisMonth": "This Month",
+  "lastMonth": "Last Month",
+  "last3Months": "Last 3 Months",
+  "last6Months": "Last 6 Months",
+  "thisYear": "This Year",
+  "lastYear": "Last Year",
+  "customRange": "Custom Range"
+} 
