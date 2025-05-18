@@ -18,45 +18,7 @@ import {
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./providers/language-provider"
 import { toast } from "sonner"
-
-const languageLabels = {
-  pt: 'Português',
-  en: 'English',
-  es: 'Español',
-  de: 'Deutsch'
-};
-
-// Translations for the language selector
-const translations = {
-  pt: {
-    loading: 'Carregando...',
-    selectLanguage: 'Selecione o idioma',
-    noLanguageFound: 'Nenhum idioma encontrado.',
-    languageChanged: 'Idioma alterado para',
-    languageChangeFailed: 'Falha ao alterar o idioma'
-  },
-  en: {
-    loading: 'Loading...',
-    selectLanguage: 'Select language',
-    noLanguageFound: 'No language found.',
-    languageChanged: 'Language changed to',
-    languageChangeFailed: 'Failed to change language'
-  },
-  es: {
-    loading: 'Cargando...',
-    selectLanguage: 'Seleccione el idioma',
-    noLanguageFound: 'No se encontró ningún idioma.',
-    languageChanged: 'Idioma cambiado a',
-    languageChangeFailed: 'Error al cambiar el idioma'
-  },
-  de: {
-    loading: 'Wird geladen...',
-    selectLanguage: 'Sprache auswählen',
-    noLanguageFound: 'Keine Sprache gefunden.',
-    languageChanged: 'Sprache geändert zu',
-    languageChangeFailed: 'Sprache konnte nicht geändert werden'
-  }
-};
+import { useTranslation } from '@/app/i18n/client'
 
 interface LanguageSelectorProps {
   isProfilePage?: boolean;
@@ -64,26 +26,24 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ isProfilePage }: LanguageSelectorProps) {
   const { userLocale, setUserLocale, isLoading } = useLanguage()
+  const { t } = useTranslation(userLocale, 'language-selector')
   const [open, setOpen] = useState(false)
-  
-  // Get the translations based on current locale
-  const t = translations[userLocale as keyof typeof translations] || translations.en
 
   const handleLanguageSelect = async (locale: string) => {
     try {
       await setUserLocale(locale as 'pt' | 'en' | 'es' | 'de')
-      toast.success(`${t.languageChanged} ${languageLabels[locale as keyof typeof languageLabels]}`)
+      toast.success(`${t('languageChanged')} ${t(`languageLabels.${locale}`)}`)
     } catch {
-      toast.error(t.languageChangeFailed)
+      toast.error(t('languageChangeFailed'))
     }
     setOpen(false)
   }
 
   const languages = [
-    { value: 'pt', label: languageLabels.pt },
-    { value: 'en', label: languageLabels.en },
-    { value: 'es', label: languageLabels.es },
-    { value: 'de', label: languageLabels.de },
+    { value: 'pt', label: t('languageLabels.pt') },
+    { value: 'en', label: t('languageLabels.en') },
+    { value: 'es', label: t('languageLabels.es') },
+    { value: 'de', label: t('languageLabels.de') }
   ]
 
   return (
@@ -104,7 +64,7 @@ export function LanguageSelector({ isProfilePage }: LanguageSelectorProps) {
             {/* Texto visível apenas em desktop */}
             <span className={`${isProfilePage ? "inline" : "hidden sm:inline"}`}>
               {isLoading 
-                ? t.loading
+                ? t('loading')
                 : languages.find((lang) => lang.value === userLocale)?.label || languages[0].label
               }
             </span>
@@ -115,8 +75,8 @@ export function LanguageSelector({ isProfilePage }: LanguageSelectorProps) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder={t.selectLanguage} />
-          <CommandEmpty>{t.noLanguageFound}</CommandEmpty>
+          <CommandInput placeholder={t('selectLanguage')} />
+          <CommandEmpty>{t('noLanguageFound')}</CommandEmpty>
           <CommandGroup>
             {languages.map((language) => (
               <CommandItem

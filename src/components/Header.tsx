@@ -4,51 +4,28 @@ import Link from "next/link"
 import { LanguageSelector } from "./LanguageSelector"
 import { ThemeToggle } from "./theme-toggle"
 import { useLanguage } from "./providers/language-provider"
-
-// Traduções simplificadas para o header
-const translations = {
-  pt: {
-    home: 'Início',
-    dashboard: 'Dashboard',
-    profile: 'Perfil'
-  },
-  en: {
-    home: 'Home',
-    dashboard: 'Dashboard',
-    profile: 'Profile'
-  },
-  es: {
-    home: 'Inicio',
-    dashboard: 'Panel',
-    profile: 'Perfil'
-  },
-  de: {
-    home: 'Startseite',
-    dashboard: 'Dashboard',
-    profile: 'Profil'
-  }
-}
+import { useTranslation } from '@/app/i18n/client'
 
 export function Header() {
   const { userLocale } = useLanguage()
-  const t = translations[userLocale as keyof typeof translations] || translations.en
+  const { t } = useTranslation(userLocale, 'header')
 
   return (
     <header className="w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between py-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-xl font-bold">
-            MoneyMind
+            {t('appName')}
           </Link>
           <nav className="hidden md:flex gap-6">
             <Link href="/" className="text-sm font-medium hover:underline">
-              {t.home}
+              {t('home')}
             </Link>
             <Link href="/dashboard" className="text-sm font-medium hover:underline">
-              {t.dashboard}
+              {t('dashboard')}
             </Link>
             <Link href="/dashboard/profile" className="text-sm font-medium hover:underline">
-              {t.profile}
+              {t('profile')}
             </Link>
           </nav>
         </div>

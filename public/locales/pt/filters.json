@@ -1,0 +1,20 @@
+{
+  "filters": "Filtros",
+  "selectPeriod": "Selecione um período para analisar seus dados",
+  "searchTransactions": "Buscar transações...",
+  "filterByType": "Filtrar por tipo",
+  "allTypes": "Todos os Tipos",
+  "income": "Receita",
+  "expense": "Despesa",
+  "filterByCategory": "Filtrar por categoria",
+  "allCategories": "Todas as Categorias",
+  "dateRange": "Período",
+  "clear": "Limpar",
+  "thisMonth": "Este Mês",
+  "lastMonth": "Mês Passado",
+  "last3Months": "Últimos 3 Meses",
+  "last6Months": "Últimos 6 Meses",
+  "thisYear": "Este Ano",
+  "lastYear": "Ano Passado",
+  "customRange": "Período Personalizado"
+} 

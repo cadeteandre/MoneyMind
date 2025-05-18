@@ -8,30 +8,7 @@ import { formatCurrency } from "@/lib/utils";
 import React from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useCurrency } from "@/components/providers/currency-provider";
-
-// Translations for the pie chart
-const translations = {
-  pt: {
-    title: 'Despesas por Categoria',
-    noData: 'Sem dados de despesas disponíveis',
-    transactions: 'transação(ões)'
-  },
-  en: {
-    title: 'Expenses by Category',
-    noData: 'No expense data available',
-    transactions: 'transaction(s)'
-  },
-  es: {
-    title: 'Gastos por Categoría',
-    noData: 'No hay datos de gastos disponibles',
-    transactions: 'transacción(es)'
-  },
-  de: {
-    title: 'Ausgaben nach Kategorie',
-    noData: 'Keine Ausgabendaten verfügbar',
-    transactions: 'Transaktion(en)'
-  }
-};
+import { useTranslation } from '@/app/i18n/client';
 
 // Function to normalize category names
 const normalizeCategory = (category: string) => {
@@ -50,9 +27,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   const isTablet = useMediaQuery("(max-width: 1024px)");
   const { userLocale } = useLanguage();
   const { userCurrency } = useCurrency();
-  
-  // Get translations based on user locale
-  const t = translations[userLocale as keyof typeof translations] || translations.en;
+  const { t } = useTranslation(userLocale, 'charts');
 
   // Normalize and aggregate data by category
   const normalizedData = React.useMemo(() => {
@@ -81,10 +56,10 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t.title}</CardTitle>
+          <CardTitle>{t('pieChart.title')}</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px] flex items-center justify-center">
-          <p className="text-muted-foreground">{t.noData}</p>
+          <p className="text-muted-foreground">{t('pieChart.noData')}</p>
         </CardContent>
       </Card>
     );
@@ -98,7 +73,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
         <div className="bg-background p-3 border rounded-lg shadow-sm">
           <p className="font-medium">{data.category}</p>
           <p className="text-sm">{formatCurrency(data.total, userCurrency)}</p>
-          <p className="text-xs text-muted-foreground">{data.count} {t.transactions}</p>
+          <p className="text-xs text-muted-foreground">{data.count} {t('pieChart.transactions')}</p>
         </div>
       );
     }
@@ -133,7 +108,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t.title}</CardTitle>
+        <CardTitle>{t('pieChart.title')}</CardTitle>
       </CardHeader>
       <CardContent style={{ height: `${height}px` }}>
         <ResponsiveContainer width="100%" height="100%">

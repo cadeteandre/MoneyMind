@@ -1,0 +1,14 @@
+{
+  "monthlyChart": {
+    "title": "Receitas & Despesas Mensais",
+    "noData": "Sem dados mensais disponíveis",
+    "income": "Receita",
+    "expense": "Despesa"
+  },
+  "pieChart": {
+    "title": "Despesas por Categoria",
+    "noData": "Sem dados de despesas disponíveis",
+    "others": "Outros",
+    "transactions": "transação(ões)"
+  }
+} 

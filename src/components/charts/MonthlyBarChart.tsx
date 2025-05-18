@@ -6,34 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useCurrency } from "@/components/providers/currency-provider";
-
-// Translations for the monthly bar chart
-const translations = {
-  pt: {
-    title: 'Receitas & Despesas Mensais',
-    noData: 'Sem dados mensais disponíveis',
-    income: 'Receita',
-    expense: 'Despesa'
-  },
-  en: {
-    title: 'Monthly Income & Expenses',
-    noData: 'No monthly data available',
-    income: 'Income',
-    expense: 'Expense'
-  },
-  es: {
-    title: 'Ingresos & Gastos Mensuales',
-    noData: 'No hay datos mensuales disponibles',
-    income: 'Ingreso',
-    expense: 'Gasto'
-  },
-  de: {
-    title: 'Monatliche Einnahmen & Ausgaben',
-    noData: 'Keine monatlichen Daten verfügbar',
-    income: 'Einkommen',
-    expense: 'Ausgabe'
-  }
-};
+import { useTranslation } from '@/app/i18n/client';
 
 interface MonthlyBarChartProps {
   data: MonthlyData[];
@@ -50,19 +23,17 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
 export default function MonthlyBarChart({ data }: MonthlyBarChartProps) {
   const { userLocale } = useLanguage();
   const { userCurrency } = useCurrency();
-  
-  // Get translations based on user locale
-  const t = translations[userLocale as keyof typeof translations] || translations.en;
+  const { t } = useTranslation(userLocale, 'charts');
 
   // If there's no data, show a message
   if (!data || data.length === 0) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t.title}</CardTitle>
+          <CardTitle>{t('monthlyChart.title')}</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px] flex items-center justify-center">
-          <p className="text-muted-foreground">{t.noData}</p>
+          <p className="text-muted-foreground">{t('monthlyChart.noData')}</p>
         </CardContent>
       </Card>
     );
@@ -88,7 +59,7 @@ export default function MonthlyBarChart({ data }: MonthlyBarChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t.title}</CardTitle>
+        <CardTitle>{t('monthlyChart.title')}</CardTitle>
       </CardHeader>
       <CardContent className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -106,8 +77,8 @@ export default function MonthlyBarChart({ data }: MonthlyBarChartProps) {
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <Bar dataKey="income" name={t.income} fill="#4ade80" />
-            <Bar dataKey="expense" name={t.expense} fill="#f87171" />
+            <Bar dataKey="income" name={t('monthlyChart.income')} fill="#4ade80" />
+            <Bar dataKey="expense" name={t('monthlyChart.expense')} fill="#f87171" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
