@@ -126,7 +126,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'this-month' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('this-month')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('thisMonth')}
               </Button>
@@ -134,7 +134,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'last-month' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-month')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('lastMonth')}
               </Button>
@@ -142,7 +142,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'last-3-months' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-3-months')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('last3Months')}
               </Button>
@@ -150,7 +150,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'last-6-months' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-6-months')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('last6Months')}
               </Button>
@@ -158,7 +158,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'this-year' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('this-year')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('thisYear')}
               </Button>
@@ -166,7 +166,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'last-year' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-year')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('lastYear')}
               </Button>
@@ -174,7 +174,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={showCustomDateRange ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => setShowCustomDateRange(!showCustomDateRange)}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
                 {t('customRange')}
               </Button>
