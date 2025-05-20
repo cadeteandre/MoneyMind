@@ -11,6 +11,8 @@ import { Calendar, Plus, X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import FilterContainer from "@/components/FilterContainer";
 import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
+import { useLanguage } from "@/components/providers/language-provider";
+import { useTranslation } from '@/app/i18n/client';
 
 export default function TransactionsPage() {
   const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
@@ -21,6 +23,9 @@ export default function TransactionsPage() {
   const [dateRange, setDateRange] = useState<{ startDate?: Date; endDate?: Date }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isTransactionsEmptyModalOpen, setIsTransactionsEmptyModalOpen] = useState(false);
+
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'dashboard');
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
@@ -50,12 +55,12 @@ export default function TransactionsPage() {
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold">Transactions</h1>
+        <h1 className="text-2xl font-bold">{t('transactions')}</h1>
         <div className="flex gap-2">
           {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
             <Button variant="outline" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="gap-2 cursor-pointer">
               <X className="h-4 w-4" />
-              Clear All Filters
+              {t('clearFilters')}
             </Button>
           )}
           <Dialog 
@@ -74,7 +79,7 @@ export default function TransactionsPage() {
             <DialogTrigger asChild>
               <Button size="sm" className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                New Transaction
+                {t('newTransaction')}
               </Button>
             </DialogTrigger>
             <DialogContent 
@@ -85,7 +90,7 @@ export default function TransactionsPage() {
             >
               <DialogHeader>
                 <div className="flex justify-between items-center">
-                  <DialogTitle>Add New Transaction</DialogTitle>
+                  <DialogTitle>{t('addTransaction')}</DialogTitle>
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -139,9 +144,9 @@ export default function TransactionsPage() {
         ) : transactions.length === 0 ? (
           <div className="text-center py-8">
             <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 text-lg font-semibold">No transactions found</h3>
+            <h3 className="mt-4 text-lg font-semibold">{t('noTransactionsFound')}</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Add your first transaction to start tracking your finances.
+              {t('addYourFirst')}
             </p>
             <Dialog 
               open={isTransactionsEmptyModalOpen} 
@@ -158,7 +163,7 @@ export default function TransactionsPage() {
             >
               <DialogTrigger asChild>
                 <Button className="mt-4 cursor-pointer">
-                  Add Transaction
+                  {t('addTransaction')}
                 </Button>
               </DialogTrigger>
               <DialogContent 
@@ -169,7 +174,7 @@ export default function TransactionsPage() {
               >
                 <DialogHeader>
                   <div className="flex justify-between items-center">
-                    <DialogTitle>Add New Transaction</DialogTitle>
+                    <DialogTitle>{t('addTransaction')}</DialogTitle>
                     <Button 
                       variant="ghost" 
                       size="sm" 

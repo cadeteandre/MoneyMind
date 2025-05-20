@@ -17,8 +17,7 @@ model User {
   email        String        @unique
   name         String?
   currency     String        @default("EUR")
-  locale       String        @default("pt")
-  clerkId      String?       @unique
+  locale       String        @default("en")
   transactions Transaction[]
 }
 

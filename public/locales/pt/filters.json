@@ -10,11 +10,14 @@
   "allCategories": "Todas as Categorias",
   "dateRange": "Período",
   "clear": "Limpar",
-  "thisMonth": "Este Mês",
-  "lastMonth": "Mês Passado",
-  "last3Months": "Últimos 3 Meses",
-  "last6Months": "Últimos 6 Meses",
-  "thisYear": "Este Ano",
-  "lastYear": "Ano Passado",
-  "customRange": "Período Personalizado"
+  "thisMonth": "Este mês",
+  "lastMonth": "Mês passado",
+  "last3Months": "Últimos 3 meses",
+  "last6Months": "Últimos 6 meses",
+  "thisYear": "Este ano",
+  "lastYear": "Ano passado",
+  "customRange": "Intervalo personalizado",
+  "startDate": "Data inicial",
+  "endDate": "Data final",
+  "filter": "Filtrar"
 } 

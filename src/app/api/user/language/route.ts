@@ -10,12 +10,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findFirst({
-      where: { clerkId: userId as string },
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
       select: { locale: true },
     });
 
-    return NextResponse.json({ locale: user?.locale || 'pt' });
+    return NextResponse.json({ locale: user?.locale || 'en' });
   } catch (error) {
     console.error('Error fetching user language preference:', error);
     return NextResponse.json({ error: 'Failed to fetch language preference' }, { status: 500 });
@@ -38,25 +38,20 @@ export async function POST(request: Request) {
     }
 
     // Tentar encontrar o usuário primeiro
-    const user = await prisma.user.findFirst({
-      where: { clerkId: userId as string },
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
     });
 
     if (user) {
       // Atualizar a preferência de idioma do usuário existente
       await prisma.user.update({
-        where: { id: user.id },
+        where: { id: userId },
         data: { locale },
       });
     } else {
-      // Criar um novo usuário se não existir
-      await prisma.user.create({
-        data: {
-          clerkId: userId as string,
-          email: `user-${userId}@example.com`, // Placeholder, será atualizado pelo middleware
-          locale,
-        },
-      });
+      // Se o usuário não existir, retornar erro
+      // O usuário deve ser criado pelo middleware primeiro
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json({ locale });

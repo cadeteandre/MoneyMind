@@ -15,9 +15,14 @@ export async function POST() {
     const client = await clerkClient();
     const clerkUser = await client.users.getUser(userId);
 
-    // Verificar se o usuário já existe
-    const existingUser = await prisma.user.findUnique({
-      where: { id: userId }
+    // Verificar se o usuário já existe pelo ID ou email
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: userId },
+          { email: clerkUser.emailAddresses[0].emailAddress }
+        ]
+      }
     });
 
     let user;
@@ -25,11 +30,15 @@ export async function POST() {
     if (existingUser) {
       // Atualizar usuário existente
       user = await prisma.user.update({
-        where: { id: userId },
+        where: { id: existingUser.id },
         data: {
+          id: userId, // Garantir que o ID está correto
+          email: clerkUser.emailAddresses[0].emailAddress,
           name: clerkUser.firstName 
             ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
-            : clerkUser.username || ""
+            : clerkUser.username || "",
+          // Manter o locale existente se já estiver definido
+          locale: existingUser.locale || "en"
         }
       });
     } else {
@@ -41,7 +50,7 @@ export async function POST() {
           name: clerkUser.firstName 
             ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
             : clerkUser.username || "",
-          // O valor padrão 'EUR' será usado para currency conforme o schema
+          locale: "en" // Definir explicitamente o locale padrão
         }
       });
     }
@@ -65,8 +74,15 @@ export async function GET() {
     console.log("GET /api/user - Buscando usuário:", userId);
     
     // Buscar usuário do banco de dados com contagem de transações
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
+    const client = await clerkClient();
+    const clerkUser = await client.users.getUser(userId);
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: userId },
+          { email: clerkUser.emailAddresses[0].emailAddress }
+        ]
+      },
       include: {
         _count: {
           select: { transactions: true }
@@ -87,7 +103,7 @@ export async function GET() {
           name: clerkUser.firstName 
             ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
             : clerkUser.username || "",
-          // O valor padrão 'EUR' será usado para currency conforme o schema
+          locale: "en" // Definir explicitamente o locale padrão
         },
         include: {
           _count: {
