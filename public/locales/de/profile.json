@@ -1,0 +1,14 @@
+{
+  "title": "Benutzerprofil",
+  "personalInfo": "Persönliche Informationen",
+  "personalDescription": "Ihre Kontoinformationen und persönlichen Daten",
+  "accountCreated": "Konto erstellt",
+  "transactions": "Transaktionen",
+  "registeredTransactions": "registrierte Transaktionen",
+  "settings": "Einstellungen",
+  "settingsDescription": "Verwalten Sie Ihre Anwendungseinstellungen",
+  "currency": "Währung",
+  "language": "Sprache",
+  "notFound": "Benutzer nicht gefunden",
+  "signInMessage": "Bitte melden Sie sich an, um Ihr Profil anzuzeigen"
+} 

@@ -1,0 +1,14 @@
+{
+  "monthlyChart": {
+    "title": "Monatliche Einnahmen & Ausgaben",
+    "noData": "Keine monatlichen Daten verfügbar",
+    "income": "Einkommen",
+    "expense": "Ausgabe"
+  },
+  "pieChart": {
+    "title": "Ausgaben nach Kategorie",
+    "noData": "Keine Ausgabendaten verfügbar",
+    "others": "Andere",
+    "transactions": "Transaktion(en)"
+  }
+} 

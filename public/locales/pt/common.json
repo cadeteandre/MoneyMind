@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "title": "Perfil de Usuário",
+    "personalInfo": "Informações Pessoais",
+    "personalDescription": "Seus detalhes de conta e informações pessoais",
+    "accountCreated": "Conta Criada",
+    "transactions": "Transações",
+    "registeredTransactions": "transações registradas",
+    "settings": "Configurações",
+    "settingsDescription": "Gerencie suas preferências de aplicação",
+    "currency": "Moeda",
+    "language": "Idioma",
+    "notFound": "Usuário Não Encontrado",
+    "signInMessage": "Por favor, faça login para ver seu perfil"
+  },
+  "language": {
+    "pt": "Português",
+    "en": "Inglês",
+    "es": "Espanhol",
+    "de": "Alemão"
+  },
+  "common": {
+    "goDashboard": "Ir para o Dashboard",
+    "switchLanguage": "Mudar idioma",
+    "backToHome": "Voltar para a página inicial",
+    "dashboardWelcome": "Bem-vindo ao seu painel de controle financeiro!"
+  }
+} 

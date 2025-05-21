@@ -1,0 +1,23 @@
+{
+  "filters": "Filtros",
+  "selectPeriod": "Seleccione un período para analizar sus datos",
+  "searchTransactions": "Buscar transacciones...",
+  "filterByType": "Filtrar por tipo",
+  "allTypes": "Todos los Tipos",
+  "income": "Ingreso",
+  "expense": "Gasto",
+  "filterByCategory": "Filtrar por categoría",
+  "allCategories": "Todas las Categorías",
+  "dateRange": "Rango de fechas",
+  "clear": "Limpiar",
+  "thisMonth": "Este mes",
+  "lastMonth": "Mes pasado",
+  "last3Months": "Últimos 3 meses",
+  "last6Months": "Últimos 6 meses",
+  "thisYear": "Este año",
+  "lastYear": "Año pasado",
+  "customRange": "Rango personalizado",
+  "startDate": "Fecha de inicio",
+  "endDate": "Fecha final",
+  "filter": "Filtrar"
+} 

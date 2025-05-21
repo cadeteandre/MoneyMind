@@ -1,0 +1,24 @@
+{
+  "type": {
+    "INCOME": "Ingreso",
+    "EXPENSE": "Gasto"
+  },
+  "noTransactions": "No se encontraron transacciones.",
+  "addFirst": "Añade tu primera transacción",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "viewReceipt": "Ver Recibo",
+  "receipt": "Recibo",
+  "openInBrowser": "Abrir en el navegador",
+  "loadingReceipt": "Cargando recibo...",
+  "failedToLoad": "Error al cargar la imagen",
+  "useOpenInBrowser": "Por favor, use \"Abrir en el navegador\"",
+  "deleteConfirmation": {
+    "title": "¿Estás seguro?",
+    "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la transacción",
+    "withReceipt": " y su recibo asociado",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "deleting": "Eliminando..."
+  }
+} 

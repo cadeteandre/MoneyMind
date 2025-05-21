@@ -1,0 +1,23 @@
+{
+  "signIn": "Sign In",
+  "appName": "MoneyMind",
+  "title": "Take Control of Your Finances",
+  "description": "MoneyMind helps you track, analyze, and optimize your financial life with powerful insights and intuitive tools.",
+  "getStarted": "Get Started",
+  "goToDashboard": "Go to Dashboard",
+  "features": "Powerful Features",
+  "analytics": {
+    "title": "Financial Analytics",
+    "description": "Get detailed insights into your spending patterns and financial health."
+  },
+  "budgeting": {
+    "title": "Smart Budgeting",
+    "description": "Create and track budgets that help you reach your financial goals."
+  },
+  "security": {
+    "title": "Secure & Private",
+    "description": "Your financial data is protected with enterprise-grade security."
+  },
+  "footer": "All rights reserved.",
+  "loading": "Loading..."
+} 

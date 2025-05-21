@@ -1,0 +1,23 @@
+{
+  "signIn": "Anmelden",
+  "appName": "MoneyMind",
+  "title": "Übernehmen Sie die Kontrolle über Ihre Finanzen",
+  "description": "MoneyMind hilft Ihnen, Ihr Finanzleben mit leistungsstarken Einblicken und intuitiven Tools zu verfolgen, zu analysieren und zu optimieren.",
+  "getStarted": "Loslegen",
+  "goToDashboard": "Zum Dashboard",
+  "features": "Leistungsstarke Funktionen",
+  "analytics": {
+    "title": "Finanzanalyse",
+    "description": "Erhalten Sie detaillierte Einblicke in Ihre Ausgabemuster und Ihre finanzielle Gesundheit."
+  },
+  "budgeting": {
+    "title": "Intelligente Budgetierung",
+    "description": "Erstellen und verfolgen Sie Budgets, die Ihnen helfen, Ihre finanziellen Ziele zu erreichen."
+  },
+  "security": {
+    "title": "Sicher & Privat",
+    "description": "Ihre Finanzdaten sind mit Sicherheit auf Unternehmensniveau geschützt."
+  },
+  "footer": "Alle Rechte vorbehalten.",
+  "loading": "Wird geladen..."
+} 

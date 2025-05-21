@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useLanguage } from "./providers/language-provider";
+import { useTranslation } from '@/app/i18n/client';
 
 interface FilterContainerProps {
     transactions: ITransaction[];
@@ -22,6 +24,8 @@ interface FilterContainerProps {
 const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, setTypeFilter, categoryFilter, setCategoryFilter, categories, fetchData }: FilterContainerProps) => {
     const [showCustomDateRange, setShowCustomDateRange] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string | null>(null);
+    const { userLocale } = useLanguage();
+    const { t } = useTranslation(userLocale, 'filters');
 
     const applyQuickFilter = (filter: string) => {
         const now = new Date();
@@ -67,35 +71,35 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
     return (  
         <Card className="border shadow-sm overflow-hidden">
         <CardHeader className="pb-0">
-          <CardTitle className="text-lg">Filters</CardTitle>
-          <CardDescription>Select a period to analyze your data</CardDescription>
+          <CardTitle className="text-lg">{t('filters')}</CardTitle>
+          <CardDescription>{t('selectPeriod')}</CardDescription>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {transactions.length > 0 ? (
             <Input
-              placeholder="Search transactions..."
+              placeholder={t('searchTransactions')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />) : null}
             
             <Select value={typeFilter} onValueChange={(value: "ALL" | "INCOME" | "EXPENSE") => setTypeFilter(value)}>
               <SelectTrigger className="cursor-pointer">
-                <SelectValue placeholder="Filter by type" />
+                <SelectValue placeholder={t('filterByType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL" className="cursor-pointer">All Types</SelectItem>
-                <SelectItem value="INCOME" className="cursor-pointer">Income</SelectItem>
-                <SelectItem value="EXPENSE" className="cursor-pointer">Expense</SelectItem>
+                <SelectItem value="ALL" className="cursor-pointer">{t('allTypes')}</SelectItem>
+                <SelectItem value="INCOME" className="cursor-pointer">{t('income')}</SelectItem>
+                <SelectItem value="EXPENSE" className="cursor-pointer">{t('expense')}</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="cursor-pointer">
-                <SelectValue placeholder="Filter by category" />
+                <SelectValue placeholder={t('filterByCategory')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL" className="cursor-pointer">All Categories</SelectItem>
+                <SelectItem value="ALL" className="cursor-pointer">{t('allCategories')}</SelectItem>
                 {categories.map(category => (
                   <SelectItem key={category} value={category} className="cursor-pointer">{category}</SelectItem>
                 ))}
@@ -105,7 +109,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
           
           <div className="mt-4 mb-1">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-sm font-medium">Date Range</h3>
+              <h3 className="text-sm font-medium">{t('dateRange')}</h3>
               {(activeFilter || showCustomDateRange) && (
                 <Button 
                   variant="ghost" 
@@ -113,7 +117,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                   onClick={clearDateFilters} 
                   className="h-6 px-2 text-xs flex items-center gap-1"
                 >
-                  <X className="h-3 w-3" /> Clear
+                  <X className="h-3 w-3" /> {t('clear')}
                 </Button>
               )}
             </div>
@@ -122,67 +126,70 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                 variant={activeFilter === 'this-month' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('this-month')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                This Month
+                {t('thisMonth')}
               </Button>
               <Button 
                 variant={activeFilter === 'last-month' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-month')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                Last Month
+                {t('lastMonth')}
               </Button>
               <Button 
                 variant={activeFilter === 'last-3-months' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-3-months')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                Last 3 Months
+                {t('last3Months')}
               </Button>
               <Button 
                 variant={activeFilter === 'last-6-months' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-6-months')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                Last 6 Months
+                {t('last6Months')}
               </Button>
               <Button 
                 variant={activeFilter === 'this-year' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('this-year')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                This Year
+                {t('thisYear')}
               </Button>
               <Button 
                 variant={activeFilter === 'last-year' ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => applyQuickFilter('last-year')}
-                className="text-xs"
+                className="text-xs cursor-pointer"
               >
-                Last Year
+                {t('lastYear')}
               </Button>
               <Button 
                 variant={showCustomDateRange ? "default" : "outline"} 
                 size="sm" 
-                onClick={() => {
-                  setShowCustomDateRange(!showCustomDateRange);
-                  if (!showCustomDateRange) {
-                    setActiveFilter(null);
-                  }
-                }}
-                className="text-xs"
+                onClick={() => setShowCustomDateRange(!showCustomDateRange)}
+                className="text-xs cursor-pointer"
               >
-                Custom Range
+                {t('customRange')}
               </Button>
             </div>
+            {showCustomDateRange && (
+               <div className="mt-4">
+               <DateRangeFilter onFilter={(start, end) => {
+                 if (start && end) {
+                   fetchData(start, end);
+                   setActiveFilter(null);
+                 }
+               }} />
+             </div>
+            )}
           </div>
-          
-          {showCustomDateRange && <DateRangeFilter onFilter={fetchData} />}
         </CardContent>
       </Card>
     );

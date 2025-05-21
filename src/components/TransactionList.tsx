@@ -18,6 +18,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { TransactionForm } from "./TransactionForm"
 import { useCurrency } from "./providers/currency-provider"
+import { useLanguage } from "./providers/language-provider"
+import { useTranslation } from '@/app/i18n/client'
 
 // Usar a interface do frontend
 type Transaction = ITransaction;
@@ -44,6 +46,8 @@ export default function TransactionList({
   const [imgLoaded, setImgLoaded] = useState(false)
   const [imgError, setImgError] = useState(false)
   const { userCurrency } = useCurrency();
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'transactions');
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -151,12 +155,11 @@ export default function TransactionList({
   if (transactions.length === 0) {
     return (
       <div className="text-center py-8 px-4">
-        <p className="text-muted-foreground mb-4">No transactions found.</p>
+        <p className="text-muted-foreground mb-4">{t('noTransactions')}</p>
         <Button
           variant="outline"
           className="cursor-pointer"
           onClick={() => {
-            // Create an empty transaction to open the form
             setEditTransaction({
               id: "",
               userId: "",
@@ -171,7 +174,7 @@ export default function TransactionList({
             setIsEditModalOpen(true)
           }}
         >
-          Add your first transaction
+          {t('addFirst')}
         </Button>
       </div>
     )
@@ -203,7 +206,7 @@ export default function TransactionList({
               <div className="flex items-center gap-2">
                 <p className="font-medium">{transaction.category}</p>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 hidden sm:inline-block">
-                  {transaction.type === "INCOME" ? "Income" : "Expense"}
+                  {t(`type.${transaction.type}`)}
                 </span>
               </div>
 
@@ -224,7 +227,7 @@ export default function TransactionList({
                         aria-label="View receipt"
                       >
                         <Receipt className="h-3 w-3" />
-                        <span>Receipt</span>
+                        <span>{t('receipt')}</span>
                       </button>
                     ) : (
                       <Dialog
@@ -248,7 +251,7 @@ export default function TransactionList({
                           aria-label="View receipt"
                         >
                           <Receipt className="h-3 w-3" />
-                          <span>Receipt</span>
+                          <span>{t('receipt')}</span>
                         </button>
                         <DialogContent>
                           <DialogHeader>
@@ -263,17 +266,17 @@ export default function TransactionList({
                                 className="flex items-center text-blue-600 mb-2"
                               >
                                 <ArrowUpRight className="h-4 w-4 mr-1" />
-                                Open in browser
+                                {t('openInBrowser')}
                               </a>
 
                               <div className="w-full max-w-md flex justify-center">
                                 {!imgLoaded && !imgError && (
-                                  <p className="text-center text-muted-foreground">Loading receipt...</p>
+                                  <p className="text-center text-muted-foreground">{t('loadingReceipt')}</p>
                                 )}
                                 {imgError ? (
                                   <div className="text-center text-red-500">
-                                    <p>Failed to load image</p>
-                                    <p className="text-xs mt-2">Please use &quot;Open in browser&quot;</p>
+                                    <p>{t('failedToLoad')}</p>
+                                    <p className="text-xs mt-2">{t('useOpenInBrowser')}</p>
                                   </div>
                                 ) : (
                                   <img
@@ -327,7 +330,7 @@ export default function TransactionList({
                     className="cursor-pointer"
                   >
                     <Edit className="mr-2 h-4 w-4" />
-                    Edit
+                    {t('edit')}
                   </DropdownMenuItem>
 
                   {transaction.receiptUrl && (
@@ -343,7 +346,7 @@ export default function TransactionList({
                         className="cursor-pointer"
                       >
                         <Receipt className="mr-2 h-4 w-4" />
-                        View Receipt
+                        {t('viewReceipt')}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
@@ -361,7 +364,7 @@ export default function TransactionList({
                     className="cursor-pointer text-red-500 focus:text-red-500"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
+                    {t('delete')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -415,20 +418,20 @@ export default function TransactionList({
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogTitle>{t('deleteConfirmation.title')}</DialogTitle>
           </DialogHeader>
           <div className="py-3">
             <p className="text-sm text-muted-foreground">
-              This action cannot be undone. This will permanently delete the transaction
-              {deleteTransaction?.receiptUrl && " and its associated receipt"}.
+              {t('deleteConfirmation.description')}
+              {deleteTransaction?.receiptUrl && t('deleteConfirmation.withReceipt')}.
             </p>
           </div>
           <div className="flex justify-end gap-3 mt-2">
             <Button variant="outline" className="cursor-pointer" onClick={() => setIsDeleteAlertOpen(false)}>
-              Cancel
+              {t('deleteConfirmation.cancel')}
             </Button>
             <Button onClick={handleDelete} disabled={isDeleting} className="bg-red-500 hover:bg-red-600 text-white cursor-pointer">
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? t('deleteConfirmation.deleting') : t('deleteConfirmation.delete')}
             </Button>
           </div>
         </DialogContent>

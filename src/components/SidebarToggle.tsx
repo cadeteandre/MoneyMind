@@ -6,10 +6,15 @@ import { UserButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from './theme-toggle';
+import { useLanguage } from './providers/language-provider';
+import { LanguageSelector } from './LanguageSelector';
+import { useTranslation } from '@/app/i18n/client';
 
 export default function SidebarToggle() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'sidebar');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -58,7 +63,7 @@ export default function SidebarToggle() {
           ${sidebarOpen || !isMobile ? 'left-0' : '-left-64'}`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold dark:text-white">Dashboard</h2>
+          <h2 className="text-lg font-bold dark:text-white">{t('dashboard')}</h2>
           {isMobile && (
             <Button 
               variant="ghost"
@@ -80,7 +85,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              Overview
+              {t('overview')}
             </Link>
           </li>
           <li>
@@ -91,7 +96,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              Profile
+              {t('profile')}
             </Link>
           </li>
           <li>
@@ -102,7 +107,7 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              Transactions
+              {t('transactions')}
             </Link>
           </li>
           <li>
@@ -113,14 +118,19 @@ export default function SidebarToggle() {
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              Home
+              {t('home')}
             </Link>
           </li>
         </ul>
         
-        <div className="mt-10 flex items-center gap-3">
-          <UserButton />
-          <ThemeToggle />
+        <div className="mt-10 space-y-4">
+          <div className="flex items-center gap-3">
+            <UserButton />
+            <ThemeToggle />
+            <div>
+              <LanguageSelector />
+            </div>
+          </div>
         </div>
       </aside>
     </>
