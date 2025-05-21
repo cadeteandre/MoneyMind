@@ -82,6 +82,7 @@ export function LanguageSelector({ isProfilePage }: LanguageSelectorProps) {
               <CommandItem
                 key={language.value}
                 value={language.value}
+                className="cursor-pointer"
                 onSelect={() => handleLanguageSelect(language.value)}
               >
                 <Check

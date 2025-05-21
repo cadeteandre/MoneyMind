@@ -28,6 +28,9 @@ export function formatCurrency(amount: number | string, currency: string = 'EUR'
   return new Intl.NumberFormat(currencyConfig.locale, {
     style: 'currency',
     currency: currencyConfig.code,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: true,
   }).format(num);
 }
 

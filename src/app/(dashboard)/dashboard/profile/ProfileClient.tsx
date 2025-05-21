@@ -10,7 +10,8 @@ import { Calendar, Mail, User, Coins, Globe } from 'lucide-react';
 // import { Edit } from 'lucide-react';
 import { CurrencySelector } from '@/components/CurrencySelector';
 import { LanguageSelector } from '@/components/LanguageSelector';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@/app/i18n/client';
+import { useLanguage } from '@/components/providers/language-provider';
 
 interface UserData {
   id: string;
@@ -27,7 +28,8 @@ export default function ProfileClient() {
   const { user, isLoaded } = useUser();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation('common');
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'profile');
 
   useEffect(() => {
     async function fetchUserData() {
@@ -54,7 +56,7 @@ export default function ProfileClient() {
   if (!isLoaded || loading) {
     return (
       <div className="container mx-auto p-4 md:p-6">
-        <h1 className="text-2xl font-bold mb-6">{t('profile.title')}</h1>
+        <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-48 mb-2" />
@@ -82,9 +84,9 @@ export default function ProfileClient() {
     return (
       <div className="container mx-auto p-4 md:p-6">
         <Card className="p-8 text-center">
-          <CardTitle className="mb-4">{t('profile.notFound')}</CardTitle>
+          <CardTitle className="mb-4">{t('notFound')}</CardTitle>
           <CardDescription>
-            {t('profile.signInMessage')}
+            {t('signInMessage')}
           </CardDescription>
         </Card>
       </div>
@@ -100,15 +102,15 @@ export default function ProfileClient() {
 
   return (
     <div className="container mx-auto p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-6">{t('profile.title')}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left column - User profile card */}
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>{t('profile.personalInfo')}</CardTitle>
+            <CardTitle>{t('personalInfo')}</CardTitle>
             <CardDescription>
-              {t('profile.personalDescription')}
+              {t('personalDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -132,7 +134,7 @@ export default function ProfileClient() {
               <div className="bg-muted/50 dark:bg-muted/20 p-4 rounded-lg">
                 <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
                   <Calendar className="h-4 w-4" />
-                  {t('profile.accountCreated')}
+                  {t('accountCreated')}
                 </h3>
                 <p>{joinDate}</p>
               </div>
@@ -140,9 +142,9 @@ export default function ProfileClient() {
               <div className="bg-muted/50 dark:bg-muted/20 p-4 rounded-lg">
                 <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
                   <User className="h-4 w-4" />
-                  {t('profile.transactions')}
+                  {t('transactions')}
                 </h3>
-                <p>{userData?._count?.transactions || 0} {t('profile.registeredTransactions')}</p>
+                <p>{userData?._count?.transactions || 0} {t('registeredTransactions')}</p>
               </div>
             </div>
 
@@ -158,16 +160,16 @@ export default function ProfileClient() {
         {/* Right column - Settings */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('profile.settings')}</CardTitle>
+            <CardTitle>{t('settings')}</CardTitle>
             <CardDescription>
-              {t('profile.settingsDescription')}
+              {t('settingsDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
                 <Coins className="h-4 w-4" />
-                {t('profile.currency')}
+                {t('currency')}
               </h3>
               <CurrencySelector />
             </div>
@@ -175,7 +177,7 @@ export default function ProfileClient() {
             <div>
               <h3 className="text-sm font-medium flex items-center gap-2 mb-2">
                 <Globe className="h-4 w-4" />
-                {t('profile.language')}
+                {t('language')}
               </h3>
               <LanguageSelector isProfilePage={true} />
             </div>

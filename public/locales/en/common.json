@@ -1,24 +1,4 @@
 {
-  "profile": {
-    "title": "User Profile",
-    "personalInfo": "Personal Information",
-    "personalDescription": "Your account details and personal information",
-    "accountCreated": "Account Created",
-    "transactions": "Transactions",
-    "registeredTransactions": "registered transactions",
-    "settings": "Settings",
-    "settingsDescription": "Manage your application preferences",
-    "currency": "Currency",
-    "language": "Language",
-    "notFound": "User Not Found",
-    "signInMessage": "Please sign in to view your profile"
-  },
-  "language": {
-    "pt": "Portuguese",
-    "en": "English",
-    "es": "Spanish",
-    "de": "German"
-  },
   "common": {
     "goDashboard": "Go to Dashboard",
     "switchLanguage": "Switch language",
