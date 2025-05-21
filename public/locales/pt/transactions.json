@@ -1,0 +1,24 @@
+{
+  "type": {
+    "INCOME": "Receita",
+    "EXPENSE": "Despesa"
+  },
+  "noTransactions": "Nenhuma transação encontrada.",
+  "addFirst": "Adicione sua primeira transação",
+  "edit": "Editar",
+  "delete": "Excluir",
+  "viewReceipt": "Ver Recibo",
+  "receipt": "Recibo",
+  "openInBrowser": "Abrir no navegador",
+  "loadingReceipt": "Carregando recibo...",
+  "failedToLoad": "Falha ao carregar imagem",
+  "useOpenInBrowser": "Por favor, use \"Abrir no navegador\"",
+  "deleteConfirmation": {
+    "title": "Tem certeza?",
+    "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação",
+    "withReceipt": " e seu recibo associado",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "deleting": "Excluindo..."
+  }
+} 

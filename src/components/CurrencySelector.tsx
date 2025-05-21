@@ -47,7 +47,7 @@ export function CurrencySelector() {
           role="combobox"
           aria-expanded={open}
           disabled={isLoading}
-          className="w-full justify-between whitespace-nowrap"
+          className="w-full justify-between whitespace-nowrap cursor-pointer"
         >
           <div className="flex items-center gap-2">
             <Coins className="h-4 w-4" />
@@ -68,6 +68,7 @@ export function CurrencySelector() {
               <CommandItem
                 key={currency.value}
                 value={currency.value}
+                className="cursor-pointer"
                 onSelect={() => handleCurrencySelect(currency.value)}
               >
                 <Check

@@ -1,0 +1,24 @@
+{
+  "type": {
+    "INCOME": "Einnahme",
+    "EXPENSE": "Ausgabe"
+  },
+  "noTransactions": "Keine Transaktionen gefunden.",
+  "addFirst": "Fügen Sie Ihre erste Transaktion hinzu",
+  "edit": "Bearbeiten",
+  "delete": "Löschen",
+  "viewReceipt": "Beleg anzeigen",
+  "receipt": "Beleg",
+  "openInBrowser": "Im Browser öffnen",
+  "loadingReceipt": "Beleg wird geladen...",
+  "failedToLoad": "Bild konnte nicht geladen werden",
+  "useOpenInBrowser": "Bitte verwenden Sie \"Im Browser öffnen\"",
+  "deleteConfirmation": {
+    "title": "Sind Sie sicher?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird die Transaktion dauerhaft löschen",
+    "withReceipt": " und den zugehörigen Beleg",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "deleting": "Wird gelöscht..."
+  }
+} 
