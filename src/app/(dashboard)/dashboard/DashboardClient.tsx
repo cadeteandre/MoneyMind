@@ -323,7 +323,8 @@ export default function DashboardClient() {
                   >
                     <DialogTrigger asChild>
                       <Button className="mt-4 cursor-pointer">
-                        {t('addTransaction')}
+                        <Plus className="h-4 w-4 sm:mr-2" />
+                        <span className="hidden sm:inline">{t('addTransaction')}</span>
                       </Button>
                     </DialogTrigger>
                     <DialogContent 
@@ -386,8 +387,8 @@ export default function DashboardClient() {
                 >
                   <DialogTrigger asChild>
                     <Button size="sm" className="cursor-pointer">
-                      <Plus className="h-4 w-4 mr-2" />
-                      {t('addTransaction')}
+                      <Plus className="h-4 w-4 sm:mr-2" />
+                      <span className="hidden sm:inline">{t('addTransaction')}</span>
                     </Button>
                   </DialogTrigger>
                   <DialogContent 
@@ -463,7 +464,8 @@ export default function DashboardClient() {
                   >
                     <DialogTrigger asChild>
                       <Button className="mt-4 cursor-pointer">
-                        {t('addTransaction')}
+                        <Plus className="h-4 w-4 sm:mr-2" />
+                        <span className="hidden sm:inline">{t('addTransaction')}</span>
                       </Button>
                     </DialogTrigger>
                     <DialogContent 
