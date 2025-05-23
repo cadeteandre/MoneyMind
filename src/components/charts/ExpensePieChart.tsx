@@ -1,7 +1,7 @@
 "use client";
 
 import { CategorySummary } from "@/app/actions/getTransactionStats";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, TooltipProps } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { formatCurrency } from "@/lib/utils";
@@ -111,63 +111,73 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   const getChartDimensions = () => {
     if (isMobile) {
       return {
-        height: 300,
         outerRadius: 80,
-        legendPosition: "bottom" as const
       };
     }
     if (isTablet) {
       return {
-        height: 350,
         outerRadius: 90,
-        legendPosition: "bottom" as const
       };
     }
     return {
-      height: 300,
       outerRadius: 100,
-      legendPosition: "right" as const
     };
   };
 
-  const { height, outerRadius, legendPosition } = getChartDimensions();
+  const { outerRadius } = getChartDimensions();
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t('pieChart.title')}</CardTitle>
       </CardHeader>
-      <CardContent style={{ height: `${height}px` }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={normalizedData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={outerRadius}
-              fill="#8884d8"
-              dataKey="total"
-              nameKey="category"
-              label={({ name, percent }) => 
-                `${name}: ${(percent * 100).toFixed(0)}%`
-              }
-            >
-              {normalizedData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              layout={legendPosition === "bottom" ? "horizontal" : "vertical"}
-              verticalAlign={legendPosition === "bottom" ? "bottom" : "middle"}
-              align={legendPosition === "bottom" ? "center" : "right"}
-              wrapperStyle={{
-                paddingTop: legendPosition === "bottom" ? "20px" : "0"
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+      <CardContent className="flex flex-col space-y-4">
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={normalizedData}
+                cx="50%"
+                cy="50%"
+                outerRadius={outerRadius}
+                fill="#8884d8"
+                dataKey="total"
+                nameKey="category"
+              >
+                {normalizedData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Legenda customizada */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[180px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2">
+          {normalizedData.map((entry, index) => {
+            const percent = ((entry.total / normalizedData.reduce((sum, item) => sum + item.total, 0)) * 100).toFixed(1);
+            return (
+              <div 
+                key={entry.category} 
+                className="flex items-center gap-2 py-1"
+              >
+                <span
+                  className="h-3 w-3 rounded-sm flex-shrink-0"
+                  style={{
+                    backgroundColor: COLORS[index % COLORS.length],
+                  }}
+                />
+                <span className="text-sm font-medium flex-grow truncate">
+                  {entry.category}
+                </span>
+                <span className="text-sm text-muted-foreground flex-shrink-0">
+                  {percent}%
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
