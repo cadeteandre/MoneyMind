@@ -18,6 +18,9 @@ const normalizeCategory = (category: string) => {
 // Colors for the pie chart segments
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28FD0", "#FF6B6B", "#54C8FF", "#2DD4BF"];
 
+// Limite percentual para agrupamento de categorias pequenas
+const GROUPING_THRESHOLD = 0.05; // 5%
+
 interface ExpensePieChartProps {
   data: CategorySummary[];
 }
@@ -32,11 +35,9 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   // Normalize and aggregate data by category
   const normalizedData = React.useMemo(() => {
     const categoryMap = new Map<string, CategorySummary>();
-    
     data.forEach(item => {
       const normalizedCategory = normalizeCategory(item.category);
       const existing = categoryMap.get(normalizedCategory);
-      
       if (existing) {
         existing.total += item.total;
         existing.count += item.count;
@@ -47,9 +48,35 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
         });
       }
     });
-    
-    return Array.from(categoryMap.values());
-  }, [data]);
+    const aggregated = Array.from(categoryMap.values());
+
+    // --- Agrupamento de categorias pequenas em "Outros" ---
+    const totalSum = aggregated.reduce((sum, item) => sum + item.total, 0);
+    const mainCategories: CategorySummary[] = [];
+    const otherCategories: CategorySummary[] = [];
+
+    aggregated.forEach(item => {
+      if (item.total / totalSum < GROUPING_THRESHOLD) {
+        otherCategories.push(item);
+      } else {
+        mainCategories.push(item);
+      }
+    });
+
+    if (otherCategories.length > 0) {
+      const otherTotal = otherCategories.reduce((sum, item) => sum + item.total, 0);
+      const otherCount = otherCategories.reduce((sum, item) => sum + item.count, 0);
+      mainCategories.push({
+        category: t ? t('pieChart.others') : 'Outros',
+        total: otherTotal,
+        count: otherCount,
+        // Adicione um campo opcional para detalhamento futuro
+        groupedCategories: otherCategories
+      } as CategorySummary & { groupedCategories?: CategorySummary[] });
+    }
+
+    return mainCategories;
+  }, [data, t]);
 
   // If there's no data, show a message
   if (!normalizedData || normalizedData.length === 0) {
