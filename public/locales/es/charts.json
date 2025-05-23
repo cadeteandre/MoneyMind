@@ -9,6 +9,7 @@
     "title": "Gastos por Categoría",
     "noData": "No hay datos de gastos disponibles",
     "others": "Otros",
-    "transactions": "transacción(es)"
+    "transactions": "transacción(es)",
+    "groupedCategories": "Categorías agrupadas"
   }
 } 

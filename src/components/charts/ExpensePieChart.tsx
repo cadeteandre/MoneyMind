@@ -95,12 +95,43 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   // Custom tooltip formatter for the pie chart
   const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
-      const data = payload[0].payload as CategorySummary;
+      const data = payload[0].payload as CategorySummary & { groupedCategories?: CategorySummary[] };
+      const totalValue = normalizedData.reduce((sum, item) => sum + item.total, 0);
+      const percent = ((data.total / totalValue) * 100).toFixed(1);
+
       return (
-        <div className="bg-background p-3 border rounded-lg shadow-sm">
-          <p className="font-medium">{data.category}</p>
-          <p className="text-sm">{formatCurrency(data.total, userCurrency)}</p>
-          <p className="text-xs text-muted-foreground">{data.count} {t('pieChart.transactions')}</p>
+        <div className="bg-card border rounded-lg shadow-lg p-3 min-w-[200px]">
+          <div className="space-y-2">
+            {/* Cabeçalho do Tooltip */}
+            <div className="space-y-1">
+              <p className="font-medium text-sm">{data.category}</p>
+              <p className="text-sm">{formatCurrency(data.total, userCurrency)}</p>
+              <p className="text-xs text-muted-foreground">{percent}% • {data.count} {t('pieChart.transactions')}</p>
+            </div>
+
+            {/* Detalhamento das subcategorias em "Outros" */}
+            {data.groupedCategories && data.groupedCategories.length > 0 && (
+              <>
+                <div className="h-px bg-border my-2" />
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-muted-foreground">{t('pieChart.groupedCategories')}:</p>
+                  <div className="space-y-1.5 max-h-[150px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-1">
+                    {data.groupedCategories.map((subCategory, index) => {
+                      const subPercent = ((subCategory.total / totalValue) * 100).toFixed(1);
+                      return (
+                        <div key={index} className="flex items-center justify-between gap-2 text-xs">
+                          <span className="truncate">{subCategory.category}</span>
+                          <span className="text-muted-foreground whitespace-nowrap">
+                            {formatCurrency(subCategory.total, userCurrency)} • {subPercent}%
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       );
     }
