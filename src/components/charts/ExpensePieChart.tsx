@@ -1,7 +1,7 @@
 "use client";
 
 import { CategorySummary } from "@/app/actions/getTransactionStats";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, TooltipProps } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { formatCurrency } from "@/lib/utils";
@@ -18,6 +18,9 @@ const normalizeCategory = (category: string) => {
 // Colors for the pie chart segments
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28FD0", "#FF6B6B", "#54C8FF", "#2DD4BF"];
 
+// Limite percentual para agrupamento de categorias pequenas
+const GROUPING_THRESHOLD = 0.05; // 5%
+
 interface ExpensePieChartProps {
   data: CategorySummary[];
 }
@@ -32,11 +35,9 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   // Normalize and aggregate data by category
   const normalizedData = React.useMemo(() => {
     const categoryMap = new Map<string, CategorySummary>();
-    
     data.forEach(item => {
       const normalizedCategory = normalizeCategory(item.category);
       const existing = categoryMap.get(normalizedCategory);
-      
       if (existing) {
         existing.total += item.total;
         existing.count += item.count;
@@ -47,9 +48,35 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
         });
       }
     });
-    
-    return Array.from(categoryMap.values());
-  }, [data]);
+    const aggregated = Array.from(categoryMap.values());
+
+    // --- Agrupamento de categorias pequenas em "Outros" ---
+    const totalSum = aggregated.reduce((sum, item) => sum + item.total, 0);
+    const mainCategories: CategorySummary[] = [];
+    const otherCategories: CategorySummary[] = [];
+
+    aggregated.forEach(item => {
+      if (item.total / totalSum < GROUPING_THRESHOLD) {
+        otherCategories.push(item);
+      } else {
+        mainCategories.push(item);
+      }
+    });
+
+    if (otherCategories.length > 0) {
+      const otherTotal = otherCategories.reduce((sum, item) => sum + item.total, 0);
+      const otherCount = otherCategories.reduce((sum, item) => sum + item.count, 0);
+      mainCategories.push({
+        category: t ? t('pieChart.others') : 'Outros',
+        total: otherTotal,
+        count: otherCount,
+        // Adicione um campo opcional para detalhamento futuro
+        groupedCategories: otherCategories
+      } as CategorySummary & { groupedCategories?: CategorySummary[] });
+    }
+
+    return mainCategories;
+  }, [data, t]);
 
   // If there's no data, show a message
   if (!normalizedData || normalizedData.length === 0) {
@@ -68,12 +95,43 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   // Custom tooltip formatter for the pie chart
   const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
-      const data = payload[0].payload as CategorySummary;
+      const data = payload[0].payload as CategorySummary & { groupedCategories?: CategorySummary[] };
+      const totalValue = normalizedData.reduce((sum, item) => sum + item.total, 0);
+      const percent = ((data.total / totalValue) * 100).toFixed(1);
+
       return (
-        <div className="bg-background p-3 border rounded-lg shadow-sm">
-          <p className="font-medium">{data.category}</p>
-          <p className="text-sm">{formatCurrency(data.total, userCurrency)}</p>
-          <p className="text-xs text-muted-foreground">{data.count} {t('pieChart.transactions')}</p>
+        <div className="bg-card border rounded-lg shadow-lg p-3 min-w-[200px]">
+          <div className="space-y-2">
+            {/* Cabeçalho do Tooltip */}
+            <div className="space-y-1">
+              <p className="font-medium text-sm">{data.category}</p>
+              <p className="text-sm">{formatCurrency(data.total, userCurrency)}</p>
+              <p className="text-xs text-muted-foreground">{percent}% • {data.count} {t('pieChart.transactions')}</p>
+            </div>
+
+            {/* Detalhamento das subcategorias em "Outros" */}
+            {data.groupedCategories && data.groupedCategories.length > 0 && (
+              <>
+                <div className="h-px bg-border my-2" />
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-muted-foreground">{t('pieChart.groupedCategories')}:</p>
+                  <div className="space-y-1.5 max-h-[150px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-1">
+                    {data.groupedCategories.map((subCategory, index) => {
+                      const subPercent = ((subCategory.total / totalValue) * 100).toFixed(1);
+                      return (
+                        <div key={index} className="flex items-center justify-between gap-2 text-xs">
+                          <span className="truncate">{subCategory.category}</span>
+                          <span className="text-muted-foreground whitespace-nowrap">
+                            {formatCurrency(subCategory.total, userCurrency)} • {subPercent}%
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       );
     }
@@ -84,63 +142,73 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
   const getChartDimensions = () => {
     if (isMobile) {
       return {
-        height: 300,
         outerRadius: 80,
-        legendPosition: "bottom" as const
       };
     }
     if (isTablet) {
       return {
-        height: 350,
         outerRadius: 90,
-        legendPosition: "bottom" as const
       };
     }
     return {
-      height: 300,
       outerRadius: 100,
-      legendPosition: "right" as const
     };
   };
 
-  const { height, outerRadius, legendPosition } = getChartDimensions();
+  const { outerRadius } = getChartDimensions();
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t('pieChart.title')}</CardTitle>
       </CardHeader>
-      <CardContent style={{ height: `${height}px` }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={normalizedData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={outerRadius}
-              fill="#8884d8"
-              dataKey="total"
-              nameKey="category"
-              label={({ name, percent }) => 
-                `${name}: ${(percent * 100).toFixed(0)}%`
-              }
-            >
-              {normalizedData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              layout={legendPosition === "bottom" ? "horizontal" : "vertical"}
-              verticalAlign={legendPosition === "bottom" ? "bottom" : "middle"}
-              align={legendPosition === "bottom" ? "center" : "right"}
-              wrapperStyle={{
-                paddingTop: legendPosition === "bottom" ? "20px" : "0"
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+      <CardContent className="flex flex-col space-y-4">
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={normalizedData}
+                cx="50%"
+                cy="50%"
+                outerRadius={outerRadius}
+                fill="#8884d8"
+                dataKey="total"
+                nameKey="category"
+              >
+                {normalizedData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Legenda customizada */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[180px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2">
+          {normalizedData.map((entry, index) => {
+            const percent = ((entry.total / normalizedData.reduce((sum, item) => sum + item.total, 0)) * 100).toFixed(1);
+            return (
+              <div 
+                key={entry.category} 
+                className="flex items-center gap-2 py-1"
+              >
+                <span
+                  className="h-3 w-3 rounded-sm flex-shrink-0"
+                  style={{
+                    backgroundColor: COLORS[index % COLORS.length],
+                  }}
+                />
+                <span className="text-sm font-medium flex-grow truncate">
+                  {entry.category}
+                </span>
+                <span className="text-sm text-muted-foreground flex-shrink-0">
+                  {percent}%
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
