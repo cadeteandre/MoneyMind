@@ -71,8 +71,6 @@ export async function GET() {
   }
 
   try {
-    console.log("GET /api/user - Buscando usuário:", userId);
-    
     // Buscar usuário do banco de dados com contagem de transações
     const client = await clerkClient();
     const clerkUser = await client.users.getUser(userId);
@@ -91,7 +89,6 @@ export async function GET() {
     });
     
     if (!user) {
-      console.log("Usuário não encontrado, criando novo usuário");
       const client = await clerkClient();
       const clerkUser = await client.users.getUser(userId);
       
@@ -112,11 +109,9 @@ export async function GET() {
         }
       });
       
-      console.log("Novo usuário criado:", newUser);
       return NextResponse.json(newUser);
     }
     
-    console.log("Usuário encontrado:", user);
     return NextResponse.json(user);
   } catch (error) {
     console.error("GET /api/user error:", error);

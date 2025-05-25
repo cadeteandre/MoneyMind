@@ -19,8 +19,6 @@ export async function uploadReceipt(file: File, userId: string, token: string) {
     const timestamp = Date.now();
     const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filePath = `receipts/${userId}/${timestamp}-${sanitizedFileName}`;
-
-    console.log(`Attempting to upload file to ${filePath}`);
     
     // Tenta fazer o upload
     const { error } = await supabase.storage
