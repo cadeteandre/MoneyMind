@@ -9,6 +9,7 @@
     "title": "Ausgaben nach Kategorie",
     "noData": "Keine Ausgabendaten verfügbar",
     "others": "Andere",
-    "transactions": "Transaktion(en)"
+    "transactions": "Transaktion(en)",
+    "groupedCategories": "Gruppierte Kategorien"
   }
 } 

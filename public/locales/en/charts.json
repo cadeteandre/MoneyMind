@@ -9,6 +9,7 @@
     "title": "Expenses by Category",
     "noData": "No expense data available",
     "others": "Others",
-    "transactions": "transaction(s)"
+    "transactions": "transaction(s)",
+    "groupedCategories": "Grouped categories"
   }
 } 

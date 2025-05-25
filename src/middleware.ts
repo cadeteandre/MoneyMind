@@ -21,7 +21,6 @@ export default clerkMiddleware(async (auth, req) => {
         // Usar req.nextUrl.origin para garantir URL correta
         const baseUrl = req.nextUrl?.origin || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
         const apiUrl = `${baseUrl}/api/user`;
-        console.log('[middleware] Saving user data to:', apiUrl);
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {

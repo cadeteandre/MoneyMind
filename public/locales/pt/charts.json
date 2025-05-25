@@ -9,6 +9,7 @@
     "title": "Despesas por Categoria",
     "noData": "Sem dados de despesas disponíveis",
     "others": "Outros",
-    "transactions": "transação(ões)"
+    "transactions": "transação(ões)",
+    "groupedCategories": "Categorias agrupadas"
   }
 } 

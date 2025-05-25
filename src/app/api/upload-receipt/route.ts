@@ -32,7 +32,6 @@ export async function POST(req: Request) {
   };
   
   try {
-    console.log("=== UPLOAD REQUEST DEBUG (PRODUCTION) ===");
     
     // Verificar se as variáveis de ambiente estão definidas
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -42,8 +41,6 @@ export async function POST(req: Request) {
         details: "Missing Supabase environment variables"
       }, { status: 500, headers });
     }
-    
-    console.log("Content-Type:", req.headers.get("content-type"));
     
     let formData: FormData;
     try {
@@ -57,15 +54,12 @@ export async function POST(req: Request) {
     }
     
     // Log das entradas do FormData para diagnóstico
-    const entries = Array.from(formData.entries());
-    console.log("FormData keys:", entries.map(([key]) => key));
+    // const entries = Array.from(formData.entries());
+    // console.log("FormData keys:", entries.map(([key]) => key));
     
     // Extrair arquivo e ID do usuário
     const file = formData.get("file");
     const userId = formData.get("userId");
-    
-    console.log("File present:", !!file);
-    console.log("UserId present:", !!userId);
     
     // Validações de parâmetros com mensagens detalhadas
     if (!file && !userId) {
@@ -97,18 +91,7 @@ export async function POST(req: Request) {
         details: `Expected Blob or File, got ${typeof file}`
       }, { status: 400, headers });
     }
-    
-    // Log detalhado do arquivo
-    try {
-      console.log("File details:", {
-        type: file.type,
-        size: file.size,
-        name: 'name' in file ? (file as File).name : 'unnamed',
-      });
-    } catch (logError) {
-      console.error("Error logging file details:", logError);
-    }
-    
+
     // Verificar tamanho do arquivo
     const maxSize = 4 * 1024 * 1024; // 4MB é um limite seguro para APIs serverless
     if (file.size > maxSize) {
@@ -130,8 +113,6 @@ export async function POST(req: Request) {
     const fileName = 'name' in file ? (file as File).name : `file-${timestamp}`;
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filePath = `receipts/${userId}/${timestamp}-${sanitizedFileName}`;
-    
-    console.log("Upload path:", filePath);
     
     // Upload com tratamento de erro detalhado
     let uploadResult;
@@ -159,8 +140,6 @@ export async function POST(req: Request) {
       }, { status: 500, headers });
     }
     
-    console.log("Upload successful:", uploadResult.data);
-    
     // Obter URL pública
     const urlResult = adminSupabase.storage
       .from("receipts")
@@ -174,7 +153,6 @@ export async function POST(req: Request) {
     }
     
     const publicUrl = urlResult.data.publicUrl;
-    console.log("Generated URL:", publicUrl);
     
     // Sucesso - retornar informações do arquivo
     return NextResponse.json({

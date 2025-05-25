@@ -31,13 +31,10 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        console.log('Fetching user data to get currency...')
         const response = await fetch('/api/user')
         if (response.ok) {
           const userData = await response.json()
-          console.log('User data fetched:', userData)
           if (userData.currency && CURRENCY_OPTIONS[userData.currency]) {
-            console.log('Setting currency to:', userData.currency)
             setUserCurrencyState(userData.currency)
           }
         }
@@ -56,7 +53,6 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
     try {
       setIsLoading(true)
-      console.log('Updating currency to:', currency)
       const response = await fetch('/api/user/currency', {
         method: 'POST',
         headers: {
@@ -66,10 +62,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (response.ok) {
-        const data = await response.json()
-        console.log('Currency update response:', data)
         setUserCurrencyState(currency)
-        console.log('Currency state updated to:', currency)
       } else {
         console.error('Failed to update currency:', await response.text())
       }
