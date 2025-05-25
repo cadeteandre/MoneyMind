@@ -81,7 +81,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
     
     try {
       // Verifica o arquivo
-      console.log("Processing file for upload:", file.name, "Size:", file.size, "Type:", file.type);
       
       if (file.size < 100) {
         throw new Error("O arquivo selecionado parece estar vazio ou muito pequeno.");
@@ -98,8 +97,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       formData.append("file", file, file.name);
       formData.append("userId", userId);
       
-      console.log("FormData created with file", file.name);
-      
       // Faz a requisição
       const response = await fetch("/api/upload-receipt", {
         method: "POST",
@@ -112,7 +109,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       }
       
       const result = await response.json();
-      console.log("Upload success:", result);
       
       return {
         url: result.url,
