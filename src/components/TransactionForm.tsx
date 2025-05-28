@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@clerk/nextjs";
 import type { ITransaction } from "@/interfaces/ITransaction";
+import { useLanguage } from "./providers/language-provider";
+import { useTranslation } from '@/app/i18n/client';
 
 const formSchema = z.object({
   amount: z.number().positive().multipleOf(0.01),
@@ -37,6 +39,9 @@ export interface TransactionFormProps {
 }
 
 export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onClose, transaction }) => {
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'transactionForm');
+  
   const {
     register,
     handleSubmit,
@@ -83,11 +88,11 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       // Verifica o arquivo
       
       if (file.size < 100) {
-        throw new Error("O arquivo selecionado parece estar vazio ou muito pequeno.");
+        throw new Error(t('fileEmptyError'));
       }
       
       if (!file.type.startsWith('image/')) {
-        throw new Error("Por favor, selecione uma imagem válida (JPG, PNG, etc).");
+        throw new Error(t('invalidImageError'));
       }
       
       // Cria um novo FormData
@@ -105,7 +110,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Falha ao fazer upload do recibo");
+        throw new Error(errorData.error || t('uploadFailedError'));
       }
       
       const result = await response.json();
@@ -132,7 +137,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       if (fileList && fileList.length > 0) {
         const file = fileList[0];
         
-        toast.loading("Enviando recibo...");
+        toast.loading(t('uploadingReceipt'));
         
         try {
           const uploadResult = await uploadReceipt(file);
@@ -140,11 +145,11 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
             receiptUrl = uploadResult.url;
             receiptDownloadUrl = uploadResult.downloadUrl;
             toast.dismiss();
-            toast.success("Recibo enviado com sucesso!");
+            toast.success(t('receiptUploadSuccess'));
           }
         } catch (error) {
           toast.dismiss();
-          toast.error(error instanceof Error ? error.message : "Erro ao enviar recibo");
+          toast.error(error instanceof Error ? error.message : t('receiptUploadError'));
           // Não interrompe o fluxo se o upload falhar
         }
       }
@@ -156,7 +161,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       
       const method = isEditing ? 'PUT' : 'POST';
 
-      toast.loading(`${isEditing ? 'Atualizando' : 'Adicionando'} transação...`);
+      toast.loading(isEditing ? t('updatingTransaction') : t('addingTransaction'));
       
       const response = await fetch(endpoint, {
         method,
@@ -172,7 +177,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Falha ao ${isEditing ? 'atualizar' : 'adicionar'} transação: ${errorData.error || 'Erro desconhecido'}`);
+        throw new Error(`${isEditing ? t('failedToUpdate') : t('failedToAdd')}: ${errorData.error || t('unknownError')}`);
       }
 
       reset({
@@ -184,7 +189,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       });
 
       toast.dismiss();
-      toast.success(`Transação ${isEditing ? 'atualizada' : 'adicionada'} com sucesso!`);
+      toast.success(isEditing ? t('transactionUpdatedSuccess') : t('transactionAddedSuccess'));
       
       // Limpa o campo de arquivo
       if (fileInputRef.current) {
@@ -196,7 +201,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.dismiss();
-      toast.error(`${error instanceof Error ? error.message : 'Erro desconhecido ao processar a transação'}`);
+      toast.error(`${error instanceof Error ? error.message : t('unknownError')}`);
     } finally {
       setIsUploading(false);
     }
@@ -226,10 +231,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       <Input 
         type="number" 
         step="0.01"
-        placeholder="Amount" 
+        placeholder={t('amount')}
         {...register("amount", { valueAsNumber: true })} 
       />
-      {errors.amount && <p className="text-sm text-red-500">Enter a valid amount</p>}
+      {errors.amount && <p className="text-sm text-red-500">{t('enterValidAmount')}</p>}
 
       <Select 
         defaultValue={transaction?.type}
@@ -237,30 +242,30 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         {...register("type")}
       >
         <SelectTrigger className="cursor-pointer">
-          <SelectValue placeholder="Type" />
+          <SelectValue placeholder={t('type')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="INCOME" className="cursor-pointer">Income</SelectItem>
-          <SelectItem value="EXPENSE" className="cursor-pointer">Expense</SelectItem>
+          <SelectItem value="INCOME" className="cursor-pointer">{t('income')}</SelectItem>
+          <SelectItem value="EXPENSE" className="cursor-pointer">{t('expense')}</SelectItem>
         </SelectContent>
       </Select>
-      {errors.type && <p className="text-sm text-red-500">Select a type</p>}
+      {errors.type && <p className="text-sm text-red-500">{t('selectType')}</p>}
 
       <Input 
-        placeholder="Category" 
+        placeholder={t('category')}
         {...register("category")} 
       />
-      {errors.category && <p className="text-sm text-red-500">Category is required</p>}
+      {errors.category && <p className="text-sm text-red-500">{t('categoryRequired')}</p>}
 
       <Textarea 
-        placeholder="Description (optional)" 
+        placeholder={t('description')}
         {...register("description")} 
       />
 
       {isMobile ? (
         <div className="flex flex-col space-y-2">
           <label htmlFor="date-input" className="text-sm font-medium">
-            Date
+            {t('date')}
           </label>
           <Input
             id="date-input"
@@ -279,7 +284,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           <PopoverTrigger asChild className="cursor-pointer">
             <Button variant="outline" className={cn("w-full justify-start text-left", !date && "text-muted-foreground")}>
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
+              {date ? format(date, "PPP") : <span>{t('pickDate')}</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -296,7 +301,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       {/* Campo de upload de recibo com pré-visualização */}
       <div className="space-y-2">
         <label className="text-sm font-medium">
-          {isEditing ? "Update receipt" : "Add receipt"} (optional)
+          {isEditing ? t('updateReceipt') : t('addReceipt')} {t('optional')}
         </label>
         
         <Input 
@@ -312,7 +317,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           <div className="mt-2 relative max-h-[150px] overflow-scroll">
             <img 
               src={filePreview} 
-              alt="Receipt Preview" 
+              alt={t('receiptPreview')}
               className="w-full h-full object-contain rounded border"
             />
             <Button
@@ -335,7 +340,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         
         {transaction?.receiptUrl && !filePreview && (
           <div className="text-sm text-muted-foreground">
-            This transaction already has a receipt. Sending a new one will replace the current one.
+            {t('hasReceiptWarning')}
           </div>
         )}
       </div>
@@ -351,7 +356,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           }}
           disabled={isUploading}
         >
-          Cancel
+          {t('cancel')}
         </Button>
 
         <Button 
@@ -359,7 +364,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           className="self-end cursor-pointer"
           disabled={isUploading}
         >
-          {isUploading ? "Processing..." : isEditing ? "Update Transaction" : "Add Transaction"}
+          {isUploading ? t('processing') : isEditing ? t('updateTransaction') : t('addTransaction')}
         </Button>
       </div>
     </form>
