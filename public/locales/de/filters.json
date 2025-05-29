@@ -19,5 +19,6 @@
   "customRange": "Benutzerdefinierter Bereich",
   "startDate": "Anfangsdatum",
   "endDate": "Enddatum",
-  "filter": "Filtern"
+  "filter": "Filtern",
+  "clearFilters": "Filter löschen"
 } 

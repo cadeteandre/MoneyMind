@@ -19,5 +19,6 @@
   "customRange": "Custom Range",
   "startDate": "Start date",
   "endDate": "End date",
-  "filter": "Filter"
+  "filter": "Filter",
+  "clearFilters": "Clear Filters"
 } 

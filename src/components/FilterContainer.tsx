@@ -8,6 +8,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
+import { handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
 
 interface FilterContainerProps {
     transactions: ITransaction[];
@@ -110,12 +111,18 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
           <div className="mt-4 mb-1">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-sm font-medium">{t('dateRange')}</h3>
+              {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
+            <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="h-9 cursor-pointer">
+              <X className="h-4 w-4 mr-2" />
+              {t('clearFilters')}
+            </Button>
+          )}
               {(activeFilter || showCustomDateRange) && (
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={clearDateFilters} 
-                  className="h-6 px-2 text-xs flex items-center gap-1"
+                  className="h-6 px-2 text-xs flex items-center gap-1 cursor-pointer"
                 >
                   <X className="h-3 w-3" /> {t('clear')}
                 </Button>
