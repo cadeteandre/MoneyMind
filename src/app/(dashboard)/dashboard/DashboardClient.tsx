@@ -13,11 +13,11 @@ import { Button } from "@/components/ui/button"
 import { TransactionForm } from "@/components/TransactionForm"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus, X } from "lucide-react"
+import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import FilterContainer from "@/components/FilterContainer"
-import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils"
+import { categories, filteredTransactions } from "@/lib/utils"
 import { useLanguage } from "@/components/providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
 
@@ -90,12 +90,6 @@ export default function DashboardClient() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
-            <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="h-9 cursor-pointer">
-              <X className="h-4 w-4 mr-2" />
-              {t('clearFilters')}
-            </Button>
-          )}
           <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={isLoading} className="h-9 cursor-pointer">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             {isLoading ? t('updating') : t('update')}

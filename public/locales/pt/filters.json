@@ -19,5 +19,6 @@
   "customRange": "Intervalo personalizado",
   "startDate": "Data inicial",
   "endDate": "Data final",
-  "filter": "Filtrar"
+  "filter": "Filtrar",
+  "clearFilters": "Limpar filtros"
 } 
