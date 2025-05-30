@@ -19,6 +19,7 @@ model User {
   currency     String        @default("EUR")
   locale       String        @default("en")
   transactions Transaction[]
+  categories   Category[]
 }
 
 model Transaction {
@@ -28,8 +29,25 @@ model Transaction {
   amount             Decimal         @db.Decimal(19, 4)
   type               TransactionType
   category           String
+  categoryId         String?
+  categoryReference  Category?       @relation(fields: [categoryId], references: [id])
   description        String?
   date               DateTime        @default(now())
   receiptUrl         String? // URL of the uploaded receipt (optional)
   receiptDownloadUrl String? // URL de download direto para o recibo (opcional)
+}
+
+model Category {
+  id           String          @id @default(cuid())
+  name         String
+  type         TransactionType
+  isDefault    Boolean         @default(false)
+  userId       String? // FK - null para categorias padrão
+  user         User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  createdAt    DateTime        @default(now())
+
+  @@unique([name, userId])
+  @@index([type])
+  @@index([isDefault])
 }
