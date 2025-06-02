@@ -20,6 +20,8 @@ import { TransactionForm } from "./TransactionForm"
 import { useCurrency } from "./providers/currency-provider"
 import { useLanguage } from "./providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
+import { useCategories } from '@/hooks/useCategories'
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation'
 
 // Usar a interface do frontend
 type Transaction = ITransaction;
@@ -48,6 +50,21 @@ export default function TransactionList({
   const { userCurrency } = useCurrency();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'transactions');
+  
+  // Hooks para tradução de categorias
+  const { categories } = useCategories({ type: 'ALL' });
+  const { translateCategoryName } = useCategoryTranslation();
+
+  // Função para traduzir nome da categoria
+  const getTranslatedCategoryName = (categoryName: string) => {
+    // Verificar se a categoria existe no banco (é padrão)
+    const categoryObj = categories.find(cat => cat.name === categoryName);
+    if (categoryObj && categoryObj.isDefault) {
+      return translateCategoryName(categoryName, true);
+    }
+    // Se não for categoria padrão, manter nome original
+    return categoryName;
+  };
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -204,7 +221,7 @@ export default function TransactionList({
 
             <div>
               <div className="flex items-center gap-2">
-                <p className="font-medium">{transaction.category}</p>
+                <p className="font-medium">{getTranslatedCategoryName(transaction.category)}</p>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 hidden sm:inline-block">
                   {t(`type.${transaction.type}`)}
                 </span>

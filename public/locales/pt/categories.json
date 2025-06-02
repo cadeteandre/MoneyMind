@@ -1,0 +1,33 @@
+{
+  "categories": {
+    "Food & Dining": "Alimentação",
+    "Transportation": "Transporte",
+    "Housing": "Moradia",
+    "Healthcare": "Saúde",
+    "Clothing": "Vestuário",
+    "Education": "Educação",
+    "Entertainment": "Entretenimento",
+    "Technology": "Tecnologia",
+    "Financial Services": "Serviços Financeiros",
+    "Other": "Outros",
+    "Salary": "Salário",
+    "Investments": "Investimentos",
+    "Freelance": "Freelances",
+    "Gifts": "Presentes"
+  },
+  "categorySelector": {
+    "addNewCategory": "Adicionar nova categoria",
+    "categoryName": "Nome da Categoria",
+    "enterCategoryName": "Digite o nome da categoria",
+    "cancel": "Cancelar",
+    "createCategory": "Criar Categoria",
+    "creating": "Criando...",
+    "categoryNameRequired": "Nome da categoria é obrigatório",
+    "categoryCreatedSuccess": "Categoria \"{name}\" criada com sucesso!",
+    "failedToCreateCategory": "Falha ao criar categoria",
+    "addNew": "Adicionar Nova Categoria de {type}",
+    "loadingCategories": "Carregando categorias...",
+    "selectCategory": "Selecionar categoria",
+    "customLabel": "(Personalizada)"
+  }
+} 

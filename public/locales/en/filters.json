@@ -1,6 +1,6 @@
 {
   "filters": "Filters",
-  "selectPeriod": "Select a period to analyze your data",
+  "selectPeriod": "Select a date range to filter your transactions",
   "searchTransactions": "Search transactions...",
   "filterByType": "Filter by type",
   "allTypes": "All Types",
@@ -8,7 +8,9 @@
   "expense": "Expense",
   "filterByCategory": "Filter by category",
   "allCategories": "All Categories",
+  "customLabel": "(Custom)",
   "dateRange": "Date Range",
+  "clearFilters": "Clear Filters",
   "clear": "Clear",
   "thisMonth": "This Month",
   "lastMonth": "Last Month",
@@ -16,9 +18,5 @@
   "last6Months": "Last 6 Months",
   "thisYear": "This Year",
   "lastYear": "Last Year",
-  "customRange": "Custom Range",
-  "startDate": "Start date",
-  "endDate": "End date",
-  "filter": "Filter",
-  "clearFilters": "Clear Filters"
+  "customRange": "Custom Range"
 } 
