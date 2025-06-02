@@ -18,11 +18,13 @@ import { useAuth } from "@clerk/nextjs";
 import type { ITransaction } from "@/interfaces/ITransaction";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
+import { CategorySelector } from '@/components/CategorySelector';
 
 const formSchema = z.object({
   amount: z.number().positive().multipleOf(0.01),
   type: z.enum(["INCOME", "EXPENSE"]),
   category: z.string().min(1),
+  categoryId: z.string().optional(),
   description: z.string().optional(),
   date: z.date(),
   receipt: z.any().optional(),
@@ -63,12 +65,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   });
 
   const date = watch("date");
+  const transactionType = watch("type");
   const { userId } = useAuth();
   const isEditing = !!transaction;
   const [isMobile, setIsMobile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filePreview, setFilePreview] = useState<string | null>(transaction?.receiptUrl || null);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
 
   useEffect(() => {
     // Check if we're on a mobile device
@@ -79,6 +83,21 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
     
     checkMobile();
   }, []);
+
+  // Definir categoria inicial para edição
+  useEffect(() => {
+    if (transaction?.category && isEditing) {
+      // Para transações existentes, usar o nome da categoria como value inicial
+      setSelectedCategoryId(transaction.category);
+    }
+  }, [transaction, isEditing]);
+
+  // Função para lidar com mudança de categoria
+  const handleCategoryChange = (categoryId: string, categoryName: string) => {
+    setSelectedCategoryId(categoryId);
+    setValue("categoryId", categoryId);
+    setValue("category", categoryName);
+  };
 
   // Função separada para upload de arquivo
   const uploadReceipt = async (file: File): Promise<{url: string, downloadUrl: string} | null> => {
@@ -184,9 +203,13 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
         amount: 0,
         type: undefined,
         category: '',
+        categoryId: undefined,
         description: '',
         date: new Date(),
       });
+
+      // Resetar categoria selecionada
+      setSelectedCategoryId('');
 
       toast.dismiss();
       toast.success(isEditing ? t('transactionUpdatedSuccess') : t('transactionAddedSuccess'));
@@ -251,11 +274,15 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       </Select>
       {errors.type && <p className="text-sm text-red-500">{t('selectType')}</p>}
 
-      <Input 
-        placeholder={t('category')}
-        {...register("category")} 
-      />
-      {errors.category && <p className="text-sm text-red-500">{t('categoryRequired')}</p>}
+      {transactionType && (
+        <CategorySelector
+          type={transactionType}
+          value={selectedCategoryId}
+          onChange={handleCategoryChange}
+          placeholder={t('category')}
+          error={errors.category?.message}
+        />
+      )}
 
       <Textarea 
         placeholder={t('description')}
@@ -352,6 +379,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           className="cursor-pointer"
           onClick={() => {
             reset();
+            setSelectedCategoryId('');
             if (onClose) onClose();
           }}
           disabled={isUploading}
