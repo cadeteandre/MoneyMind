@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useCategories } from '@/hooks/useCategories'
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation'
+import { useLanguage } from '@/components/providers/language-provider'
+import { useTranslation } from '@/app/i18n/client'
 import { toast } from 'sonner'
 
 interface CategorySelectorProps {
@@ -25,13 +28,17 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   error
 }) => {
   const { categories, loading, createCategory } = useCategories({ type })
+  const { translateCategory } = useCategoryTranslation()
+  const { userLocale } = useLanguage()
+  const { t } = useTranslation(userLocale, 'categories')
+  
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newCategoryName, setNewCategoryName] = useState('')
   const [isCreating, setIsCreating] = useState(false)
 
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) {
-      toast.error('Category name is required')
+      toast.error(t('categorySelector.categoryNameRequired'))
       return
     }
 
@@ -49,9 +56,9 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       setIsModalOpen(false)
       setNewCategoryName('')
       
-      toast.success(`Category "${newCategory.name}" created successfully!`)
+      toast.success(t('categorySelector.categoryCreatedSuccess').replace('{name}', newCategory.name))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create category')
+      toast.error(error instanceof Error ? error.message : t('categorySelector.failedToCreateCategory'))
     } finally {
       setIsCreating(false)
     }
@@ -73,7 +80,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     return (
       <div className="flex items-center justify-center p-4 border rounded-md">
         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-        <span className="text-sm text-muted-foreground">Loading categories...</span>
+        <span className="text-sm text-muted-foreground">{t('categorySelector.loadingCategories')}</span>
       </div>
     )
   }
@@ -89,12 +96,12 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
             <SelectItem 
               key={category.id} 
               value={category.id} 
-              className="cursor-pointer"
+              className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700"
             >
               <div className="flex items-center justify-between w-full">
-                <span>{category.name}</span>
+                <span>{translateCategory(category)}</span>
                 {!category.isDefault && (
-                  <span className="text-xs text-muted-foreground ml-2">(Custom)</span>
+                  <span className="text-xs text-muted-foreground ml-2">{t('categorySelector.customLabel')}</span>
                 )}
               </div>
             </SelectItem>
@@ -105,7 +112,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
           <SelectItem value="__ADD_NEW__" className="cursor-pointer text-blue-600">
             <div className="flex items-center">
               <Plus className="h-4 w-4 mr-2" />
-              <span>Add new category</span>
+              <span>{t('categorySelector.addNewCategory')}</span>
             </div>
           </SelectItem>
         </SelectContent>
@@ -119,17 +126,19 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New {type} Category</DialogTitle>
+            <DialogTitle>
+              {t('categorySelector.addNew').replace('{type}', type === 'INCOME' ? 'Income' : 'Expense')}
+            </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4 pt-4">
             <div className="space-y-2">
               <label htmlFor="category-name" className="text-sm font-medium">
-                Category Name
+                {t('categorySelector.categoryName')}
               </label>
               <Input
                 id="category-name"
-                placeholder="Enter category name"
+                placeholder={t('categorySelector.enterCategoryName')}
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 onKeyPress={(e) => {
@@ -149,7 +158,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                 }}
                 disabled={isCreating}
               >
-                Cancel
+                {t('categorySelector.cancel')}
               </Button>
               <Button
                 onClick={handleCreateCategory}
@@ -158,10 +167,10 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                 {isCreating ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Creating...
+                    {t('categorySelector.creating')}
                   </>
                 ) : (
-                  'Create Category'
+                  t('categorySelector.createCategory')
                 )}
               </Button>
             </div>

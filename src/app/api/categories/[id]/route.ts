@@ -7,12 +7,8 @@ import {
   ErrorResponse 
 } from '@/interfaces/ICategory'
 
-interface RouteParams {
-  params: { id: string }
-}
-
 // PUT /api/categories/[id]
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // 1. Verificar autenticação
     const user = await currentUser()
@@ -23,7 +19,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       )
     }
 
-    const { id } = params
+    const { id } = await params
 
     // 2. Verificar se categoria existe e pertence ao usuário
     const existingCategory = await prisma.category.findUnique({
@@ -133,7 +129,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 }
 
 // DELETE /api/categories/[id]
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // 1. Verificar autenticação
     const user = await currentUser()
@@ -144,7 +140,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       )
     }
 
-    const { id } = params
+    const { id } = await params
 
     // 2. Verificar se categoria existe e pertence ao usuário
     const existingCategory = await prisma.category.findUnique({

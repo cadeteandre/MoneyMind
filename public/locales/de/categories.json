@@ -1,0 +1,33 @@
+{
+  "categories": {
+    "Food & Dining": "Essen & Trinken",
+    "Transportation": "Transport",
+    "Housing": "Wohnen",
+    "Healthcare": "Gesundheitswesen",
+    "Clothing": "Kleidung",
+    "Education": "Bildung",
+    "Entertainment": "Unterhaltung",
+    "Technology": "Technologie",
+    "Financial Services": "Finanzdienstleistungen",
+    "Other": "Andere",
+    "Salary": "Gehalt",
+    "Investments": "Investitionen",
+    "Freelance": "Freiberuflich",
+    "Gifts": "Geschenke"
+  },
+  "categorySelector": {
+    "addNewCategory": "Neue Kategorie hinzufügen",
+    "categoryName": "Kategoriename",
+    "enterCategoryName": "Kategoriename eingeben",
+    "cancel": "Abbrechen",
+    "createCategory": "Kategorie erstellen",
+    "creating": "Erstellen...",
+    "categoryNameRequired": "Kategoriename ist erforderlich",
+    "categoryCreatedSuccess": "Kategorie \"{name}\" erfolgreich erstellt!",
+    "failedToCreateCategory": "Kategorie konnte nicht erstellt werden",
+    "addNew": "Neue {type}-Kategorie hinzufügen",
+    "loadingCategories": "Kategorien werden geladen...",
+    "selectCategory": "Kategorie auswählen",
+    "customLabel": "(Benutzerdefiniert)"
+  }
+} 

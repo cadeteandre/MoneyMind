@@ -17,7 +17,7 @@ import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus } from "lucide-rea
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import FilterContainer from "@/components/FilterContainer"
-import { categories, filteredTransactions } from "@/lib/utils"
+import { filteredTransactions } from "@/lib/utils"
 import { useLanguage } from "@/components/providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
 
@@ -164,13 +164,15 @@ export default function DashboardClient() {
         setTypeFilter={setTypeFilter}
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
-        categories={categories(transactions)}
         fetchData={fetchData}
       />
       ) : null}
 
       {/* Tabs para alternar entre visões */}
-      <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs defaultValue="overview" value={activeTab} onValueChange={(value) => {
+        setActiveTab(value)
+        setShowFiltersContainer(value === "transactions")
+      }} className="w-full">
         <div className="flex justify-between items-center mb-4">
           <TabsList className="grid grid-cols-2 w-[400px] gap-2">
             <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>{t('overview')}</TabsTrigger>
@@ -272,7 +274,10 @@ export default function DashboardClient() {
                   variant="ghost"
                   size="sm"
                   className="text-sm font-medium cursor-pointer"
-                  onClick={() => setActiveTab("transactions")}
+                  onClick={() => {
+                    setActiveTab("transactions")
+                    setShowFiltersContainer(true)
+                  }}
                 >
                   {t('viewAll')}
                   <ChevronRight className="ml-1 h-4 w-4" />

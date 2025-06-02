@@ -268,8 +268,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           <SelectValue placeholder={t('type')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="INCOME" className="cursor-pointer">{t('income')}</SelectItem>
-          <SelectItem value="EXPENSE" className="cursor-pointer">{t('expense')}</SelectItem>
+          <SelectItem value="INCOME" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('income')}</SelectItem>
+          <SelectItem value="EXPENSE" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('expense')}</SelectItem>
         </SelectContent>
       </Select>
       {errors.type && <p className="text-sm text-red-500">{t('selectType')}</p>}

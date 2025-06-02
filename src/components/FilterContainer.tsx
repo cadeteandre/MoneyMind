@@ -1,14 +1,16 @@
 import type { ITransaction } from "@/interfaces/ITransaction";
 import { DateRangeFilter } from "./DateRangeFilter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 import { handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
+import { useCategories } from '@/hooks/useCategories';
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation';
 
 interface FilterContainerProps {
     transactions: ITransaction[];
@@ -18,15 +20,42 @@ interface FilterContainerProps {
     setTypeFilter: (value: "ALL" | "INCOME" | "EXPENSE") => void;
     categoryFilter: string;
     setCategoryFilter: (value: string) => void;
-    categories: string[];
     fetchData: (startDate?: Date, endDate?: Date) => void;
 }
 
-const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, setTypeFilter, categoryFilter, setCategoryFilter, categories, fetchData }: FilterContainerProps) => {
+const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, setTypeFilter, categoryFilter, setCategoryFilter, fetchData }: FilterContainerProps) => {
     const [showCustomDateRange, setShowCustomDateRange] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string | null>(null);
     const { userLocale } = useLanguage();
     const { t } = useTranslation(userLocale, 'filters');
+    
+    // Buscar todas as categorias do banco para tradução
+    const { categories: allCategories } = useCategories({ type: 'ALL' });
+    const { translateCategory } = useCategoryTranslation();
+
+    // Extrair apenas categorias que aparecem nas transações do usuário
+    const usedCategoryNames = Array.from(new Set(transactions.map(t => t.category)));
+    
+    // Criar lista de categorias disponíveis baseada apenas nas transações
+    const availableCategories = usedCategoryNames.map(categoryName => {
+        // Procurar se existe no banco (para saber se é padrão)
+        const categoryFromBank = allCategories.find(cat => cat.name === categoryName);
+        
+        if (categoryFromBank) {
+            // Se existe no banco, usar dados do banco
+            return categoryFromBank;
+        } else {
+            // Se não existe no banco, criar objeto para compatibilidade (categoria antiga)
+            return {
+                id: categoryName,
+                name: categoryName,
+                type: 'EXPENSE' as const,
+                isDefault: false,
+                userId: '',
+                createdAt: new Date()
+            };
+        }
+    });
 
     const applyQuickFilter = (filter: string) => {
         const now = new Date();
@@ -101,9 +130,16 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ALL" className="cursor-pointer">{t('allCategories')}</SelectItem>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category} className="cursor-pointer">{category}</SelectItem>
-                ))}
+                {availableCategories
+                  .sort((a, b) => translateCategory(a).localeCompare(translateCategory(b)))
+                  .map(category => (
+                    <SelectItem key={category.id} value={category.name} className="cursor-pointer">
+                      {translateCategory(category)}
+                      {!category.isDefault && (
+                        <span className="text-xs text-muted-foreground ml-2">{t('customLabel')}</span>
+                      )}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
