@@ -29,64 +29,60 @@ async function main() {
   console.log('🌱 Starting database seed...')
   
   try {
-    // Criar categorias padrão para EXPENSE
-    console.log('📊 Creating default EXPENSE categories...')
-    for (const categoryName of DEFAULT_CATEGORIES.EXPENSE) {
-      const category = await prisma.category.upsert({
-        where: {
-          name_userId: {
-            name: categoryName,
-            userId: null // null = categoria padrão (não pertence a nenhum usuário)
-          }
-        },
-        update: {
-          // Se já existe, atualiza o tipo (por segurança)
-          type: TransactionType.EXPENSE,
-          isDefault: true
-        },
-        create: {
-          name: categoryName,
-          type: TransactionType.EXPENSE,
-          isDefault: true,
-          userId: null // Categoria global/padrão
-        }
-      })
-      console.log(`  ✅ Created/Updated: ${category.name} (${category.type})`)
+    // Verificar se já existem categorias padrão
+    const existingCategories = await prisma.category.count({
+      where: { isDefault: true }
+    })
+
+    if (existingCategories > 0) {
+      console.log(`📊 Found ${existingCategories} existing default categories. Skipping seed.`)
+      return
     }
+
+    // Preparar dados para criação
+    const categoriesToCreate = [
+      // Categorias de EXPENSE
+      ...DEFAULT_CATEGORIES.EXPENSE.map(name => ({
+        name,
+        type: TransactionType.EXPENSE,
+        isDefault: true,
+        userId: null
+      })),
+      // Categorias de INCOME  
+      ...DEFAULT_CATEGORIES.INCOME.map(name => ({
+        name,
+        type: TransactionType.INCOME,
+        isDefault: true,
+        userId: null
+      }))
+    ]
+
+    // Criar todas as categorias de uma vez
+    console.log('📊 Creating default categories...')
+    const result = await prisma.category.createMany({
+      data: categoriesToCreate,
+      skipDuplicates: true
+    })
     
-    // Criar categorias padrão para INCOME
-    console.log('💰 Creating default INCOME categories...')
-    for (const categoryName of DEFAULT_CATEGORIES.INCOME) {
-      const category = await prisma.category.upsert({
-        where: {
-          name_userId: {
-            name: categoryName,
-            userId: null
-          }
-        },
-        update: {
-          type: TransactionType.INCOME,
-          isDefault: true
-        },
-        create: {
-          name: categoryName,
-          type: TransactionType.INCOME,
-          isDefault: true,
-          userId: null
-        }
-      })
-      console.log(`  ✅ Created/Updated: ${category.name} (${category.type})`)
-    }
+    console.log(`✅ Created ${result.count} default categories`)
     
-    // Verificar quantas categorias foram criadas
+    // Verificar resultado final
     const totalCategories = await prisma.category.count({
       where: { isDefault: true }
     })
     
+    const expenseCount = await prisma.category.count({
+      where: { isDefault: true, type: TransactionType.EXPENSE }
+    })
+    
+    const incomeCount = await prisma.category.count({
+      where: { isDefault: true, type: TransactionType.INCOME }
+    })
+    
     console.log(`\n🎉 Seed completed successfully!`)
     console.log(`📊 Total default categories in database: ${totalCategories}`)
-    console.log(`   - EXPENSE categories: ${DEFAULT_CATEGORIES.EXPENSE.length}`)
-    console.log(`   - INCOME categories: ${DEFAULT_CATEGORIES.INCOME.length}`)
+    console.log(`   - EXPENSE categories: ${expenseCount}`)
+    console.log(`   - INCOME categories: ${incomeCount}`)
     
   } catch (error) {
     console.error('❌ Error during seed:', error)
