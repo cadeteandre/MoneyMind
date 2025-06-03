@@ -10,7 +10,7 @@ import { TransactionForm } from "@/components/TransactionForm";
 import { Calendar, Plus, X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import FilterContainer from "@/components/FilterContainer";
-import { categories, filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
+import { filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 
@@ -122,7 +122,6 @@ export default function TransactionsPage() {
         setTypeFilter={setTypeFilter}
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
-        categories={categories(transactions)}
         fetchData={fetchData}
       />
         
