@@ -7,11 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TransactionType {
-  INCOME
-  EXPENSE
-}
-
 model User {
   id           String        @id @default(cuid())
   email        String        @unique
@@ -25,16 +20,16 @@ model User {
 model Transaction {
   id                 String          @id @default(cuid())
   userId             String
-  user               User            @relation(fields: [userId], references: [id])
   amount             Decimal         @db.Decimal(19, 4)
   type               TransactionType
   category           String
-  categoryId         String?
-  categoryReference  Category?       @relation(fields: [categoryId], references: [id])
   description        String?
   date               DateTime        @default(now())
-  receiptUrl         String? // URL of the uploaded receipt (optional)
-  receiptDownloadUrl String? // URL de download direto para o recibo (opcional)
+  receiptUrl         String?
+  receiptDownloadUrl String?
+  categoryId         String?
+  user               User            @relation(fields: [userId], references: [id])
+  categoryReference  Category?       @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
@@ -42,12 +37,18 @@ model Category {
   name         String
   type         TransactionType
   isDefault    Boolean         @default(false)
-  userId       String? // FK - null para categorias padrão
-  user         User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
+  userId       String?
   createdAt    DateTime        @default(now())
+  user         User?           @relation(fields: [userId], references: [id])
+  transactions Transaction[]
 
   @@unique([name, userId])
   @@index([type])
   @@index([isDefault])
+  @@index([userId])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }
