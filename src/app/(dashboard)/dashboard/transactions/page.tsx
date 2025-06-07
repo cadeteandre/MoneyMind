@@ -7,10 +7,10 @@ import { getTransactions } from "@/app/actions/getTransactions";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/TransactionForm";
-import { Calendar, Plus, X } from "lucide-react";
+import { Calendar, Plus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import FilterContainer from "@/components/FilterContainer";
-import { filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
+import { filteredTransactions } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 
@@ -27,11 +27,6 @@ export default function TransactionsPage() {
 
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
-
-  const clearDateFilters = () => {
-    setHasDateFilter(false);
-    setDateRange({});
-  };
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
