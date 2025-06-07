@@ -22,5 +22,7 @@
   "allTransactions": "Todas las Transacciones",
   "showing": "Mostrando",
   "transactions_count": "transacciones",
-  "noTransactionsFound": "No se encontraron transacciones"
+  "noTransactionsFound": "No se encontraron transacciones",
+  "showFilters": "Mostrar Filtros",
+  "hideFilters": "Ocultar Filtros"
 } 
