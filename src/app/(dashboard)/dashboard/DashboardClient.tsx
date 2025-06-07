@@ -51,10 +51,14 @@ export default function DashboardClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL")
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL")
+  const [hasDateFilter, setHasDateFilter] = useState(false)
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
     setError(null)
+    
+    // Atualizar estado de filtro de data
+    setHasDateFilter(!!(startDate && endDate))
 
     try {
       // Prepare date parameters
@@ -171,7 +175,7 @@ export default function DashboardClient() {
               title={showFiltersContainer ? t('hideFilters') : t('showFilters')}
             >
               <Filter className="h-4 w-4" />
-              <span className="hidden sm:inline ml-2">{showFiltersContainer ? t('hideFilters') : t('showFilters')}</span>
+              <span className="sm:inline ml-2">{showFiltersContainer ? t('hideFilters') : t('showFilters')}</span>
             </Button>
             {/* <span className="text-sm text-muted-foreground">
               {t('showing')} {transactions.length} {t('transactions_count')}
@@ -190,6 +194,8 @@ export default function DashboardClient() {
             categoryFilter={categoryFilter}
             setCategoryFilter={setCategoryFilter}
             fetchData={fetchData}
+            hasDateFilter={hasDateFilter}
+            onDateFilterChange={setHasDateFilter}
           />
         )}
 

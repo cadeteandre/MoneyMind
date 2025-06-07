@@ -20,6 +20,7 @@ export default function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const [hasDateFilter, setHasDateFilter] = useState(false);
   const [dateRange, setDateRange] = useState<{ startDate?: Date; endDate?: Date }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isTransactionsEmptyModalOpen, setIsTransactionsEmptyModalOpen] = useState(false);
@@ -27,8 +28,15 @@ export default function TransactionsPage() {
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
 
+  const clearDateFilters = () => {
+    setHasDateFilter(false);
+    setDateRange({});
+  };
+
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
+    setHasDateFilter(!!(startDate && endDate));
+    
     try {
       // Prepare date parameters
       const params: { startDate?: string; endDate?: string } = {};
@@ -57,12 +65,6 @@ export default function TransactionsPage() {
       <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">{t('transactions')}</h1>
         <div className="flex gap-2">
-          {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
-            <Button variant="outline" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="gap-2 cursor-pointer">
-              <X className="h-4 w-4" />
-              {t('clearFilters')}
-            </Button>
-          )}
           <Dialog 
             open={isTransactionsHeaderModalOpen} 
             modal={true}
@@ -123,6 +125,8 @@ export default function TransactionsPage() {
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
         fetchData={fetchData}
+        hasDateFilter={hasDateFilter}
+        onDateFilterChange={setHasDateFilter}
       />
         
       {isLoading ? (

@@ -7,11 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -68,21 +64,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   const transactionType = watch("type");
   const { userId } = useAuth();
   const isEditing = !!transaction;
-  const [isMobile, setIsMobile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filePreview, setFilePreview] = useState<string | null>(transaction?.receiptUrl || null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-
-  useEffect(() => {
-    // Check if we're on a mobile device
-    const checkMobile = () => {
-      const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent || navigator.vendor : '';
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
-    };
-    
-    checkMobile();
-  }, []);
 
   // Definir categoria inicial para edição
   useEffect(() => {
@@ -250,129 +235,130 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md max-h-[90vh] overflow-y-auto">
-      <Input 
-        type="number" 
-        step="0.01"
-        placeholder={t('amount')}
-        {...register("amount", { valueAsNumber: true })} 
-      />
-      {errors.amount && <p className="text-sm text-red-500">{t('enterValidAmount')}</p>}
-
-      <Select 
-        defaultValue={transaction?.type}
-        onValueChange={(val) => setValue("type", val as "INCOME" | "EXPENSE")}
-        {...register("type")}
-      >
-        <SelectTrigger className="cursor-pointer">
-          <SelectValue placeholder={t('type')} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="INCOME" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('income')}</SelectItem>
-          <SelectItem value="EXPENSE" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('expense')}</SelectItem>
-        </SelectContent>
-      </Select>
-      {errors.type && <p className="text-sm text-red-500">{t('selectType')}</p>}
-
-      {transactionType && (
-        <CategorySelector
-          type={transactionType}
-          value={selectedCategoryId}
-          onChange={handleCategoryChange}
-          placeholder={t('category')}
-          error={errors.category?.message}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md max-h-[90vh] overflow-y-visible">
+      <div className="max-h-[85vh] overflow-y-auto space-y-4">
+        <Input 
+          type="number" 
+          step="0.01"
+          placeholder={t('amount')}
+          {...register("amount", { valueAsNumber: true })} 
         />
-      )}
+        {errors.amount && <p className="text-sm text-red-500">{t('enterValidAmount')}</p>}
 
-      <Textarea 
-        placeholder={t('description')}
-        {...register("description")} 
-      />
+        <Select 
+          defaultValue={transaction?.type}
+          onValueChange={(val) => setValue("type", val as "INCOME" | "EXPENSE")}
+          {...register("type")}
+        >
+          <SelectTrigger className="cursor-pointer">
+            <SelectValue placeholder={t('type')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="INCOME" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('income')}</SelectItem>
+            <SelectItem value="EXPENSE" className="cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700">{t('expense')}</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.type && <p className="text-sm text-red-500">{t('selectType')}</p>}
 
-      {isMobile ? (
+        {transactionType && (
+          <CategorySelector
+            type={transactionType}
+            value={selectedCategoryId}
+            onChange={handleCategoryChange}
+            placeholder={t('category')}
+            error={errors.category?.message}
+          />
+        )}
+
+        <Textarea 
+          placeholder={t('description')}
+          {...register("description")} 
+        />
+
         <div className="flex flex-col space-y-2">
           <label htmlFor="date-input" className="text-sm font-medium">
             {t('date')}
           </label>
-          <Input
-            id="date-input"
-            type="date"
-            value={date ? format(date, "yyyy-MM-dd") : ""}
-            onChange={(e) => {
-              const newDate = e.target.value ? new Date(e.target.value) : null;
-              if (newDate) {
-                setValue("date", newDate);
+          <div 
+            className="relative cursor-pointer"
+            onClick={(e) => {
+              // Se não clicou no input em si, force o foco e abertura
+              const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
+              if (input && e.target !== input) {
+                input.focus();
+                input.showPicker?.(); // Método moderno para abrir o date picker
               }
             }}
-          />
-        </div>
-      ) : (
-        <Popover>
-          <PopoverTrigger asChild className="cursor-pointer">
-            <Button variant="outline" className={cn("w-full justify-start text-left", !date && "text-muted-foreground")}>
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>{t('pickDate')}</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => d && setValue("date", d)}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-      )}
-
-      {/* Campo de upload de recibo com pré-visualização */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          {isEditing ? t('updateReceipt') : t('addReceipt')} {t('optional')}
-        </label>
-        
-        <Input 
-          type="file" 
-          accept="image/*"
-          onChange={handleFileChange}
-          ref={fileInputRef}
-          disabled={isUploading}
-          className="cursor-pointer"
-        />
-        
-        {filePreview && (
-          <div className="mt-2 relative max-h-[150px] overflow-scroll">
-            <img 
-              src={filePreview} 
-              alt={t('receiptPreview')}
-              className="w-full h-full object-contain rounded border"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full cursor-pointer"
-              onClick={() => {
-                setFilePreview(null);
-                if (fileInputRef.current) {
-                  fileInputRef.current.value = '';
+          >
+            <Input
+              id="date-input"
+              type="date"
+              className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
+              value={date ? format(date, "yyyy-MM-dd") : ""}
+              onChange={(e) => {
+                const newDate = e.target.value ? new Date(e.target.value) : null;
+                if (newDate) {
+                  setValue("date", newDate);
                 }
-                setValue("receipt", null);
               }}
-            >
-              ×
-            </Button>
+              onClick={(e) => {
+                // Garantir que o picker abra ao clicar no input
+                const input = e.target as HTMLInputElement;
+                input.showPicker?.();
+              }}
+            />
           </div>
-        )}
-        
-        {transaction?.receiptUrl && !filePreview && (
-          <div className="text-sm text-muted-foreground">
-            {t('hasReceiptWarning')}
-          </div>
-        )}
+        </div>
+
+        {/* Campo de upload de recibo com pré-visualização */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">
+            {isEditing ? t('updateReceipt') : t('addReceipt')} {t('optional')}
+          </label>
+          
+          <Input 
+            type="file" 
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            disabled={isUploading}
+            className="cursor-pointer"
+          />
+          
+          {filePreview && (
+            <div className="mt-2 relative max-h-[150px] overflow-scroll">
+              <img 
+                src={filePreview} 
+                alt={t('receiptPreview')}
+                className="w-full h-full object-contain rounded border"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="absolute top-2 right-2 h-6 w-6 p-0 rounded-full cursor-pointer"
+                onClick={() => {
+                  setFilePreview(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                  }
+                  setValue("receipt", null);
+                }}
+              >
+                ×
+              </Button>
+            </div>
+          )}
+          
+          {transaction?.receiptUrl && !filePreview && (
+            <div className="text-sm text-muted-foreground">
+              {t('hasReceiptWarning')}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex gap-6 pt-4">
         <Button
           type="button"
           variant="outline"
