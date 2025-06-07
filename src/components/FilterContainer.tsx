@@ -21,9 +21,22 @@ interface FilterContainerProps {
     categoryFilter: string;
     setCategoryFilter: (value: string) => void;
     fetchData: (startDate?: Date, endDate?: Date) => void;
+    hasDateFilter?: boolean;
+    onDateFilterChange?: (hasFilter: boolean) => void;
 }
 
-const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, setTypeFilter, categoryFilter, setCategoryFilter, fetchData }: FilterContainerProps) => {
+const FilterContainer = ({ 
+    transactions, 
+    searchTerm, 
+    setSearchTerm, 
+    typeFilter, 
+    setTypeFilter, 
+    categoryFilter, 
+    setCategoryFilter, 
+    fetchData, 
+    hasDateFilter = false,
+    onDateFilterChange 
+}: FilterContainerProps) => {
     const [showCustomDateRange, setShowCustomDateRange] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string | null>(null);
     const { userLocale } = useLanguage();
@@ -90,12 +103,14 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
         fetchData(startDate, endDate);
         setShowCustomDateRange(false);
         setActiveFilter(filter);
+        if (onDateFilterChange) onDateFilterChange(true);
     };
 
     const clearDateFilters = () => {
         fetchData(undefined, undefined);
         setActiveFilter(null);
         setShowCustomDateRange(false);
+        if (onDateFilterChange) onDateFilterChange(false);
     };
 
     return (  
@@ -147,22 +162,12 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
           <div className="mt-4 mb-1">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-sm font-medium">{t('dateRange')}</h3>
-              {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
-            <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="h-9 cursor-pointer">
+              {hasActiveFilters(searchTerm, typeFilter, categoryFilter, hasDateFilter) && (
+            <Button variant="outline" size="sm" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData, clearDateFilters)} className="h-9 cursor-pointer">
               <X className="h-4 w-4 mr-2" />
               {t('clearFilters')}
             </Button>
           )}
-              {(activeFilter || showCustomDateRange) && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={clearDateFilters} 
-                  className="h-6 px-2 text-xs flex items-center gap-1 cursor-pointer"
-                >
-                  <X className="h-3 w-3" /> {t('clear')}
-                </Button>
-              )}
             </div>
             <div className="flex flex-wrap gap-2">
               <Button 
@@ -228,6 +233,7 @@ const FilterContainer = ({ transactions, searchTerm, setSearchTerm, typeFilter, 
                  if (start && end) {
                    fetchData(start, end);
                    setActiveFilter(null);
+                   if (onDateFilterChange) onDateFilterChange(true);
                  }
                }} />
              </div>

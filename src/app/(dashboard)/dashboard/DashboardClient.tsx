@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { TransactionForm } from "@/components/TransactionForm"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus } from "lucide-react"
+import { AlertCircle, Calendar, ChevronRight, RefreshCw, Plus, Filter } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import FilterContainer from "@/components/FilterContainer"
@@ -51,10 +51,14 @@ export default function DashboardClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL")
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL")
+  const [hasDateFilter, setHasDateFilter] = useState(false)
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
     setError(null)
+    
+    // Atualizar estado de filtro de data
+    setHasDateFilter(!!(startDate && endDate))
 
     try {
       // Prepare date parameters
@@ -154,31 +158,46 @@ export default function DashboardClient() {
         </Alert>
       )}
 
-      {/* Filtros de data */}
-      {showFiltersContainer ? (
-      <FilterContainer
-        transactions={transactions}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-        categoryFilter={categoryFilter}
-        setCategoryFilter={setCategoryFilter}
-        fetchData={fetchData}
-      />
-      ) : null}
-
       {/* Tabs para alternar entre visões */}
-      <Tabs defaultValue="overview" value={activeTab} onValueChange={(value) => {
-        setActiveTab(value)
-        setShowFiltersContainer(value === "transactions")
-      }} className="w-full">
-        <div className="flex justify-between items-center mb-4">
-          <TabsList className="grid grid-cols-2 w-[400px] gap-2">
-            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>{t('overview')}</TabsTrigger>
-            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(true)}>{t('transactions')}</TabsTrigger>
+      <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 mb-4">
+          <TabsList className="grid grid-cols-2 w-full sm:w-[400px] gap-2">
+            <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700">{t('overview')}</TabsTrigger>
+            <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700">{t('transactions')}</TabsTrigger>
           </TabsList>
+          
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowFiltersContainer(!showFiltersContainer)}
+              className="h-9 cursor-pointer whitespace-nowrap"
+              title={showFiltersContainer ? t('hideFilters') : t('showFilters')}
+            >
+              <Filter className="h-4 w-4" />
+              <span className="sm:inline ml-2">{showFiltersContainer ? t('hideFilters') : t('showFilters')}</span>
+            </Button>
+            {/* <span className="text-sm text-muted-foreground">
+              {t('showing')} {transactions.length} {t('transactions_count')}
+            </span> */}
+          </div>
         </div>
+        
+        {/* Filtros */}
+        {showFiltersContainer && (
+          <FilterContainer
+            transactions={transactions}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+            fetchData={fetchData}
+            hasDateFilter={hasDateFilter}
+            onDateFilterChange={setHasDateFilter}
+          />
+        )}
 
         <TabsContent value="overview" className="space-y-6 animate-in fade-in-50">
           {/* Resumo financeiro */}

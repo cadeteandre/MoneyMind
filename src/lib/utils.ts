@@ -34,11 +34,20 @@ export function formatCurrency(amount: number | string, currency: string = 'EUR'
   }).format(num);
 }
 
-export const handleClearAllFilters = (setSearchTerm: (value: string) => void, setTypeFilter: (value: "ALL" | "INCOME" | "EXPENSE") => void, setCategoryFilter: (value: string) => void, fetchData: (startDate?: Date, endDate?: Date) => void) => {
+export const handleClearAllFilters = (
+  setSearchTerm: (value: string) => void, 
+  setTypeFilter: (value: "ALL" | "INCOME" | "EXPENSE") => void, 
+  setCategoryFilter: (value: string) => void, 
+  fetchData: (startDate?: Date, endDate?: Date) => void,
+  clearDateFilters?: () => void
+) => {
   setSearchTerm("");
   setTypeFilter("ALL");
   setCategoryFilter("ALL");
   fetchData(undefined, undefined);
+  if (clearDateFilters) {
+    clearDateFilters();
+  }
 };
 
 export const filteredTransactions = (transactions: ITransaction[], searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): ITransaction[] => {
@@ -55,8 +64,13 @@ export const categories = (transactions: ITransaction[]): string[] => {
   return Array.from(new Set(transactions.map(t => t.category)));
 };
 
-export const hasActiveFilters = (searchTerm: string, typeFilter: "ALL" | "INCOME" | "EXPENSE", categoryFilter: string): boolean => {
-  if (searchTerm || typeFilter !== "ALL" || categoryFilter !== "ALL") {
+export const hasActiveFilters = (
+  searchTerm: string, 
+  typeFilter: "ALL" | "INCOME" | "EXPENSE", 
+  categoryFilter: string,
+  hasDateFilter?: boolean
+): boolean => {
+  if (searchTerm || typeFilter !== "ALL" || categoryFilter !== "ALL" || hasDateFilter) {
     return true;
   }
   return false;

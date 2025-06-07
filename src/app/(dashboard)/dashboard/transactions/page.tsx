@@ -7,10 +7,10 @@ import { getTransactions } from "@/app/actions/getTransactions";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/TransactionForm";
-import { Calendar, Plus, X } from "lucide-react";
+import { Calendar, Plus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import FilterContainer from "@/components/FilterContainer";
-import { filteredTransactions, handleClearAllFilters, hasActiveFilters } from "@/lib/utils";
+import { filteredTransactions } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 
@@ -20,6 +20,7 @@ export default function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"ALL" | "INCOME" | "EXPENSE">("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const [hasDateFilter, setHasDateFilter] = useState(false);
   const [dateRange, setDateRange] = useState<{ startDate?: Date; endDate?: Date }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isTransactionsEmptyModalOpen, setIsTransactionsEmptyModalOpen] = useState(false);
@@ -29,6 +30,8 @@ export default function TransactionsPage() {
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
+    setHasDateFilter(!!(startDate && endDate));
+    
     try {
       // Prepare date parameters
       const params: { startDate?: string; endDate?: string } = {};
@@ -57,12 +60,6 @@ export default function TransactionsPage() {
       <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">{t('transactions')}</h1>
         <div className="flex gap-2">
-          {hasActiveFilters(searchTerm, typeFilter, categoryFilter) && (
-            <Button variant="outline" onClick={() => handleClearAllFilters(setSearchTerm, setTypeFilter, setCategoryFilter, fetchData)} className="gap-2 cursor-pointer">
-              <X className="h-4 w-4" />
-              {t('clearFilters')}
-            </Button>
-          )}
           <Dialog 
             open={isTransactionsHeaderModalOpen} 
             modal={true}
@@ -123,6 +120,8 @@ export default function TransactionsPage() {
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
         fetchData={fetchData}
+        hasDateFilter={hasDateFilter}
+        onDateFilterChange={setHasDateFilter}
       />
         
       {isLoading ? (
