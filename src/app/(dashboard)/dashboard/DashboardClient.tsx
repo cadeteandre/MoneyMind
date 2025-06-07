@@ -154,20 +154,6 @@ export default function DashboardClient() {
         </Alert>
       )}
 
-      {/* Filtros de data */}
-      {showFiltersContainer ? (
-      <FilterContainer
-        transactions={transactions}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-        categoryFilter={categoryFilter}
-        setCategoryFilter={setCategoryFilter}
-        fetchData={fetchData}
-      />
-      ) : null}
-
       {/* Tabs para alternar entre visões */}
       <Tabs defaultValue="overview" value={activeTab} onValueChange={(value) => {
         setActiveTab(value)
@@ -178,7 +164,24 @@ export default function DashboardClient() {
             <TabsTrigger value="overview" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(false)}>{t('overview')}</TabsTrigger>
             <TabsTrigger value="transactions" className="cursor-pointer dark:hover:bg-neutral-700" onClick={() => setShowFiltersContainer(true)}>{t('transactions')}</TabsTrigger>
           </TabsList>
+          <span className="text-sm text-muted-foreground">
+            {t('showing')} {transactions.length} {t('transactions_count')}
+          </span>
         </div>
+        
+        {/* Filtros de data */}
+        {showFiltersContainer ? (
+          <FilterContainer
+            transactions={transactions}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+            fetchData={fetchData}
+          />
+          ) : null}
 
         <TabsContent value="overview" className="space-y-6 animate-in fade-in-50">
           {/* Resumo financeiro */}
