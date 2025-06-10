@@ -19,5 +19,40 @@
       "description": "Seus dados financeiros são protegidos com segurança de nível empresarial."
   },
   "footer": "Todos os direitos reservados.",
-  "loading": "Carregando..."
+  "loading": "Carregando...",
+  "tryDemo": "Experimentar Demo",
+  "featuresInAction": {
+    "title": "Veja o MoneyMind em Ação",
+    "subtitle": "Explore nossos recursos poderosos com demos ao vivo e descubra como o MoneyMind pode transformar sua gestão financeira.",
+    "dashboard": {
+      "title": "Dashboard Financeiro",
+      "description": "Tenha uma visão completa das suas finanças",
+      "features": [
+        "Acompanhamento de saldo em tempo real",
+        "Receitas vs despesas mensais",
+        "Gráficos por categoria",
+        "Visão geral de transações recentes"
+      ]
+    },
+    "transactions": {
+      "title": "Gerenciamento de Transações",
+      "description": "Rastreie e organize suas despesas sem esforço",
+      "features": [
+        "Adicione transações rapidamente",
+        "Categorização inteligente",
+        "Upload de foto de recibos",
+        "Opções avançadas de filtros"
+      ]
+    },
+    "profile": {
+      "title": "Perfil e Configurações",
+      "description": "Personalize sua experiência financeira",
+      "features": [
+        "Suporte a múltiplas moedas",
+        "Preferências de idioma",
+        "Gerenciamento de conta",
+        "Configurações de segurança"
+      ]
+    }
+  }
 }
