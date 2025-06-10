@@ -1,0 +1,48 @@
+{
+  "user": {
+    "name": "Maria Silva",
+    "email": "maria.demo@example.com"
+  },
+  "categories": {
+    "income": {
+      "salary": "Salário",
+      "freelance": "Freelance",
+      "investments": "Investimentos",
+      "sales": "Vendas"
+    },
+    "expense": {
+      "food": "Alimentação",
+      "transportation": "Transporte",
+      "housing": "Moradia",
+      "healthcare": "Saúde",
+      "education": "Educação",
+      "entertainment": "Lazer",
+      "shopping": "Compras",
+      "services": "Serviços"
+    }
+  },
+  "transactions": {
+    "descriptions": {
+      "salary_jan": "Salário Janeiro 2024",
+      "rent_apartment": "Aluguel Apartamento",
+      "supermarket": "Supermercado Extra",
+      "freelance_website": "Projeto Freelance - Website",
+      "gas_station": "Combustível Posto Shell",
+      "medical_consultation": "Consulta Médica",
+      "streaming": "Streaming Netflix + Spotify",
+      "online_course": "Curso Online Udemy",
+      "stock_dividends": "Dividendos Ações ITUB4",
+      "pharmacy": "Farmácia São Paulo",
+      "salary_dec": "Salário Dezembro 2023",
+      "rent_dec": "Aluguel Dezembro",
+      "christmas_gifts": "Presente Natal - Shopping",
+      "freelance_logo": "Freelance - Logo Design",
+      "restaurant_dinner": "Jantar Restaurante",
+      "salary_nov": "Salário Novembro 2023",
+      "rent_nov": "Aluguel Novembro",
+      "car_maintenance": "Manutenção Carro",
+      "freelance_app": "Freelance - App Mobile",
+      "online_shopping": "Mercado Livre - Eletrônicos"
+    }
+  }
+} 
