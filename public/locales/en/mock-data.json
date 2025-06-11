@@ -1,0 +1,48 @@
+{
+  "user": {
+    "name": "Mary Jane",
+    "email": "mary.jane@example.com"
+  },
+  "categories": {
+    "income": {
+      "salary": "Salary",
+      "freelance": "Freelance",
+      "investments": "Investments",
+      "sales": "Sales"
+    },
+    "expense": {
+      "food": "Food & Dining",
+      "transportation": "Transportation",
+      "housing": "Housing",
+      "healthcare": "Healthcare",
+      "education": "Education",
+      "entertainment": "Entertainment",
+      "shopping": "Shopping",
+      "services": "Services"
+    }
+  },
+  "transactions": {
+    "descriptions": {
+      "salary_jan": "January 2024 Salary",
+      "rent_apartment": "Apartment Rent",
+      "supermarket": "Extra Supermarket",
+      "freelance_website": "Freelance Project - Website",
+      "gas_station": "Shell Gas Station",
+      "medical_consultation": "Medical Consultation",
+      "streaming": "Netflix + Spotify Streaming",
+      "online_course": "Udemy Online Course",
+      "stock_dividends": "ITUB4 Stock Dividends",
+      "pharmacy": "São Paulo Pharmacy",
+      "salary_dec": "December 2023 Salary",
+      "rent_dec": "December Rent",
+      "christmas_gifts": "Christmas Gifts - Shopping",
+      "freelance_logo": "Freelance - Logo Design",
+      "restaurant_dinner": "Restaurant Dinner",
+      "salary_nov": "November 2023 Salary",
+      "rent_nov": "November Rent",
+      "car_maintenance": "Car Maintenance",
+      "freelance_app": "Freelance - Mobile App",
+      "online_shopping": "Online Electronics Shopping"
+    }
+  }
+} 

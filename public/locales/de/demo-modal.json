@@ -1,0 +1,45 @@
+{
+  "title": "Upgrade um diese Funktion freizuschalten",
+  "description": "Sie befinden sich derzeit im Demo-Modus. Erstellen Sie ein kostenloses Konto, um auf alle Funktionen zuzugreifen.",
+  "withFreeAccount": "Mit einem kostenlosen Konto",
+  "fullAccess": "Vollzugriff auf alle Funktionen",
+  "unlimitedTransactions": "Unbegrenzte Transaktionen",
+  "dataExport": "Datenexport & -import",
+  "prioritySupport": "Prioritätssupport",
+  "signUpToday": "Heute registrieren",
+  "continueDemo": "Demo fortsetzen",
+  "signUpNow": "Jetzt registrieren",
+  "addTransaction": {
+    "title": "Transaktion hinzufügen",
+    "description": "Erstellen Sie ein kostenloses Konto, um unbegrenzte Transaktionen hinzuzufügen und Ihre Finanzen zu verwalten."
+  },
+  "editProfile": {
+    "title": "Profil bearbeiten",
+    "description": "Registrieren Sie sich, um Ihr Profil und Ihre Einstellungen anzupassen."
+  },
+  "deleteData": {
+    "title": "Daten löschen",
+    "description": "Erstellen Sie ein Konto, um Ihre Finanzdaten zu verwalten und zu löschen."
+  },
+  "exportData": {
+    "title": "Daten exportieren",
+    "description": "Erhalten Sie ein kostenloses Konto, um Ihre Finanzdaten in mehreren Formaten zu exportieren."
+  },
+  "addCategory": {
+    "title": "Kategorie hinzufügen",
+    "description": "Registrieren Sie sich, um benutzerdefinierte Kategorien für bessere Ausgabenverfolgung zu erstellen."
+  },
+  "setBudgets": {
+    "title": "Budgets festlegen",
+    "description": "Erstellen Sie ein Konto, um Budgets festzulegen und Ihre Ausgabenziele zu verfolgen."
+  },
+  "generateReports": {
+    "title": "Berichte erstellen",
+    "description": "Erhalten Sie detaillierte Finanzberichte mit einem kostenlosen MoneyMind-Konto."
+  },
+  "features": {
+    "realData": "Verwalten Sie Ihre echten Finanzdaten",
+    "dataSync": "Synchronisierung auf allen Ihren Geräten",
+    "security": "Sicherheit auf Bankniveau"
+  }
+} 

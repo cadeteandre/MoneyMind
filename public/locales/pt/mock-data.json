@@ -1,0 +1,48 @@
+{
+  "user": {
+    "name": "Mary Jane",
+    "email": "mary.jane@example.com"
+  },
+  "categories": {
+    "income": {
+      "salary": "Salário",
+      "freelance": "Freelance",
+      "investments": "Investimentos",
+      "sales": "Vendas"
+    },
+    "expense": {
+      "food": "Alimentação",
+      "transportation": "Transporte",
+      "housing": "Moradia",
+      "healthcare": "Saúde",
+      "education": "Educação",
+      "entertainment": "Entretenimento",
+      "shopping": "Compras",
+      "services": "Serviços"
+    }
+  },
+  "transactions": {
+    "descriptions": {
+      "salary_jan": "Salário de Janeiro 2024",
+      "rent_apartment": "Aluguel do Apartamento",
+      "supermarket": "Supermercado Extra",
+      "freelance_website": "Projeto Freelance - Website",
+      "gas_station": "Posto Shell",
+      "medical_consultation": "Consulta Médica",
+      "streaming": "Streaming Netflix + Spotify",
+      "online_course": "Curso Online Udemy",
+      "stock_dividends": "Dividendos ITUB4",
+      "pharmacy": "Farmácia São Paulo",
+      "salary_dec": "Salário de Dezembro 2023",
+      "rent_dec": "Aluguel de Dezembro",
+      "christmas_gifts": "Presentes de Natal - Compras",
+      "freelance_logo": "Freelance - Design de Logo",
+      "restaurant_dinner": "Jantar no Restaurante",
+      "salary_nov": "Salário de Novembro 2023",
+      "rent_nov": "Aluguel de Novembro",
+      "car_maintenance": "Manutenção do Carro",
+      "freelance_app": "Freelance - App Mobile",
+      "online_shopping": "Compras Online Eletrônicos"
+    }
+  }
+} 

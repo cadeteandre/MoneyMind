@@ -1,0 +1,45 @@
+{
+  "title": "Actualiza para desbloquear esta función",
+  "description": "Actualmente estás en modo demo. Crea una cuenta gratuita para acceder a todas las funciones.",
+  "withFreeAccount": "Con una cuenta gratuita",
+  "fullAccess": "Acceso completo a todas las funciones",
+  "unlimitedTransactions": "Transacciones ilimitadas",
+  "dataExport": "Exportación e importación de datos",
+  "prioritySupport": "Soporte prioritario",
+  "signUpToday": "Regístrate hoy",
+  "continueDemo": "Continuar demo",
+  "signUpNow": "Registrarse ahora",
+  "addTransaction": {
+    "title": "Agregar Transacción",
+    "description": "Crea una cuenta gratuita para agregar transacciones ilimitadas y gestionar tus finanzas."
+  },
+  "editProfile": {
+    "title": "Editar Perfil",
+    "description": "Regístrate para personalizar tu perfil y preferencias."
+  },
+  "deleteData": {
+    "title": "Eliminar Datos",
+    "description": "Crea una cuenta para gestionar y eliminar tus datos financieros."
+  },
+  "exportData": {
+    "title": "Exportar Datos",
+    "description": "Obtén una cuenta gratuita para exportar tus datos financieros en múltiples formatos."
+  },
+  "addCategory": {
+    "title": "Agregar Categoría",
+    "description": "Regístrate para crear categorías personalizadas para un mejor seguimiento de gastos."
+  },
+  "setBudgets": {
+    "title": "Establecer Presupuestos",
+    "description": "Crea una cuenta para establecer presupuestos y seguir tus metas de gastos."
+  },
+  "generateReports": {
+    "title": "Generar Reportes",
+    "description": "Obtén reportes financieros detallados con una cuenta MoneyMind gratuita."
+  },
+  "features": {
+    "realData": "Gestiona tus datos financieros reales",
+    "dataSync": "Sincroniza en todos tus dispositivos",
+    "security": "Seguridad a nivel bancario"
+  }
+} 
