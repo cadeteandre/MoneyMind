@@ -5,7 +5,8 @@ const nextConfig = {
     domains: [
       "qujgsyngpismiyphgkip.supabase.co", 
       "qujgsyngpismiyphgkip.supabase.in",
-      "storage.googleapis.com"
+      "storage.googleapis.com",
+      "images.unsplash.com"
     ],
     remotePatterns: [
       {

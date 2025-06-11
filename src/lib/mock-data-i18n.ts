@@ -280,31 +280,26 @@ export function getLocalizedMockData(locale: Locale, t: (key: string) => string)
 // Calculate metrics based on localized data
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function calculateLocalizedMetrics(_locale: Locale, _t: (key: string) => string): MockMetricsI18n {
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
+  // Use all transactions for demo metrics (more realistic)
+  const allTransactions = baseMockData.transactions;
   
-  // Filter current month transactions
-  const currentMonthTransactions = baseMockData.transactions.filter(txn => {
-    const txnDate = new Date(txn.date);
-    return txnDate.getMonth() === currentMonth && txnDate.getFullYear() === currentYear;
-  });
-
-  const totalIncome = currentMonthTransactions
+  // Calculate totals from all transactions
+  const totalIncome = allTransactions
     .filter(txn => txn.type === 'income')
     .reduce((sum, txn) => sum + txn.amount, 0);
 
-  const totalExpenses = Math.abs(currentMonthTransactions
+  const totalExpenses = Math.abs(allTransactions
     .filter(txn => txn.type === 'expense')
     .reduce((sum, txn) => sum + txn.amount, 0));
 
-  const totalBalance = baseMockData.transactions.reduce((sum, txn) => sum + txn.amount, 0);
+  const totalBalance = allTransactions.reduce((sum, txn) => sum + txn.amount, 0);
 
   // Calculate savings rate
   const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
 
   // Find top category by expense amount
   const categoryExpenses: { [key: string]: number } = {};
-  currentMonthTransactions
+  allTransactions
     .filter(txn => txn.type === 'expense')
     .forEach(txn => {
       categoryExpenses[txn.categoryKey] = (categoryExpenses[txn.categoryKey] || 0) + Math.abs(txn.amount);
@@ -318,7 +313,7 @@ export function calculateLocalizedMetrics(_locale: Locale, _t: (key: string) => 
     monthlyIncome: totalIncome,
     monthlyExpenses: totalExpenses,
     savingsRate: Math.round(savingsRate * 100) / 100,
-    transactionCount: currentMonthTransactions.length,
+    transactionCount: allTransactions.length,
     topCategoryKey
   };
 }
@@ -382,20 +377,27 @@ export function getLocalizedMonthlyChartData(locale: Locale) {
 
   const months = monthNames[locale] || monthNames.en;
   
-  return months.map((month) => ({
+  // Fixed deterministic data to avoid hydration mismatch
+  const fixedData = [6500, 4200, 5800, 4900, 6100, 5500, 7000];
+  const fixedExpenses = [3200, 2800, 3500, 3100, 2900, 3400, 3800];
+  
+  return months.map((month, index) => ({
     month,
-    income: Math.floor(Math.random() * 3000) + 4000, // 4000-7000
-    expenses: Math.floor(Math.random() * 2000) + 2000, // 2000-4000
+    income: fixedData[index] || 5000,
+    expenses: fixedExpenses[index] || 3000,
   }));
 }
 
 export function getLocalizedCategoryChartData(locale: Locale, t: (key: string) => string) {
+  // Fixed amounts to avoid hydration mismatch
+  const fixedAmounts = [850, 720, 650, 580, 490, 420];
+  
   return baseMockData.categories
     .filter(cat => cat.type === 'expense')
     .slice(0, 6) // Top 6 categories
-    .map(cat => ({
+    .map((cat, index) => ({
       category: t(cat.nameKey),
-      amount: Math.floor(Math.random() * 800) + 200, // 200-1000
+      amount: fixedAmounts[index] || 500,
       color: cat.color
     }));
 } 
