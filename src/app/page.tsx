@@ -4,10 +4,11 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { ArrowRight, BarChart3, Wallet, PiggyBank, Shield, Loader2 } from "lucide-react";
+import { ArrowRight, BarChart3, Wallet, PiggyBank, Shield, Loader2, Eye, TrendingUp, User } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useTranslation } from '@/app/i18n/client';
+import { PreviewCard } from "@/components/demo/PreviewCard";
 
 // Loading component 
 function LoadingScreen() {
@@ -63,13 +64,21 @@ export default function Home() {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             {t('description')}
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <SignedOut>
-              <SignInButton>
-                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 cursor-pointer">
-                  {t('getStarted')}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <SignInButton>
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 cursor-pointer">
+                    {t('getStarted')}
+                  </Button>
+                </SignInButton>
+                <Button size="lg" variant="outline" asChild>
+                  <Link href="/demo/dashboard" className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    {t('tryDemo')}
+                  </Link>
                 </Button>
-              </SignInButton>
+              </div>
             </SignedOut>
             <SignedIn>
               <Button size="lg" asChild>
@@ -102,6 +111,59 @@ export default function Home() {
               <h3 className="text-xl font-semibold mb-2">{t('security.title')}</h3>
               <p className="text-muted-foreground">{t('security.description')}</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features in Action Section */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">{t('featuresInAction.title')}</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              {t('featuresInAction.subtitle')}
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-8">
+            <PreviewCard
+              title={t('featuresInAction.dashboard.title')}
+              description={t('featuresInAction.dashboard.description')}
+              icon={TrendingUp}
+              demoLink="/demo/dashboard"
+              features={[
+                t('featuresInAction.dashboard.features.0'),
+                t('featuresInAction.dashboard.features.1'),
+                t('featuresInAction.dashboard.features.2'),
+                t('featuresInAction.dashboard.features.3')
+              ]}
+            />
+            
+            <PreviewCard
+              title={t('featuresInAction.transactions.title')}
+              description={t('featuresInAction.transactions.description')}
+              icon={BarChart3}
+              demoLink="/demo/transactions"
+              features={[
+                t('featuresInAction.transactions.features.0'),
+                t('featuresInAction.transactions.features.1'),
+                t('featuresInAction.transactions.features.2'),
+                t('featuresInAction.transactions.features.3')
+              ]}
+            />
+            
+            <PreviewCard
+              title={t('featuresInAction.profile.title')}
+              description={t('featuresInAction.profile.description')}
+              icon={User}
+              demoLink="/demo/profile"
+              features={[
+                t('featuresInAction.profile.features.0'),
+                t('featuresInAction.profile.features.1'),
+                t('featuresInAction.profile.features.2'),
+                t('featuresInAction.profile.features.3')
+              ]}
+            />
           </div>
         </div>
       </section>

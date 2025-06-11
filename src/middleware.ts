@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in',
   '/sign-up',
+  '/demo/(.*)', // Allow all demo routes
   '/api/user/language'
 ]);
 
