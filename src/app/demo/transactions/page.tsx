@@ -14,13 +14,24 @@ import DemoTransactionList from "@/components/demo/DemoTransactionList";
 
 export default function DemoTransactionsPage() {
   const mockData = useMockData();
-  const { } = useDemo();
+  const { simulateAction } = useDemo();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
   
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<"ALL" | "income" | "expense">("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+
+  // Ensure data is loaded before processing
+  if (!mockData || !mockData.transactions || mockData.transactions.length === 0) {
+    return (
+      <div className="space-y-6 p-4 max-w-7xl mx-auto">
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">{t('loadingTransactions', 'Loading transactions...')}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Filter transactions
   const filteredTransactions = mockData.transactions.filter(transaction => {
@@ -32,7 +43,10 @@ export default function DemoTransactionsPage() {
     return matchesSearch && matchesType && matchesCategory;
   });
 
-  const categories = [...new Set(mockData.transactions.map(t => t.category))];
+  // Get unique categories and filter out empty strings
+  const categories = [...new Set(mockData.transactions.map(t => t.category))]
+    .filter(category => category && category.trim().length > 0)
+    .sort();
 
   return (
     <div className="space-y-6 p-4 max-w-7xl mx-auto">
@@ -49,7 +63,12 @@ export default function DemoTransactionsPage() {
         </div>
 
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="cursor-pointer hover:bg-accent"
+              onClick={() => simulateAction('Add Transaction')}
+            >
               <Plus className="h-4 w-4 mr-2" />
               {t('newTransaction')}
             </Button>
@@ -93,11 +112,16 @@ export default function DemoTransactionsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">{t('allCategories')}</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
+                  {categories.map((category) => {
+                    if (!category || category.trim().length === 0) {
+                      return null;
+                    }
+                    return (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
 
