@@ -13,7 +13,7 @@ import demoAvatar from "../../../../public/images/avatar-mary-jane.jpg";
 
 export default function DemoProfilePage() {
   const mockData = useMockData();
-  const { formatDate } = useDemo();
+  const { formatDate, simulateAction } = useDemo();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
 
@@ -47,7 +47,7 @@ export default function DemoProfilePage() {
                 {t('profilePicture')}
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-center space-y-4">
+            <CardContent className="text-center space-y-4 px-4">
               <div className="relative w-32 h-32 mx-auto">
                 <img
                   src={demoAvatar.src}
@@ -55,11 +55,15 @@ export default function DemoProfilePage() {
                   className="w-32 h-32 rounded-full object-cover border-2 border-border"
                 />
               </div>
-              <div>
+              <div className="flex flex-col items-center">
                 <h3 className="font-semibold text-lg">{mockData.user.name}</h3>
-                <p className="text-muted-foreground">{mockData.user.email}</p>
+                <p className="text-muted-foreground text-sm sm:text-xs">{mockData.user.email}</p>
               </div>
-              <Button variant="outline" disabled className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full cursor-pointer hover:bg-accent"
+                onClick={() => simulateAction('Edit Profile')}
+              >
                 {t('changePhoto')}
               </Button>
             </CardContent>
@@ -164,7 +168,10 @@ export default function DemoProfilePage() {
               <p className="text-sm text-muted-foreground mb-4">
                 {t('demoNote')}
               </p>
-              <Button disabled className="w-full md:w-auto">
+              <Button 
+                className="w-full md:w-auto cursor-pointer hover:bg-accent hover:text-primary"
+                onClick={() => simulateAction('Edit Profile')}
+              >
                 {t('saveChanges')}
               </Button>
             </div>

@@ -45,7 +45,7 @@ export default function DemoSidebar() {
       {/* Overlay for mobile */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 dark:bg-black/70 z-20" 
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 z-20 backdrop-blur-sm" 
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -54,7 +54,7 @@ export default function DemoSidebar() {
       <Button 
         variant="ghost" 
         size="icon" 
-        className="hover:bg-gray-200 dark:hover:bg-neutral-800 md:hidden cursor-pointer mt-2 ml-2"
+        className="hover:bg-gray-200 dark:hover:bg-neutral-800 md:hidden cursor-pointer mt-2 ml-2 transition-all duration-300 hover:scale-110"
         onClick={() => setSidebarOpen(!sidebarOpen)}
         >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -62,19 +62,20 @@ export default function DemoSidebar() {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed md:relative z-20 w-64 bg-gray-100 dark:bg-neutral-800 p-4 border-r h-full transition-all duration-300
-          ${sidebarOpen || !isMobile ? 'left-0' : '-left-64'}`}
+        className={`fixed md:relative z-20 w-64 bg-gray-100 dark:bg-neutral-800 p-4 border-r h-full transition-all duration-500 ease-in-out transform
+          ${sidebarOpen || !isMobile ? 'translate-x-0' : '-translate-x-full'} 
+          ${isMobile ? 'shadow-2xl' : ''}`}
       >
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-            <Eye className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-bold dark:text-white">{t('dashboard')} - Demo</h2>
+            <Eye className="h-5 w-5 text-primary animate-pulse" />
+            <h2 className="text-lg font-bold dark:text-white transition-colors duration-300">{t('dashboard')} - Demo</h2>
           </div>
           {isMobile && (
             <Button 
               variant="ghost"
               size="icon"
-              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-black cursor-pointer"
+              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-black cursor-pointer transition-all duration-300 hover:scale-110"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-5 w-5" />
@@ -83,8 +84,8 @@ export default function DemoSidebar() {
         </div>
         
         {/* Demo Banner in Sidebar */}
-        <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-          <p className="text-xs text-amber-800 dark:text-amber-200 text-center">
+        <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg transition-all duration-300 hover:shadow-md">
+          <p className="text-xs text-amber-800 dark:text-amber-200 text-center font-medium">
             🎯 {t('demoMode')}
           </p>
         </div>
@@ -93,10 +94,10 @@ export default function DemoSidebar() {
           <li>
             <Link
               href="/demo/dashboard"
-              className={`block px-4 py-2 rounded-lg transition-colors 
+              className={`block px-4 py-3 rounded-lg transition-all duration-300 transform hover:scale-105
                       ${isActivePath('/demo/dashboard') 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white'}`}
+                        ? 'bg-primary text-primary-foreground shadow-lg' 
+                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white hover:shadow-md'}`}
               onClick={handleLinkClick}
             >
               {t('overview')}
@@ -105,10 +106,10 @@ export default function DemoSidebar() {
           <li>
             <Link
               href="/demo/transactions"
-              className={`block px-4 py-2 rounded-lg transition-colors 
+              className={`block px-4 py-3 rounded-lg transition-all duration-300 transform hover:scale-105
                       ${isActivePath('/demo/transactions') 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white'}`}
+                        ? 'bg-primary text-primary-foreground shadow-lg' 
+                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white hover:shadow-md'}`}
               onClick={handleLinkClick}
             >
               {t('transactions')}
@@ -117,10 +118,10 @@ export default function DemoSidebar() {
           <li>
             <Link
               href="/demo/profile"
-              className={`block px-4 py-2 rounded-lg transition-colors 
+              className={`block px-4 py-3 rounded-lg transition-all duration-300 transform hover:scale-105
                       ${isActivePath('/demo/profile') 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white'}`}
+                        ? 'bg-primary text-primary-foreground shadow-lg' 
+                        : 'text-gray-700 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-black dark:hover:text-white hover:shadow-md'}`}
               onClick={handleLinkClick}
             >
               {t('profile')}
@@ -131,9 +132,9 @@ export default function DemoSidebar() {
         <div className="border-t mt-6 pt-4">
           <Link
             href="/"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors 
+            className="flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-300 transform hover:scale-105
                     text-gray-700 hover:bg-gray-300 hover:text-gray-900
-                    dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
+                    dark:text-gray-300 dark:hover:bg-black dark:hover:text-white hover:shadow-md"
             onClick={handleLinkClick}
           >
             <Home className="h-4 w-4" />
@@ -143,18 +144,20 @@ export default function DemoSidebar() {
         
         <div className="mt-6 space-y-4">
           <div className="flex items-center gap-3 justify-center">
-            <ThemeToggle />
-            <div>
+            <div className="transition-transform duration-300 hover:scale-110">
+              <ThemeToggle />
+            </div>
+            <div className="transition-transform duration-300 hover:scale-110">
               <LanguageSelector />
             </div>
           </div>
           
           {/* CTA for creating account */}
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
             <p className="text-xs text-blue-800 dark:text-blue-200 text-center mb-2">
               {t('readyToStart')}
             </p>
-            <Button asChild size="sm" className="w-full">
+            <Button asChild size="sm" className="w-full transition-all duration-300 hover:shadow-md">
               <Link href="/">
                 {t('createAccount')}
               </Link>

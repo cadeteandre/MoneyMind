@@ -1,10 +1,45 @@
 {
-  "title": "Demo Limitation",
+  "title": "Upgrade to unlock this feature",
   "subtitle": "This feature is available with a full account",
-  "description": "You're currently in demo mode. To access all features and manage your real financial data, create a free account.",
+  "description": "You're currently in demo mode. Create a free account to access all features.",
+  "withFreeAccount": "With a free account",
+  "fullAccess": "Full access to all features",
+  "unlimitedTransactions": "Unlimited transactions",
+  "dataExport": "Data export & import",
+  "prioritySupport": "Priority support",
+  "signUpToday": "Sign up today",
+  "continueDemo": "Continue demo",
+  "signUpNow": "Sign up now",
+  "addTransaction": {
+    "title": "Add Transaction",
+    "description": "Create a free account to add unlimited transactions and manage your finances."
+  },
+  "editProfile": {
+    "title": "Edit Profile",
+    "description": "Sign up to customize your profile and preferences."
+  },
+  "deleteData": {
+    "title": "Delete Data",
+    "description": "Create an account to manage and delete your financial data."
+  },
+  "exportData": {
+    "title": "Export Data",
+    "description": "Get a free account to export your financial data in multiple formats."
+  },
+  "addCategory": {
+    "title": "Add Category",
+    "description": "Sign up to create custom categories for better expense tracking."
+  },
+  "setBudgets": {
+    "title": "Set Budgets",
+    "description": "Create an account to set budgets and track your spending goals."
+  },
+  "generateReports": {
+    "title": "Generate Reports",
+    "description": "Get detailed financial reports with a free MoneyMind account."
+  },
   "features": {
     "realData": "Manage your real financial data",
-    "fullAccess": "Access to all features",
     "dataSync": "Sync across all your devices",
     "security": "Bank-level security"
   },

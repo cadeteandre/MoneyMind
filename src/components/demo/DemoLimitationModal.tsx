@@ -1,13 +1,13 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignInButton } from "@clerk/nextjs";
-import { AlertCircle, Sparkles, Shield, Smartphone, Database } from "lucide-react";
-import { useDemoModalContext } from "@/components/demo/DemoModalProvider";
+import { AlertCircle, CheckCircle, ArrowRight, Database, Shield } from "lucide-react";
+import { useDemoModalContext } from "./DemoModalProvider";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/providers/language-provider";
+import { useTranslation } from "@/app/i18n/client";
 
 interface DemoLimitationModalProps {
   className?: string;
@@ -16,114 +16,104 @@ interface DemoLimitationModalProps {
 export function DemoLimitationModal({ className }: DemoLimitationModalProps) {
   const { 
     isOpen, 
-    closeModal, 
-    getLimitationMessage, 
-    translations: t 
+    limitationType,
+    closeModal
   } = useDemoModalContext();
 
-
+  const { userLocale } = useLanguage();
+  const { t: tModal } = useTranslation(userLocale, 'demo-modal');
 
   const features = [
     {
+      icon: CheckCircle,
+      text: tModal('fullAccess')
+    },
+    {
       icon: Database,
-      text: t('features.realData'),
-      gradient: 'from-blue-500 to-blue-600'
+      text: tModal('unlimitedTransactions')
     },
     {
-      icon: Sparkles,
-      text: t('features.fullAccess'),
-      gradient: 'from-purple-500 to-purple-600'
-    },
-    {
-      icon: Smartphone,
-      text: t('features.dataSync'),
-      gradient: 'from-green-500 to-green-600'
+      icon: ArrowRight,
+      text: tModal('dataExport')
     },
     {
       icon: Shield,
-      text: t('features.security'),
-      gradient: 'from-amber-500 to-amber-600'
+      text: tModal('prioritySupport')
     }
   ];
+
+  // Get specific content for limitation type
+  const getSpecificContent = () => {
+    const content = tModal(`${limitationType}.title`);
+    const description = tModal(`${limitationType}.description`);
+    return { title: content, description };
+  };
+
+  const specificContent = getSpecificContent();
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent 
         className={cn(
-          "w-[95vw] max-w-lg max-h-[95vh] p-0 gap-0 bg-gradient-to-br from-background to-muted/30 border-2 overflow-hidden",
+          "max-w-md w-[95vw] max-h-[95vh] overflow-y-auto rounded-xl border-0 p-0 gap-0",
+          "bg-gradient-to-br from-white via-gray-50/80 to-gray-100/60 dark:from-gray-900 dark:via-gray-950/80 dark:to-gray-800/60",
+          "animate-in zoom-in-95 duration-300",
           className
         )}
       >
-        {/* Header with gradient background */}
-        <DialogHeader className="relative overflow-hidden bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 px-4 sm:px-6 py-4 text-center flex-shrink-0">
-          <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-          <div className="relative">
-            <div className="mx-auto mb-3 sm:mb-4 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20">
-              <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+        {/* Hidden DialogTitle for accessibility */}
+        <DialogTitle className="sr-only">
+          {specificContent.title}
+        </DialogTitle>
+        
+        <div className="relative p-4 sm:p-6">
+          {/* Header */}
+          <div className="text-center mb-4 sm:mb-6 animate-in slide-in-from-top duration-500">
+            <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center mb-3 sm:mb-4 animate-pulse shadow-lg">
+              <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
-            <DialogTitle className="text-xl sm:text-2xl font-bold">
-              {t('title')}
-            </DialogTitle>
-            <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-              {t('subtitle')}
+            
+            <h2 className="text-lg sm:text-xl font-bold text-foreground mb-2 transition-colors duration-300">
+              {specificContent.title}
+            </h2>
+            
+            <p className="text-xs sm:text-sm text-muted-foreground transition-colors duration-300">
+              {specificContent.description}
             </p>
           </div>
-        </DialogHeader>
 
-        <div className="px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 overflow-y-auto max-h-[calc(95vh-180px)] sm:max-h-[calc(95vh-200px)]">
-          {/* Limitation message */}
-          <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 rounded-full bg-amber-100 dark:bg-amber-900/40 p-2">
-                  <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                </div>
-                <div>
-                  <p className="font-medium text-amber-800 dark:text-amber-200">
-                    {getLimitationMessage()}
-                  </p>
-                  <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
-                    {t('description')}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Features Grid */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-xs sm:text-sm text-muted-foreground uppercase tracking-wider">
-              WITH A FREE ACCOUNT
+          {/* Features Section */}
+          <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6 animate-in slide-in-from-bottom duration-700">
+            <h3 className="font-semibold text-xs sm:text-sm text-muted-foreground uppercase tracking-wider transition-colors duration-300">
+              {tModal('withFreeAccount')}
             </h3>
+            
             <div className="grid gap-2 sm:gap-3">
-              {features.map((feature, index) => (
-                <div 
-                  key={index}
-                  className="flex items-center gap-2 sm:gap-3 rounded-lg bg-muted/50 p-2 sm:p-3 transition-colors hover:bg-muted/70"
-                >
-                  <div className={cn(
-                    "flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-gradient-to-br text-white flex-shrink-0",
-                    feature.gradient
-                  )}>
-                    <feature.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+              {features.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <div 
+                    key={index} 
+                    className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:bg-white/90 dark:hover:bg-gray-800/90 hover:scale-[1.02] hover:shadow-md animate-in slide-in-from-left duration-500"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                      <Icon className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 dark:text-green-400" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-medium text-foreground transition-colors duration-300">{feature.text}</span>
                   </div>
-                  <span className="text-xs sm:text-sm font-medium">
-                    {feature.text}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-2 sm:gap-3">
+          {/* Actions */}
+          <div className="space-y-2 sm:space-y-3 animate-in slide-in-from-bottom duration-500">
             <SignInButton>
               <Button 
-                size="sm"
-                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-xs sm:text-sm py-2 sm:py-3 cursor-pointer"
+                className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground text-xs sm:text-sm py-2 sm:py-3 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
               >
-                <Sparkles className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                {t('actions.createAccount')}
+                {tModal('signUpNow')}
               </Button>
             </SignInButton>
             
@@ -131,17 +121,10 @@ export function DemoLimitationModal({ className }: DemoLimitationModalProps) {
               variant="outline" 
               size="sm"
               onClick={closeModal}
-              className="w-full text-xs sm:text-sm py-2 sm:py-3 cursor-pointer"
+              className="w-full text-xs sm:text-sm py-2 sm:py-3 cursor-pointer transition-all duration-300 hover:bg-muted dark:hover:bg-gray-800 hover:scale-[1.02]"
             >
-              {t('actions.continueBrowsing')}
+              {tModal('continueDemo')}
             </Button>
-          </div>
-
-          {/* Demo Badge */}
-          <div className="flex justify-center">
-            <Badge variant="secondary" className="text-xs">
-              🎯 Demo Mode Active
-            </Badge>
           </div>
         </div>
       </DialogContent>

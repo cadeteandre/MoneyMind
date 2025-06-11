@@ -63,21 +63,21 @@ export default function Home() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 animate-in slide-in-from-bottom duration-700">
             {t('title')}
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in slide-in-from-bottom duration-900 delay-200">
             {t('description')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in slide-in-from-bottom duration-1000 delay-400">
             <SignedOut>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <SignInButton>
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 cursor-pointer">
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto">
                     {t('getStarted')}
                   </Button>
                 </SignInButton>
-                <Button size="lg" variant="outline" asChild>
+                <Button size="lg" variant="outline" asChild className="transition-all duration-300 hover:scale-105 hover:shadow-md w-full sm:w-auto">
                   <Link href="/demo/dashboard" className="flex items-center gap-2">
                     <Eye className="h-4 w-4" />
                     {t('tryDemo')}
@@ -86,9 +86,9 @@ export default function Home() {
               </div>
             </SignedOut>
             <SignedIn>
-              <Button size="lg" asChild>
+              <Button size="lg" asChild className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
                 <Link href="/dashboard" className="flex items-center gap-2">
-                  {t('goToDashboard')} <ArrowRight className="h-4 w-4" />
+                  {t('goToDashboard')} <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </SignedIn>
@@ -99,20 +99,20 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">{t('features')}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-lg bg-background border">
-              <BarChart3 className="h-8 w-8 text-primary mb-4" />
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-12 animate-in slide-in-from-bottom duration-700">{t('features')}</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="p-6 rounded-lg bg-background border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-in slide-in-from-bottom duration-700 delay-100">
+              <BarChart3 className="h-8 w-8 text-primary mb-4 transition-transform duration-300 hover:scale-110" />
               <h3 className="text-xl font-semibold mb-2">{t('analytics.title')}</h3>
               <p className="text-muted-foreground">{t('analytics.description')}</p>
             </div>
-            <div className="p-6 rounded-lg bg-background border">
-              <PiggyBank className="h-8 w-8 text-primary mb-4" />
+            <div className="p-6 rounded-lg bg-background border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-in slide-in-from-bottom duration-700 delay-200">
+              <PiggyBank className="h-8 w-8 text-primary mb-4 transition-transform duration-300 hover:scale-110" />
               <h3 className="text-xl font-semibold mb-2">{t('budgeting.title')}</h3>
               <p className="text-muted-foreground">{t('budgeting.description')}</p>
             </div>
-            <div className="p-6 rounded-lg bg-background border">
-              <Shield className="h-8 w-8 text-primary mb-4" />
+            <div className="p-6 rounded-lg bg-background border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-in slide-in-from-bottom duration-700 delay-300 sm:col-span-2 lg:col-span-1">
+              <Shield className="h-8 w-8 text-primary mb-4 transition-transform duration-300 hover:scale-110" />
               <h3 className="text-xl font-semibold mb-2">{t('security.title')}</h3>
               <p className="text-muted-foreground">{t('security.description')}</p>
             </div>
@@ -123,55 +123,61 @@ export default function Home() {
       {/* Features in Action Section */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">{t('featuresInAction.title')}</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <div className="text-center mb-16 animate-in slide-in-from-bottom duration-700">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{t('featuresInAction.title')}</h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
               {t('featuresInAction.subtitle')}
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-3 gap-8">
-            <PreviewCard
-              title={t('featuresInAction.dashboard.title')}
-              description={t('featuresInAction.dashboard.description')}
-              icon={TrendingUp}
-              imageImport={dashboardScreenshot}
-              demoLink="/demo/dashboard"
-              features={[
-                t('featuresInAction.dashboard.features.0'),
-                t('featuresInAction.dashboard.features.1'),
-                t('featuresInAction.dashboard.features.2'),
-                t('featuresInAction.dashboard.features.3')
-              ]}
-            />
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="animate-in slide-in-from-left duration-700 delay-100">
+              <PreviewCard
+                title={t('featuresInAction.dashboard.title')}
+                description={t('featuresInAction.dashboard.description')}
+                icon={TrendingUp}
+                imageImport={dashboardScreenshot}
+                demoLink="/demo/dashboard"
+                features={[
+                  t('featuresInAction.dashboard.features.0'),
+                  t('featuresInAction.dashboard.features.1'),
+                  t('featuresInAction.dashboard.features.2'),
+                  t('featuresInAction.dashboard.features.3')
+                ]}
+              />
+            </div>
             
-            <PreviewCard
-              title={t('featuresInAction.transactions.title')}
-              description={t('featuresInAction.transactions.description')}
-              icon={BarChart3}
-              imageImport={transactionsScreenshot}
-              demoLink="/demo/transactions"
-              features={[
-                t('featuresInAction.transactions.features.0'),
-                t('featuresInAction.transactions.features.1'),
-                t('featuresInAction.transactions.features.2'),
-                t('featuresInAction.transactions.features.3')
-              ]}
-            />
+            <div className="animate-in slide-in-from-bottom duration-700 delay-200">
+              <PreviewCard
+                title={t('featuresInAction.transactions.title')}
+                description={t('featuresInAction.transactions.description')}
+                icon={BarChart3}
+                imageImport={transactionsScreenshot}
+                demoLink="/demo/transactions"
+                features={[
+                  t('featuresInAction.transactions.features.0'),
+                  t('featuresInAction.transactions.features.1'),
+                  t('featuresInAction.transactions.features.2'),
+                  t('featuresInAction.transactions.features.3')
+                ]}
+              />
+            </div>
             
-            <PreviewCard
-              title={t('featuresInAction.profile.title')}
-              description={t('featuresInAction.profile.description')}
-              icon={User}
-              imageImport={profileScreenshot}
-              demoLink="/demo/profile"
-              features={[
-                t('featuresInAction.profile.features.0'),
-                t('featuresInAction.profile.features.1'),
-                t('featuresInAction.profile.features.2'),
-                t('featuresInAction.profile.features.3')
-              ]}
-            />
+            <div className="animate-in slide-in-from-right duration-700 delay-300">
+              <PreviewCard
+                title={t('featuresInAction.profile.title')}
+                description={t('featuresInAction.profile.description')}
+                icon={User}
+                imageImport={profileScreenshot}
+                demoLink="/demo/profile"
+                features={[
+                  t('featuresInAction.profile.features.0'),
+                  t('featuresInAction.profile.features.1'),
+                  t('featuresInAction.profile.features.2'),
+                  t('featuresInAction.profile.features.3')
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>
