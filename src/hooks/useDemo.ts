@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useMockData } from '@/components/demo/MockDataProviderI18n';
 import { useLanguage } from '@/components/providers/language-provider';
 import { useTranslation } from '@/app/i18n/client';
+import { useDemoModalContext } from '@/components/demo/DemoModalProvider';
 
 export function useDemo() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export function useDemo() {
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'sidebar');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const demoModal = useDemoModalContext();
 
   // Check if current route is a demo route
   const isDemoRoute = pathname.startsWith('/demo');
@@ -33,16 +35,44 @@ export function useDemo() {
 
   // Simulate user action with demo limitations
   const simulateAction = useCallback((actionName: string, callback?: () => void) => {
-    // In demo mode, show a modal or toast explaining the limitation
-    console.log(`Demo limitation: ${actionName} is not available in demo mode`);
-    
-    // Could trigger a modal here showing:
-    // "This feature is available when you create an account. Sign up to get started!"
+    // Show demo limitation modal based on action type
+    switch (actionName.toLowerCase()) {
+      case 'add transaction':
+      case 'create transaction':
+        demoModal.showAddTransactionLimitation();
+        break;
+      case 'edit profile':
+      case 'update profile':
+        demoModal.showEditProfileLimitation();
+        break;
+      case 'delete':
+      case 'remove':
+        demoModal.showDeleteDataLimitation();
+        break;
+      case 'export':
+      case 'download':
+        demoModal.showExportDataLimitation();
+        break;
+      case 'add category':
+      case 'create category':
+        demoModal.showAddCategoryLimitation();
+        break;
+      case 'set budget':
+      case 'create budget':
+        demoModal.showSetBudgetsLimitation();
+        break;
+      case 'generate report':
+      case 'create report':
+        demoModal.showGenerateReportsLimitation();
+        break;
+      default:
+        demoModal.showCustomLimitation(actionName);
+    }
     
     if (callback) {
       callback();
     }
-  }, []);
+  }, [demoModal]);
 
   // Get demo-specific navigation items
   const getDemoNavigation = useCallback(() => {
@@ -96,6 +126,13 @@ export function useDemo() {
 
     // Actions
     simulateAction,
+
+    // Modal controls
+    showLimitationModal: demoModal.showLimitation,
+    showAddTransactionLimitation: demoModal.showAddTransactionLimitation,
+    showEditProfileLimitation: demoModal.showEditProfileLimitation,
+    showDeleteDataLimitation: demoModal.showDeleteDataLimitation,
+    showExportDataLimitation: demoModal.showExportDataLimitation,
 
     // Utilities
     formatCurrency,

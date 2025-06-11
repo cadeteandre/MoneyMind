@@ -1,6 +1,6 @@
 {
   "title": "Finanz-Dashboard",
-  "subtitle": "Verfolgen Sie Ihre Finanzen an einem Ort",
+  "subtitle": "Verwalten Sie Ihre Finanzen mit Leichtigkeit",
   "updating": "Wird aktualisiert...",
   "update": "Aktualisieren",
   "newTransaction": "Neue Transaktion",
@@ -45,7 +45,7 @@
   "totalIncome": "Gesamteinkommen",
   "totalExpenses": "Gesamtausgaben",
   "balance": "Saldo",
-  "recentTransactions": "Aktuelle Transaktionen",
+  "recentTransactions": "Letzte Transaktionen",
   "demoMode": "Demo-Modus",
   "readyToStart": "Bereit anzufangen?",
   "createAccount": "Konto erstellen",
@@ -67,5 +67,10 @@
   "accountStats": "Kontostatistiken",
   "totalTransactions": "Gesamte Transaktionen",
   "savingsRate": "Sparquote",
-  "activeCategories": "Aktive Kategorien"
+  "activeCategories": "Aktive Kategorien",
+  "actions": {
+    "addTransaction": "Transaktion Hinzufügen",
+    "export": "Exportieren",
+    "settings": "Einstellungen"
+  }
 } 

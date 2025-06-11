@@ -43,8 +43,8 @@ export const baseMockData = {
   user: {
     id: 'demo-user-1',
     nameKey: 'user.name',
-    email: 'maria.demo@example.com',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b5b5?w=150&h=150&fit=crop&crop=face',
+    email: 'mary.jane@example.com',
+    avatar: '/images/avatar-mary-jane.jpg',
     currency: 'EUR',
     language: 'en',
     createdAt: '2024-01-15T10:00:00Z'

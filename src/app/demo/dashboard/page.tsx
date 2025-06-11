@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, TrendingDown, DollarSign, BarChart3, Eye } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Eye, Plus } from "lucide-react";
 import { useMockData } from "@/components/demo/MockDataProviderI18n";
 import { useDemo } from "@/hooks/useDemo";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -16,7 +16,8 @@ import MonthlyBarChart from "@/components/charts/MonthlyBarChart";
 
 export default function DemoDashboardPage() {
   const mockData = useMockData();
-  const { formatCurrency } = useDemo();
+  const { formatCurrency, simulateAction } = useDemo();
+
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
   const [activeTab, setActiveTab] = useState("overview");
@@ -48,11 +49,37 @@ export default function DemoDashboardPage() {
           <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
         </div>
 
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled>
-              <BarChart3 className="h-4 w-4 mr-2" />
-              {t('demoMode')}
+          <div className="flex gap-2 flex-wrap">
+
+            
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="cursor-pointer hover:bg-accent"
+              onClick={() => simulateAction('Add Transaction')}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {t('actions.addTransaction')}
             </Button>
+            {/* Features for the future... */}
+            {/* <Button 
+              variant="outline" 
+              size="sm"
+              className="cursor-pointer hover:bg-accent"
+              onClick={() => simulateAction('Export')}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {t('actions.export')}
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="cursor-pointer hover:bg-accent"
+              onClick={() => simulateAction('Edit Profile')}
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              {t('actions.settings')}
+            </Button> */}
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 {
   "title": "Financial Dashboard",
-  "subtitle": "Track your finances in one place",
+  "subtitle": "Manage your finances with ease",
   "updating": "Updating...",
   "update": "Update",
   "newTransaction": "New Transaction",
@@ -67,5 +67,10 @@
   "accountStats": "Account statistics",
   "totalTransactions": "Total transactions",
   "savingsRate": "Savings rate",
-  "activeCategories": "Active categories"
+  "activeCategories": "Active categories",
+  "actions": {
+    "addTransaction": "Add Transaction",
+    "export": "Export",
+    "settings": "Settings"
+  }
 } 

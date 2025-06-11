@@ -1,6 +1,6 @@
 {
   "title": "Dashboard Financeiro",
-  "subtitle": "Acompanhe suas finanças em um só lugar",
+  "subtitle": "Gerencie suas finanças com facilidade",
   "updating": "Atualizando...",
   "update": "Atualizar",
   "newTransaction": "Nova Transação",
@@ -42,7 +42,7 @@
   "analytics": "Analytics",
   "statistics": "Estatísticas",
   "monthlyTrends": "Tendências Mensais",
-  "totalIncome": "Receitas Totais",
+  "totalIncome": "Receita Total",
   "totalExpenses": "Despesas Totais",
   "balance": "Saldo",
   "recentTransactions": "Transações Recentes",
@@ -67,5 +67,10 @@
   "accountStats": "Estatísticas da conta",
   "totalTransactions": "Total de transações",
   "savingsRate": "Taxa de poupança",
-  "activeCategories": "Categorias ativas"
+  "activeCategories": "Categorias ativas",
+  "actions": {
+    "addTransaction": "Adicionar Transação",
+    "export": "Exportar",
+    "settings": "Configurações"
+  }
 } 

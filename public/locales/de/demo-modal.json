@@ -1,0 +1,25 @@
+{
+  "title": "Demo-Einschränkung",
+  "subtitle": "Diese Funktion ist mit einem vollständigen Konto verfügbar",
+  "description": "Sie befinden sich im Demo-Modus. Um auf alle Funktionen zuzugreifen und Ihre echten Finanzdaten zu verwalten, erstellen Sie ein kostenloses Konto.",
+  "features": {
+    "realData": "Verwalten Sie Ihre echten Finanzdaten",
+    "fullAccess": "Zugang zu allen Funktionen",
+    "dataSync": "Synchronisation auf allen Ihren Geräten",
+    "security": "Sicherheit auf Bankniveau"
+  },
+  "actions": {
+    "createAccount": "Kostenloses Konto Erstellen",
+    "continueBrowsing": "Demo Weiter Durchsuchen",
+    "learnMore": "Mehr Erfahren"
+  },
+  "limitations": {
+    "addTransaction": "Transaktionen hinzufügen",
+    "editProfile": "Profileinstellungen bearbeiten",
+    "deleteData": "Daten löschen",
+    "exportData": "Daten exportieren",
+    "addCategory": "Benutzerdefinierte Kategorien hinzufügen",
+    "setBudgets": "Budgets festlegen",
+    "generateReports": "Berichte generieren"
+  }
+} 
