@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, LucideIcon } from "lucide-react";
-import Image from "next/image";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from "@/app/i18n/client";
 
@@ -12,7 +11,7 @@ interface PreviewCardProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  imageSrc?: string;
+  imageImport?: { src: string } | string; // For direct image imports
   demoLink: string;
   features: string[];
   className?: string;
@@ -22,7 +21,7 @@ export function PreviewCard({
   title,
   description,
   icon: Icon,
-  imageSrc,
+  imageImport,
   demoLink,
   features,
   className = ""
@@ -44,25 +43,30 @@ export function PreviewCard({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* Preview Image/Screenshot placeholder */}
-        {imageSrc ? (
+        {/* Preview Image/Screenshot */}
+        {imageImport ? (
           <div className="relative overflow-hidden rounded-lg border bg-muted">
-            <Image
-              src={imageSrc}
+            <img
+              src={typeof imageImport === 'string' ? imageImport : imageImport.src}
               alt={`${t('previewOf')} ${title}`}
-              width={400}
-              height={240}
               className="w-full h-48 object-cover"
+              onError={(e) => {
+                // Hide the image and show placeholder
+                e.currentTarget.style.display = 'none';
+                const placeholder = e.currentTarget.parentElement?.nextElementSibling;
+                if (placeholder) placeholder.classList.remove('hidden');
+              }}
             />
           </div>
-        ) : (
-          <div className="h-48 bg-gradient-to-br from-primary/5 to-primary/20 rounded-lg border border-dashed border-primary/30 flex items-center justify-center">
-            <div className="text-center">
-              <Icon className="h-12 w-12 text-primary/60 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">{t('previewComingSoon')}</p>
-            </div>
+        ) : null}
+        
+        {/* Fallback placeholder (hidden by default if image exists) */}
+        <div className={`h-48 bg-gradient-to-br from-primary/5 to-primary/20 rounded-lg border border-dashed border-primary/30 flex items-center justify-center ${imageImport ? 'hidden' : ''}`}>
+          <div className="text-center">
+            <Icon className="h-12 w-12 text-primary/60 mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">{t('previewComingSoon')}</p>
           </div>
-        )}
+        </div>
 
         {/* Features list */}
         <ul className="space-y-2">

@@ -1,0 +1,25 @@
+{
+  "title": "Limitação do Demo",
+  "subtitle": "Esta funcionalidade está disponível com uma conta completa",
+  "description": "Você está no modo demo. Para acessar todas as funcionalidades e gerenciar seus dados financeiros reais, crie uma conta gratuita.",
+  "features": {
+    "realData": "Gerencie seus dados financeiros reais",
+    "fullAccess": "Acesso a todas as funcionalidades",
+    "dataSync": "Sincronização em todos os seus dispositivos",
+    "security": "Segurança de nível bancário"
+  },
+  "actions": {
+    "createAccount": "Criar Conta Gratuita",
+    "continueBrowsing": "Continuar Navegando no Demo",
+    "learnMore": "Saiba Mais"
+  },
+  "limitations": {
+    "addTransaction": "Adicionar transações",
+    "editProfile": "Editar configurações do perfil",
+    "deleteData": "Excluir dados",
+    "exportData": "Exportar dados",
+    "addCategory": "Adicionar categorias personalizadas",
+    "setBudgets": "Definir orçamentos",
+    "generateReports": "Gerar relatórios"
+  }
+} 

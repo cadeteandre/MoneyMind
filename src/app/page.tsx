@@ -10,6 +10,11 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { useTranslation } from '@/app/i18n/client';
 import { PreviewCard } from "@/components/demo/PreviewCard";
 
+// Import demo screenshots
+import dashboardScreenshot from "../../public/images/moneymind-demo-overview-optimized.webp";
+import transactionsScreenshot from "../../public/images/moneymind-demo-transactions-optimized.webp";
+import profileScreenshot from "../../public/images/moneymind-demo-profile-optimized.webp";
+
 // Loading component 
 function LoadingScreen() {
   return (
@@ -130,6 +135,7 @@ export default function Home() {
               title={t('featuresInAction.dashboard.title')}
               description={t('featuresInAction.dashboard.description')}
               icon={TrendingUp}
+              imageImport={dashboardScreenshot}
               demoLink="/demo/dashboard"
               features={[
                 t('featuresInAction.dashboard.features.0'),
@@ -143,6 +149,7 @@ export default function Home() {
               title={t('featuresInAction.transactions.title')}
               description={t('featuresInAction.transactions.description')}
               icon={BarChart3}
+              imageImport={transactionsScreenshot}
               demoLink="/demo/transactions"
               features={[
                 t('featuresInAction.transactions.features.0'),
@@ -156,6 +163,7 @@ export default function Home() {
               title={t('featuresInAction.profile.title')}
               description={t('featuresInAction.profile.description')}
               icon={User}
+              imageImport={profileScreenshot}
               demoLink="/demo/profile"
               features={[
                 t('featuresInAction.profile.features.0'),

@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Eye, User, Mail, Globe, DollarSign, Calendar, Shield } from "lucide-react";
+import { User, Mail, Globe, DollarSign, Calendar, Shield, Eye } from "lucide-react";
 import { useMockData } from "@/components/demo/MockDataProviderI18n";
 import { useDemo } from "@/hooks/useDemo";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from "@/app/i18n/client";
-import Image from "next/image";
+import demoAvatar from "../../../../public/images/avatar-mary-jane.jpg";
 
 export default function DemoProfilePage() {
   const mockData = useMockData();
@@ -49,11 +49,10 @@ export default function DemoProfilePage() {
             </CardHeader>
             <CardContent className="text-center space-y-4">
               <div className="relative w-32 h-32 mx-auto">
-                <Image
-                  src={mockData.user.avatar}
-                  alt={mockData.user.name}
-                  fill
-                  className="rounded-full object-cover"
+                <img
+                  src={demoAvatar.src}
+                  alt="Mary Jane"
+                  className="w-32 h-32 rounded-full object-cover border-2 border-border"
                 />
               </div>
               <div>

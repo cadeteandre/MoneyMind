@@ -67,5 +67,10 @@
   "accountStats": "Estadísticas de cuenta",
   "totalTransactions": "Total de transacciones",
   "savingsRate": "Tasa de ahorro",
-  "activeCategories": "Categorías activas"
+  "activeCategories": "Categorías activas",
+  "actions": {
+    "addTransaction": "Agregar Transacción",
+    "export": "Exportar",
+    "settings": "Configuraciones"
+  }
 } 

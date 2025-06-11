@@ -1,7 +1,7 @@
 {
   "user": {
-    "name": "Maria Silva",
-    "email": "maria.demo@example.com"
+    "name": "Mary Jane",
+    "email": "mary.jane@example.com"
   },
   "categories": {
     "income": {
@@ -30,19 +30,19 @@
       "gas_station": "Shell Tankstelle",
       "medical_consultation": "Arzttermin",
       "streaming": "Netflix + Spotify Streaming",
-      "online_course": "Udemy Online-Kurs",
+      "online_course": "Udemy Online Kurs",
       "stock_dividends": "ITUB4 Aktien Dividenden",
       "pharmacy": "São Paulo Apotheke",
       "salary_dec": "Gehalt Dezember 2023",
-      "rent_dec": "Miete Dezember",
-      "christmas_gifts": "Weihnachtsgeschenke - Einkaufszentrum",
+      "rent_dec": "Dezember Miete",
+      "christmas_gifts": "Weihnachtsgeschenke - Einkaufen",
       "freelance_logo": "Freelance - Logo Design",
       "restaurant_dinner": "Restaurant Abendessen",
       "salary_nov": "Gehalt November 2023",
-      "rent_nov": "Miete November",
+      "rent_nov": "November Miete",
       "car_maintenance": "Auto Wartung",
       "freelance_app": "Freelance - Mobile App",
-      "online_shopping": "Online Shopping - Elektronik"
+      "online_shopping": "Online Elektronik Einkauf"
     }
   }
 } 

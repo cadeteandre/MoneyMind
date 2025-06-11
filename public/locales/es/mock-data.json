@@ -1,7 +1,7 @@
 {
   "user": {
-    "name": "María Silva",
-    "email": "maria.demo@example.com"
+    "name": "Mary Jane",
+    "email": "mary.jane@example.com"
   },
   "categories": {
     "income": {
@@ -35,14 +35,14 @@
       "pharmacy": "Farmacia São Paulo",
       "salary_dec": "Salario Diciembre 2023",
       "rent_dec": "Alquiler Diciembre",
-      "christmas_gifts": "Regalos Navidad - Centro Comercial",
+      "christmas_gifts": "Regalos Navidad - Compras",
       "freelance_logo": "Freelance - Diseño Logo",
       "restaurant_dinner": "Cena Restaurante",
       "salary_nov": "Salario Noviembre 2023",
       "rent_nov": "Alquiler Noviembre",
       "car_maintenance": "Mantenimiento Coche",
       "freelance_app": "Freelance - App Móvil",
-      "online_shopping": "Compras Online - Electrónicos"
+      "online_shopping": "Compras Online Electrónicos"
     }
   }
 } 
