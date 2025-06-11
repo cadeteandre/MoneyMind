@@ -11,6 +11,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from "@/app/i18n/client";
 import { CategorySummary, MonthlyData } from "@/app/actions/getTransactionStats";
 import DemoExpensePieChart from "@/components/demo/DemoExpensePieChart";
+import DemoTransactionList from "@/components/demo/DemoTransactionList";
 import MonthlyBarChart from "@/components/charts/MonthlyBarChart";
 
 export default function DemoDashboardPage() {
@@ -58,8 +59,8 @@ export default function DemoDashboardPage() {
         {/* Tabs */}
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-2 w-full sm:w-[400px] gap-2">
-            <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
-            <TabsTrigger value="transactions">{t('transactions')}</TabsTrigger>
+            <TabsTrigger value="overview" className="cursor-pointer">{t('overview')}</TabsTrigger>
+            <TabsTrigger value="transactions" className="cursor-pointer">{t('transactions')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6 mt-6">
@@ -129,24 +130,7 @@ export default function DemoDashboardPage() {
                  <CardTitle>{t('recentTransactions')}</CardTitle>
                </CardHeader>
                <CardContent>
-                 <div className="space-y-2">
-                   {recentTransactions.map((transaction) => (
-                     <div key={transaction.id} className="flex justify-between items-center p-3 border rounded-lg">
-                       <div>
-                         <p className="font-medium">{transaction.description}</p>
-                         <p className="text-sm text-muted-foreground">{transaction.category}</p>
-                       </div>
-                       <div className="text-right">
-                         <p className={`font-semibold ${transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                           {formatCurrency(transaction.amount)}
-                         </p>
-                         <p className="text-xs text-muted-foreground">
-                           {new Date(transaction.date).toLocaleDateString()}
-                         </p>
-                       </div>
-                     </div>
-                   ))}
-                 </div>
+                 <DemoTransactionList transactions={recentTransactions} />
                </CardContent>
              </Card>
            </TabsContent>
@@ -157,23 +141,8 @@ export default function DemoDashboardPage() {
                  <CardTitle>{t('allTransactions')}</CardTitle>
                </CardHeader>
                <CardContent>
-                 <div className="max-h-[600px] overflow-y-auto space-y-2">
-                   {mockData.transactions.map((transaction) => (
-                     <div key={transaction.id} className="flex justify-between items-center p-3 border rounded-lg">
-                       <div>
-                         <p className="font-medium">{transaction.description}</p>
-                         <p className="text-sm text-muted-foreground">{transaction.category}</p>
-                       </div>
-                       <div className="text-right">
-                         <p className={`font-semibold ${transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                           {formatCurrency(transaction.amount)}
-                         </p>
-                         <p className="text-xs text-muted-foreground">
-                           {new Date(transaction.date).toLocaleDateString()}
-                         </p>
-                       </div>
-                     </div>
-                   ))}
+                 <div className="max-h-[600px] overflow-y-auto">
+                   <DemoTransactionList transactions={mockData.transactions} />
                  </div>
                </CardContent>
              </Card>

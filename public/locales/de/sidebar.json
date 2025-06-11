@@ -3,5 +3,8 @@
   "overview": "Übersicht",
   "profile": "Profil",
   "transactions": "Transaktionen",
-  "home": "Startseite"
+  "home": "Startseite",
+  "demoMode": "Demo-Modus",
+  "readyToStart": "Bereit anzufangen?",
+  "createAccount": "Konto erstellen"
 } 

@@ -218,7 +218,7 @@ export default function DemoProfilePage() {
               </p>
               <Button 
                 onClick={() => window.location.href = '/'}
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-amber-600 hover:bg-amber-700 cursor-pointer"
               >
                 {t('createAccount')}
               </Button>
