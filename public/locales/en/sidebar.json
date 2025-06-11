@@ -3,5 +3,8 @@
   "overview": "Overview",
   "profile": "Profile",
   "transactions": "Transactions",
-  "home": "Home"
+  "home": "Home",
+  "demoMode": "Demo Mode",
+  "readyToStart": "Ready to start?",
+  "createAccount": "Create Account"
 } 

@@ -137,7 +137,7 @@ export default function DemoSidebar() {
             onClick={handleLinkClick}
           >
             <Home className="h-4 w-4" />
-            {t('backToHome')}
+            {t('home')}
           </Link>
         </div>
         
