@@ -72,5 +72,20 @@
     "addTransaction": "Agregar Transacción",
     "export": "Exportar",
     "settings": "Configuraciones"
+  },
+  "recurringWidget": {
+    "title": "Próximos Vencimientos",
+    "viewAll": "Ver Todos",
+    "noUpcoming": "No hay vencimientos próximos",
+    "createFirst": "Crear Gasto Fijo",
+    "managePayments": "Gestionar Pagos",
+    "overdue": "Vencido",
+    "pending": "Pendiente",
+    "weekly": "Semanal",
+    "biweekly": "Quincenal",
+    "monthly": "Mensual",
+    "quarterly": "Trimestral",
+    "semiannually": "Semestral",
+    "annually": "Anual"
   }
 } 
