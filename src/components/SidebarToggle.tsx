@@ -90,17 +90,6 @@ export default function SidebarToggle() {
           </li>
           <li>
             <Link
-              href="/dashboard/profile"
-              className="block px-4 py-2 rounded-lg transition-colors 
-                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
-                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
-              onClick={handleLinkClick}
-            >
-              {t('profile')}
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/dashboard/transactions"
               className="block px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
@@ -108,6 +97,39 @@ export default function SidebarToggle() {
               onClick={handleLinkClick}
             >
               {t('transactions')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/dashboard/recurring-transactions"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
+              onClick={handleLinkClick}
+            >
+              {t('recurringTransactions')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/dashboard/pending-payments"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
+              onClick={handleLinkClick}
+            >
+              {t('pendingPayments')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/dashboard/profile"
+              className="block px-4 py-2 rounded-lg transition-colors 
+                      text-gray-700 hover:bg-gray-300 hover:text-gray-900
+                      dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
+              onClick={handleLinkClick}
+            >
+              {t('profile')}
             </Link>
           </li>
           <li>

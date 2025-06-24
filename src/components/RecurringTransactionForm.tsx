@@ -1,0 +1,376 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import React, { useState, useEffect } from "react";
+import type { IRecurringTransaction, ICreateRecurringTransaction } from "@/interfaces/IRecurringTransaction";
+import { useLanguage } from "./providers/language-provider";
+import { useTranslation } from '@/app/i18n/client';
+import { CategorySelector } from '@/components/CategorySelector';
+import { FrequencySelector } from './FrequencySelector';
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+
+const formSchema = z.object({
+  amount: z.number().positive().multipleOf(0.01),
+  type: z.enum(["INCOME", "EXPENSE"]),
+  category: z.string().min(1),
+  categoryId: z.string().optional(),
+  description: z.string().optional(),
+  frequency: z.enum(["WEEKLY", "BIWEEKLY", "MONTHLY", "QUARTERLY", "SEMIANNUALLY", "ANNUALLY", "CUSTOM"]),
+  customDays: z.number().positive().optional(),
+  dayOfMonth: z.number().min(1).max(31).optional(),
+  dayOfWeek: z.number().min(0).max(6).optional(),
+  startDate: z.date(),
+  endDate: z.date().optional(),
+  isActive: z.boolean(),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+export interface RecurringTransactionFormProps {
+  onSuccess?: () => void;
+  onClose?: () => void;
+  transaction?: IRecurringTransaction;
+}
+
+export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> = ({ 
+  onSuccess, 
+  onClose, 
+  transaction 
+}) => {
+  const { userLocale } = useLanguage();
+  const { t } = useTranslation(userLocale, 'recurring-transactions');
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset,
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: transaction ? {
+      amount: parseFloat(transaction.amount.toString()),
+      type: transaction.type,
+      category: transaction.category,
+      description: transaction.description || '',
+      frequency: transaction.frequency,
+      customDays: transaction.customDays || undefined,
+      dayOfMonth: transaction.dayOfMonth || undefined,
+      dayOfWeek: transaction.dayOfWeek || undefined,
+      startDate: new Date(transaction.startDate),
+      endDate: transaction.endDate ? new Date(transaction.endDate) : undefined,
+      isActive: transaction.isActive,
+    } : {
+      startDate: new Date(),
+      isActive: true,
+    },
+  });
+
+  const frequency = watch("frequency");
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+  const isEditing = !!transaction;
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Definir categoria inicial para edição
+  useEffect(() => {
+    if (transaction?.category && isEditing) {
+      setSelectedCategoryId(transaction.category);
+    }
+  }, [transaction, isEditing]);
+
+  // Função para lidar com mudança de categoria
+  const handleCategoryChange = (categoryId: string, categoryName: string) => {
+    setSelectedCategoryId(categoryId);
+    setValue("categoryId", categoryId);
+    setValue("category", categoryName);
+  };
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      setIsSubmitting(true);
+      
+      const endpoint = isEditing 
+        ? `/api/recurring-transactions/${transaction.id}` 
+        : '/api/recurring-transactions';
+      
+      const method = isEditing ? 'PUT' : 'POST';
+
+      toast.loading(isEditing ? t('form.updating') : t('form.creating'));
+      
+      // Preparar dados para envio
+      const submitData: ICreateRecurringTransaction = {
+        amount: data.amount,
+        type: data.type,
+        category: data.category,
+        categoryId: data.categoryId,
+        description: data.description,
+        frequency: data.frequency,
+        customDays: data.frequency === 'CUSTOM' ? data.customDays : undefined,
+        dayOfMonth: data.dayOfMonth,
+        dayOfWeek: data.dayOfWeek,
+        startDate: data.startDate,
+        endDate: data.endDate,
+      };
+
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || (isEditing ? t('form.updateError') : t('form.createError')));
+      }
+
+      reset({
+        amount: 0,
+        type: undefined,
+        category: '',
+        categoryId: undefined,
+        description: '',
+        frequency: undefined,
+        customDays: undefined,
+        dayOfMonth: undefined,
+        dayOfWeek: undefined,
+        startDate: new Date(),
+        endDate: undefined,
+        isActive: true,
+      });
+
+      setSelectedCategoryId('');
+
+      toast.dismiss();
+      toast.success(isEditing ? t('form.updateSuccess') : t('form.createSuccess'));
+
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error instanceof Error ? error.message : t('form.unknownError'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Tipo de Transação */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.type')}</label>
+        <Select onValueChange={(value) => setValue("type", value as "INCOME" | "EXPENSE")}>
+          <SelectTrigger>
+            <SelectValue placeholder={t('form.selectType')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="INCOME">{t('type.income')}</SelectItem>
+            <SelectItem value="EXPENSE">{t('type.expense')}</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
+      </div>
+
+      {/* Valor */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.amount')}</label>
+        <Input
+          type="number"
+          step="0.01"
+          placeholder="0.00"
+          {...register("amount", { valueAsNumber: true })}
+        />
+        {errors.amount && <p className="text-sm text-red-500">{errors.amount.message}</p>}
+      </div>
+
+      {/* Categoria */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.category')}</label>
+        <CategorySelector
+          type={watch("type") || "EXPENSE"}
+          value={selectedCategoryId}
+          onChange={handleCategoryChange}
+        />
+        {errors.category && <p className="text-sm text-red-500">{errors.category.message}</p>}
+      </div>
+
+      {/* Descrição */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.description')}</label>
+        <Textarea
+          placeholder={t('form.descriptionPlaceholder')}
+          {...register("description")}
+        />
+      </div>
+
+      {/* Frequência */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.frequency')}</label>
+        <FrequencySelector
+          value={frequency}
+          onValueChange={(value) => setValue("frequency", value)}
+        />
+        {errors.frequency && <p className="text-sm text-red-500">{errors.frequency.message}</p>}
+      </div>
+
+      {/* Campos customizados para frequência CUSTOM */}
+      {frequency === 'CUSTOM' && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium">{t('form.customDays')}</label>
+          <Input
+            type="number"
+            min="1"
+            placeholder="30"
+            {...register("customDays", { valueAsNumber: true })}
+          />
+          <p className="text-sm text-muted-foreground">{t('form.customDaysHelp')}</p>
+          {errors.customDays && <p className="text-sm text-red-500">{errors.customDays.message}</p>}
+        </div>
+      )}
+
+      {/* Dia do mês para frequência mensal */}
+      {frequency === 'MONTHLY' && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium">{t('form.dayOfMonth')}</label>
+          <Select onValueChange={(value) => setValue("dayOfMonth", parseInt(value))}>
+            <SelectTrigger>
+              <SelectValue placeholder={t('form.selectDayOfMonth')} />
+            </SelectTrigger>
+            <SelectContent>
+              {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                <SelectItem key={day} value={day.toString()}>
+                  {day}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.dayOfMonth && <p className="text-sm text-red-500">{errors.dayOfMonth.message}</p>}
+        </div>
+      )}
+
+      {/* Dia da semana para frequência semanal */}
+      {(frequency === 'WEEKLY' || frequency === 'BIWEEKLY') && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium">{t('form.dayOfWeek')}</label>
+          <Select onValueChange={(value) => setValue("dayOfWeek", parseInt(value))}>
+            <SelectTrigger>
+              <SelectValue placeholder={t('form.selectDayOfWeek')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">{t('weekdays.sunday')}</SelectItem>
+              <SelectItem value="1">{t('weekdays.monday')}</SelectItem>
+              <SelectItem value="2">{t('weekdays.tuesday')}</SelectItem>
+              <SelectItem value="3">{t('weekdays.wednesday')}</SelectItem>
+              <SelectItem value="4">{t('weekdays.thursday')}</SelectItem>
+              <SelectItem value="5">{t('weekdays.friday')}</SelectItem>
+              <SelectItem value="6">{t('weekdays.saturday')}</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.dayOfWeek && <p className="text-sm text-red-500">{errors.dayOfWeek.message}</p>}
+        </div>
+      )}
+
+      {/* Data de Início */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.startDate')}</label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !startDate && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {startDate ? format(startDate, "PPP") : t('form.selectDate')}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={startDate}
+              onSelect={(date) => date && setValue("startDate", date)}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
+      </div>
+
+      {/* Data de Término (Opcional) */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t('form.endDate')} {t('form.optional')}</label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !endDate && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {endDate ? format(endDate, "PPP") : t('form.selectEndDate')}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={endDate}
+              onSelect={(date) => setValue("endDate", date)}
+              initialFocus
+              disabled={(date) => startDate && date < startDate}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      {/* Status Ativo */}
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          id="isActive"
+          {...register("isActive")}
+          className="rounded border-gray-300"
+        />
+        <label htmlFor="isActive" className="text-sm font-medium">
+          {t('form.isActive')}
+        </label>
+      </div>
+
+      {/* Botões */}
+      <div className="flex justify-end space-x-2 pt-4">
+        {onClose && (
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
+            {t('form.cancel')}
+          </Button>
+        )}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? t('form.submitting') : (isEditing ? t('form.update') : t('form.create'))}
+        </Button>
+      </div>
+    </form>
+  );
+}; 

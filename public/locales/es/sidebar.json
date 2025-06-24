@@ -3,6 +3,8 @@
   "overview": "Vista General",
   "profile": "Perfil",
   "transactions": "Transacciones",
+  "recurringTransactions": "Gastos Fijos",
+  "pendingPayments": "Pagos Pendientes",
   "home": "Inicio",
   "demoMode": "Modo Demo",
   "readyToStart": "¿Listo para comenzar?",

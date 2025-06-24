@@ -8,39 +8,42 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  name         String?
-  currency     String        @default("EUR")
-  locale       String        @default("en")
-  transactions Transaction[]
-  categories   Category[]
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  name                  String?
+  currency              String                 @default("EUR")
+  locale                String                 @default("en")
+  transactions          Transaction[]
+  categories            Category[]
+  recurringTransactions RecurringTransaction[]
 }
 
 model Transaction {
-  id                 String          @id @default(cuid())
+  id                 String             @id @default(cuid())
   userId             String
-  amount             Decimal         @db.Decimal(19, 4)
+  amount             Decimal            @db.Decimal(19, 4)
   type               TransactionType
   category           String
   description        String?
-  date               DateTime        @default(now())
+  date               DateTime           @default(now())
   receiptUrl         String?
   receiptDownloadUrl String?
   categoryId         String?
-  user               User            @relation(fields: [userId], references: [id])
-  categoryReference  Category?       @relation(fields: [categoryId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
+  categoryReference  Category?          @relation(fields: [categoryId], references: [id])
+  recurringPayments  RecurringPayment[]
 }
 
 model Category {
-  id           String          @id @default(cuid())
-  name         String
-  type         TransactionType
-  isDefault    Boolean         @default(false)
-  userId       String?
-  createdAt    DateTime        @default(now())
-  user         User?           @relation(fields: [userId], references: [id])
-  transactions Transaction[]
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  TransactionType
+  isDefault             Boolean                @default(false)
+  userId                String?
+  createdAt             DateTime               @default(now())
+  user                  User?                  @relation(fields: [userId], references: [id])
+  transactions          Transaction[]
+  recurringTransactions RecurringTransaction[]
 
   @@unique([name, userId])
   @@index([type])
@@ -48,7 +51,75 @@ model Category {
   @@index([userId])
 }
 
+model RecurringTransaction {
+  id                String              @id @default(cuid())
+  userId            String
+  amount            Decimal             @db.Decimal(19, 4)
+  type              TransactionType
+  category          String
+  categoryId        String?
+  description       String?
+  frequency         RecurrenceFrequency
+  dayOfMonth        Int? // Para mensal: dia do mês (1-31)
+  dayOfWeek         Int? // Para semanal: dia da semana (0-6, onde 0=domingo)
+  customDays        Int? // Para frequência personalizada (número de dias)
+  startDate         DateTime
+  endDate           DateTime? // Null = sem data final
+  isActive          Boolean             @default(true)
+  nextDueDate       DateTime // Próxima data de vencimento calculada
+  lastProcessedDate DateTime? // Última data em que foi processada
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id])
+  categoryReference Category?          @relation(fields: [categoryId], references: [id])
+  recurringPayments RecurringPayment[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([nextDueDate])
+  @@index([frequency])
+}
+
+model RecurringPayment {
+  id                     String        @id @default(cuid())
+  recurringTransactionId String
+  transactionId          String?       @unique // Null se ainda não foi pago
+  dueDate                DateTime
+  paidDate               DateTime?
+  status                 PaymentStatus @default(PENDING)
+  amount                 Decimal       @db.Decimal(19, 4) // Permite ajustar valor na hora do pagamento
+  notes                  String? // Notas específicas deste pagamento
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  recurringTransaction RecurringTransaction @relation(fields: [recurringTransactionId], references: [id], onDelete: Cascade)
+  transaction          Transaction?         @relation(fields: [transactionId], references: [id])
+
+  @@index([recurringTransactionId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([paidDate])
+}
+
 enum TransactionType {
   INCOME
   EXPENSE
+}
+
+enum RecurrenceFrequency {
+  WEEKLY // Semanal
+  BIWEEKLY // Quinzenal
+  MONTHLY // Mensal
+  QUARTERLY // Trimestral
+  SEMIANNUALLY // Semestral
+  ANNUALLY // Anual
+  CUSTOM // Personalizada (usando customDays)
+}
+
+enum PaymentStatus {
+  PENDING // Pendente
+  PAID // Pago
+  OVERDUE // Atrasado
+  SKIPPED // Pulado (usuário escolheu não pagar)
 }

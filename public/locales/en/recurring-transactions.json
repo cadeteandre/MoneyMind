@@ -1,0 +1,93 @@
+{
+  "title": "Fixed Expenses",
+  "subtitle": "Manage your recurring transactions",
+  "createNew": "Create New Fixed Expense",
+  "edit": "Edit Fixed Expense",
+  "delete": "Delete Fixed Expense",
+  "markAsPaid": "Mark as Paid",
+  "pending": "Pending",
+  "paid": "Paid",
+  "overdue": "Overdue",
+  "skipped": "Skipped",
+  "active": "Active",
+  "inactive": "Inactive",
+  "pause": "Pause",
+  "resume": "Resume",
+  "nextDue": "Next Due",
+  "lastPaid": "Last Paid",
+  "totalPaid": "Total Paid",
+  "totalPending": "Total Pending",
+  "upcomingPayments": "Upcoming Payments",
+  "paymentHistory": "Payment History",
+  "frequency": {
+    "weekly": "Weekly",
+    "biweekly": "Biweekly",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "semiannually": "Semiannually",
+    "annually": "Annually",
+    "custom": "Custom"
+  },
+  "days": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "form": {
+    "amount": "Amount",
+    "type": "Type",
+    "category": "Category",
+    "description": "Description",
+    "frequency": "Frequency",
+    "startDate": "Start Date",
+    "endDate": "End Date (Optional)",
+    "dayOfMonth": "Day of Month",
+    "dayOfWeek": "Day of Week",
+    "customDays": "Every X Days",
+    "noEndDate": "No end date",
+    "save": "Save Fixed Expense",
+    "cancel": "Cancel",
+    "update": "Update Fixed Expense"
+  },
+  "validation": {
+    "amountRequired": "Amount is required",
+    "amountPositive": "Amount must be positive",
+    "typeRequired": "Type is required",
+    "categoryRequired": "Category is required",
+    "frequencyRequired": "Frequency is required",
+    "startDateRequired": "Start date is required",
+    "dayOfMonthInvalid": "Day of month must be between 1 and 31",
+    "dayOfWeekInvalid": "Day of week must be between 0 and 6",
+    "customDaysInvalid": "Custom days must be a positive number"
+  },
+  "messages": {
+    "createSuccess": "Fixed expense created successfully",
+    "updateSuccess": "Fixed expense updated successfully",
+    "deleteSuccess": "Fixed expense deleted successfully",
+    "paymentSuccess": "Payment recorded successfully",
+    "pauseSuccess": "Fixed expense paused",
+    "resumeSuccess": "Fixed expense resumed",
+    "createError": "Error creating fixed expense",
+    "updateError": "Error updating fixed expense",
+    "deleteError": "Error deleting fixed expense",
+    "paymentError": "Error recording payment",
+    "loadError": "Error loading fixed expenses"
+  },
+  "stats": {
+    "totalFixedExpenses": "Total Fixed Expenses",
+    "monthlyTotal": "Monthly Total",
+    "pendingThisMonth": "Pending This Month",
+    "dueToday": "Due Today",
+    "dueThisWeek": "Due This Week",
+    "overdue": "Overdue"
+  },
+  "empty": {
+    "title": "No Fixed Expenses",
+    "description": "You haven't created any fixed expenses yet. Start by creating your first recurring transaction.",
+    "action": "Create First Fixed Expense"
+  }
+} 

@@ -20,6 +20,7 @@ import FilterContainer from "@/components/FilterContainer"
 import { filteredTransactions } from "@/lib/utils"
 import { useLanguage } from "@/components/providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
+import { RecurringTransactionsWidget } from "@/components/RecurringTransactionsWidget"
 
 // Definir o tipo de Transaction compatível com TransactionList
 type TransactionWithDownload = ITransaction;
@@ -285,104 +286,109 @@ export default function DashboardClient() {
           </div>
 
           {/* Transações recentes na visão geral */}
-          <Card className="border shadow-sm hover:shadow-md transition-shadow">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <CardTitle>{t('latestTransactions')}</CardTitle>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm font-medium cursor-pointer"
-                  onClick={() => {
-                    setActiveTab("transactions")
-                    setShowFiltersContainer(true)
-                  }}
-                >
-                  {t('viewAll')}
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="space-y-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex justify-between items-center p-4 border rounded-lg">
-                      <div className="space-y-2">
-                        <Skeleton className="h-4 w-24" />
-                        <Skeleton className="h-3 w-32" />
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <Skeleton className="h-4 w-16" />
-                        <Skeleton className="h-3 w-20" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : transactions.length === 0 ? (
-                <div className="text-center py-8">
-                  <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text-lg font-semibold">{t('noData')}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {t('addYourFirst')}
-                  </p>
-                  <Dialog 
-                    open={isOverviewEmptyModalOpen} 
-                    modal={true}
-                    onOpenChange={(open) => {
-                      // Se estiver tentando abrir, permitir
-                      if (open) {
-                        setIsOverviewEmptyModalOpen(true);
-                        return;
-                      }
-                      // Se estiver tentando fechar, impedir
-                      return;
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="border shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-center">
+                  <CardTitle>{t('latestTransactions')}</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm font-medium cursor-pointer"
+                    onClick={() => {
+                      setActiveTab("transactions")
+                      setShowFiltersContainer(true)
                     }}
                   >
-                    <DialogTrigger asChild>
-                      <Button className="mt-4 cursor-pointer">
-                        <Plus className="h-4 w-4 sm:mr-2" />
-                        <span className="hidden sm:inline">{t('addTransaction')}</span>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent 
-                      className="sm:max-w-md"
-                      onPointerDownOutside={e => e.preventDefault()}
-                      onInteractOutside={e => e.preventDefault()}
-                      onEscapeKeyDown={e => e.preventDefault()}
-                    >
-                      <DialogHeader>
-                        <div className="flex justify-between items-center">
-                          <DialogTitle>{t('addTransaction')}</DialogTitle>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-8 w-8 p-0 rounded-full cursor-pointer" 
-                            onClick={() => setIsOverviewEmptyModalOpen(false)}
-                          >
-                            ×
-                          </Button>
-                        </div>
-                      </DialogHeader>
-                      <TransactionForm
-                        onSuccess={() => {
-                          fetchData()
-                          setIsOverviewEmptyModalOpen(false)
-                        }}
-                        onClose={() => setIsOverviewEmptyModalOpen(false)}
-                      />
-                    </DialogContent>
-                  </Dialog>
+                    {t('viewAll')}
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
                 </div>
-              ) : (
-                <TransactionList
-                  transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter).slice(0, 3)}
-                  onTransactionUpdated={() => fetchData()}
-                  isLoading={isLoading}
-                />
-              )}
-            </CardContent>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="flex justify-between items-center p-4 border rounded-lg">
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-3 w-32" />
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <Skeleton className="h-4 w-16" />
+                          <Skeleton className="h-3 w-20" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : transactions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
+                    <h3 className="mt-4 text-lg font-semibold">{t('noData')}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {t('addYourFirst')}
+                    </p>
+                    <Dialog 
+                      open={isOverviewEmptyModalOpen} 
+                      modal={true}
+                      onOpenChange={(open) => {
+                        // Se estiver tentando abrir, permitir
+                        if (open) {
+                          setIsOverviewEmptyModalOpen(true);
+                          return;
+                        }
+                        // Se estiver tentando fechar, impedir
+                        return;
+                      }}
+                    >
+                      <DialogTrigger asChild>
+                        <Button className="mt-4 cursor-pointer">
+                          <Plus className="h-4 w-4 sm:mr-2" />
+                          <span className="hidden sm:inline">{t('addTransaction')}</span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent 
+                        className="sm:max-w-md"
+                        onPointerDownOutside={e => e.preventDefault()}
+                        onInteractOutside={e => e.preventDefault()}
+                        onEscapeKeyDown={e => e.preventDefault()}
+                      >
+                        <DialogHeader>
+                          <div className="flex justify-between items-center">
+                            <DialogTitle>{t('addTransaction')}</DialogTitle>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 rounded-full cursor-pointer" 
+                              onClick={() => setIsOverviewEmptyModalOpen(false)}
+                            >
+                              ×
+                            </Button>
+                          </div>
+                        </DialogHeader>
+                        <TransactionForm
+                          onSuccess={() => {
+                            fetchData()
+                            setIsOverviewEmptyModalOpen(false)
+                          }}
+                          onClose={() => setIsOverviewEmptyModalOpen(false)}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                ) : (
+                  <TransactionList
+                    transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter).slice(0, 3)}
+                    onTransactionUpdated={() => fetchData()}
+                    isLoading={isLoading}
+                  />
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Widget de despesas fixas */}
+            <RecurringTransactionsWidget />
+          </div>
         </TabsContent>
 
         <TabsContent value="transactions" className="space-y-6 animate-in fade-in-50">

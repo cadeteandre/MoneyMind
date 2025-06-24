@@ -1,0 +1,93 @@
+{
+  "title": "Gastos Fijos",
+  "subtitle": "Gestiona tus transacciones recurrentes",
+  "createNew": "Crear Nuevo Gasto Fijo",
+  "edit": "Editar Gasto Fijo",
+  "delete": "Eliminar Gasto Fijo",
+  "markAsPaid": "Marcar como Pagado",
+  "pending": "Pendiente",
+  "paid": "Pagado",
+  "overdue": "Atrasado",
+  "skipped": "Omitido",
+  "active": "Activo",
+  "inactive": "Inactivo",
+  "pause": "Pausar",
+  "resume": "Reanudar",
+  "nextDue": "Próximo Vencimiento",
+  "lastPaid": "Último Pago",
+  "totalPaid": "Total Pagado",
+  "totalPending": "Total Pendiente",
+  "upcomingPayments": "Próximos Pagos",
+  "paymentHistory": "Historial de Pagos",
+  "frequency": {
+    "weekly": "Semanal",
+    "biweekly": "Quincenal",
+    "monthly": "Mensual",
+    "quarterly": "Trimestral",
+    "semiannually": "Semestral",
+    "annually": "Anual",
+    "custom": "Personalizada"
+  },
+  "days": {
+    "sunday": "Domingo",
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado"
+  },
+  "form": {
+    "amount": "Cantidad",
+    "type": "Tipo",
+    "category": "Categoría",
+    "description": "Descripción",
+    "frequency": "Frecuencia",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha Final (Opcional)",
+    "dayOfMonth": "Día del Mes",
+    "dayOfWeek": "Día de la Semana",
+    "customDays": "Cada X Días",
+    "noEndDate": "Sin fecha final",
+    "save": "Guardar Gasto Fijo",
+    "cancel": "Cancelar",
+    "update": "Actualizar Gasto Fijo"
+  },
+  "validation": {
+    "amountRequired": "La cantidad es obligatoria",
+    "amountPositive": "La cantidad debe ser positiva",
+    "typeRequired": "El tipo es obligatorio",
+    "categoryRequired": "La categoría es obligatoria",
+    "frequencyRequired": "La frecuencia es obligatoria",
+    "startDateRequired": "La fecha de inicio es obligatoria",
+    "dayOfMonthInvalid": "El día del mes debe estar entre 1 y 31",
+    "dayOfWeekInvalid": "El día de la semana debe estar entre 0 y 6",
+    "customDaysInvalid": "Los días personalizados deben ser un número positivo"
+  },
+  "messages": {
+    "createSuccess": "Gasto fijo creado exitosamente",
+    "updateSuccess": "Gasto fijo actualizado exitosamente",
+    "deleteSuccess": "Gasto fijo eliminado exitosamente",
+    "paymentSuccess": "Pago registrado exitosamente",
+    "pauseSuccess": "Gasto fijo pausado",
+    "resumeSuccess": "Gasto fijo reanudado",
+    "createError": "Error al crear gasto fijo",
+    "updateError": "Error al actualizar gasto fijo",
+    "deleteError": "Error al eliminar gasto fijo",
+    "paymentError": "Error al registrar pago",
+    "loadError": "Error al cargar gastos fijos"
+  },
+  "stats": {
+    "totalFixedExpenses": "Total de Gastos Fijos",
+    "monthlyTotal": "Total Mensual",
+    "pendingThisMonth": "Pendiente Este Mes",
+    "dueToday": "Vence Hoy",
+    "dueThisWeek": "Vence Esta Semana",
+    "overdue": "Atrasados"
+  },
+  "empty": {
+    "title": "Sin Gastos Fijos",
+    "description": "Aún no has creado ningún gasto fijo. Comienza creando tu primera transacción recurrente.",
+    "action": "Crear Primer Gasto Fijo"
+  }
+} 

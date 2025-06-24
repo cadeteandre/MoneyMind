@@ -72,5 +72,20 @@
     "addTransaction": "Adicionar Transação",
     "export": "Exportar",
     "settings": "Configurações"
+  },
+  "recurringWidget": {
+    "title": "Próximos Vencimentos",
+    "viewAll": "Ver Todos",
+    "noUpcoming": "Nenhum vencimento próximo",
+    "createFirst": "Criar Despesa Fixa",
+    "managePayments": "Gerenciar Pagamentos",
+    "overdue": "Atrasado",
+    "pending": "Pendente",
+    "weekly": "Semanal",
+    "biweekly": "Quinzenal",
+    "monthly": "Mensal",
+    "quarterly": "Trimestral",
+    "semiannually": "Semestral",
+    "annually": "Anual"
   }
 } 

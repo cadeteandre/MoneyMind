@@ -3,6 +3,8 @@
   "overview": "Overview",
   "profile": "Profile",
   "transactions": "Transactions",
+  "recurringTransactions": "Fixed Expenses",
+  "pendingPayments": "Pending Payments",
   "home": "Home",
   "demoMode": "Demo Mode",
   "readyToStart": "Ready to start?",
