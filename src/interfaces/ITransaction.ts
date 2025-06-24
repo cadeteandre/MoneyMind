@@ -8,4 +8,7 @@ export interface ITransaction {
   date: Date;
   receiptUrl: string | null;
   receiptDownloadUrl: string | null;
+  categoryId?: string | null;
+  isFromRecurring?: boolean;
+  recurringPaymentId?: string | null;
 }

@@ -1,0 +1,93 @@
+{
+  "title": "Fixkosten",
+  "subtitle": "Verwalten Sie Ihre wiederkehrenden Transaktionen",
+  "createNew": "Neue Fixkosten erstellen",
+  "edit": "Fixkosten bearbeiten",
+  "delete": "Fixkosten löschen",
+  "markAsPaid": "Als bezahlt markieren",
+  "pending": "Ausstehend",
+  "paid": "Bezahlt",
+  "overdue": "Überfällig",
+  "skipped": "Übersprungen",
+  "active": "Aktiv",
+  "inactive": "Inaktiv",
+  "pause": "Pausieren",
+  "resume": "Fortsetzen",
+  "nextDue": "Nächste Fälligkeit",
+  "lastPaid": "Letzte Zahlung",
+  "totalPaid": "Gesamt bezahlt",
+  "totalPending": "Gesamt ausstehend",
+  "upcomingPayments": "Anstehende Zahlungen",
+  "paymentHistory": "Zahlungshistorie",
+  "frequency": {
+    "weekly": "Wöchentlich",
+    "biweekly": "Zweiwöchentlich",
+    "monthly": "Monatlich",
+    "quarterly": "Vierteljährlich",
+    "semiannually": "Halbjährlich",
+    "annually": "Jährlich",
+    "custom": "Benutzerdefiniert"
+  },
+  "days": {
+    "sunday": "Sonntag",
+    "monday": "Montag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag"
+  },
+  "form": {
+    "amount": "Betrag",
+    "type": "Typ",
+    "category": "Kategorie",
+    "description": "Beschreibung",
+    "frequency": "Häufigkeit",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum (Optional)",
+    "dayOfMonth": "Tag des Monats",
+    "dayOfWeek": "Wochentag",
+    "customDays": "Alle X Tage",
+    "noEndDate": "Kein Enddatum",
+    "save": "Fixkosten speichern",
+    "cancel": "Abbrechen",
+    "update": "Fixkosten aktualisieren"
+  },
+  "validation": {
+    "amountRequired": "Betrag ist erforderlich",
+    "amountPositive": "Betrag muss positiv sein",
+    "typeRequired": "Typ ist erforderlich",
+    "categoryRequired": "Kategorie ist erforderlich",
+    "frequencyRequired": "Häufigkeit ist erforderlich",
+    "startDateRequired": "Startdatum ist erforderlich",
+    "dayOfMonthInvalid": "Tag des Monats muss zwischen 1 und 31 liegen",
+    "dayOfWeekInvalid": "Wochentag muss zwischen 0 und 6 liegen",
+    "customDaysInvalid": "Benutzerdefinierte Tage müssen eine positive Zahl sein"
+  },
+  "messages": {
+    "createSuccess": "Fixkosten erfolgreich erstellt",
+    "updateSuccess": "Fixkosten erfolgreich aktualisiert",
+    "deleteSuccess": "Fixkosten erfolgreich gelöscht",
+    "paymentSuccess": "Zahlung erfolgreich registriert",
+    "pauseSuccess": "Fixkosten pausiert",
+    "resumeSuccess": "Fixkosten fortgesetzt",
+    "createError": "Fehler beim Erstellen der Fixkosten",
+    "updateError": "Fehler beim Aktualisieren der Fixkosten",
+    "deleteError": "Fehler beim Löschen der Fixkosten",
+    "paymentError": "Fehler beim Registrieren der Zahlung",
+    "loadError": "Fehler beim Laden der Fixkosten"
+  },
+  "stats": {
+    "totalFixedExpenses": "Gesamte Fixkosten",
+    "monthlyTotal": "Monatssumme",
+    "pendingThisMonth": "Ausstehend diesen Monat",
+    "dueToday": "Fällig heute",
+    "dueThisWeek": "Fällig diese Woche",
+    "overdue": "Überfällig"
+  },
+  "empty": {
+    "title": "Keine Fixkosten",
+    "description": "Sie haben noch keine Fixkosten erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
+    "action": "Erste Fixkosten erstellen"
+  }
+} 

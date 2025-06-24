@@ -1,0 +1,93 @@
+{
+  "title": "Despesas Fixas",
+  "subtitle": "Gerencie suas transações recorrentes",
+  "createNew": "Criar Nova Despesa Fixa",
+  "edit": "Editar Despesa Fixa",
+  "delete": "Excluir Despesa Fixa",
+  "markAsPaid": "Marcar como Pago",
+  "pending": "Pendente",
+  "paid": "Pago",
+  "overdue": "Atrasado",
+  "skipped": "Pulado",
+  "active": "Ativo",
+  "inactive": "Inativo",
+  "pause": "Pausar",
+  "resume": "Retomar",
+  "nextDue": "Próximo Vencimento",
+  "lastPaid": "Último Pagamento",
+  "totalPaid": "Total Pago",
+  "totalPending": "Total Pendente",
+  "upcomingPayments": "Próximos Pagamentos",
+  "paymentHistory": "Histórico de Pagamentos",
+  "frequency": {
+    "weekly": "Semanal",
+    "biweekly": "Quinzenal",
+    "monthly": "Mensal",
+    "quarterly": "Trimestral",
+    "semiannually": "Semestral",
+    "annually": "Anual",
+    "custom": "Personalizada"
+  },
+  "days": {
+    "sunday": "Domingo",
+    "monday": "Segunda",
+    "tuesday": "Terça",
+    "wednesday": "Quarta",
+    "thursday": "Quinta",
+    "friday": "Sexta",
+    "saturday": "Sábado"
+  },
+  "form": {
+    "amount": "Valor",
+    "type": "Tipo",
+    "category": "Categoria",
+    "description": "Descrição",
+    "frequency": "Frequência",
+    "startDate": "Data de Início",
+    "endDate": "Data Final (Opcional)",
+    "dayOfMonth": "Dia do Mês",
+    "dayOfWeek": "Dia da Semana",
+    "customDays": "A cada X Dias",
+    "noEndDate": "Sem data final",
+    "save": "Salvar Despesa Fixa",
+    "cancel": "Cancelar",
+    "update": "Atualizar Despesa Fixa"
+  },
+  "validation": {
+    "amountRequired": "Valor é obrigatório",
+    "amountPositive": "Valor deve ser positivo",
+    "typeRequired": "Tipo é obrigatório",
+    "categoryRequired": "Categoria é obrigatória",
+    "frequencyRequired": "Frequência é obrigatória",
+    "startDateRequired": "Data de início é obrigatória",
+    "dayOfMonthInvalid": "Dia do mês deve estar entre 1 e 31",
+    "dayOfWeekInvalid": "Dia da semana deve estar entre 0 e 6",
+    "customDaysInvalid": "Dias personalizados deve ser um número positivo"
+  },
+  "messages": {
+    "createSuccess": "Despesa fixa criada com sucesso",
+    "updateSuccess": "Despesa fixa atualizada com sucesso",
+    "deleteSuccess": "Despesa fixa excluída com sucesso",
+    "paymentSuccess": "Pagamento registrado com sucesso",
+    "pauseSuccess": "Despesa fixa pausada",
+    "resumeSuccess": "Despesa fixa retomada",
+    "createError": "Erro ao criar despesa fixa",
+    "updateError": "Erro ao atualizar despesa fixa",
+    "deleteError": "Erro ao excluir despesa fixa",
+    "paymentError": "Erro ao registrar pagamento",
+    "loadError": "Erro ao carregar despesas fixas"
+  },
+  "stats": {
+    "totalFixedExpenses": "Total de Despesas Fixas",
+    "monthlyTotal": "Total Mensal",
+    "pendingThisMonth": "Pendente Este Mês",
+    "dueToday": "Vence Hoje",
+    "dueThisWeek": "Vence Esta Semana",
+    "overdue": "Atrasados"
+  },
+  "empty": {
+    "title": "Nenhuma Despesa Fixa",
+    "description": "Você ainda não criou nenhuma despesa fixa. Comece criando sua primeira transação recorrente.",
+    "action": "Criar Primeira Despesa Fixa"
+  }
+} 
