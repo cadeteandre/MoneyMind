@@ -89,5 +89,86 @@
     "title": "Sin Gastos Fijos",
     "description": "Aún no has creado ningún gasto fijo. Comienza creando tu primera transacción recurrente.",
     "action": "Crear Primer Gasto Fijo"
+  },
+  "page": {
+    "title": "Gastos Fijos",
+    "refresh": "Actualizar",
+    "newRecurring": "Nuevo Gasto Fijo"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "type": {
+    "income": "Ingresos",
+    "expense": "Gastos"
+  },
+  "list": {
+    "noRecurringTransactions": "Sin Gastos Fijos",
+    "createFirst": "Aún no has creado ningún gasto fijo. Comienza creando tu primera transacción recurrente.",
+    "nextDue": "Próximo vencimiento",
+    "since": "Desde",
+    "edit": "Editar",
+    "pause": "Pausar",
+    "activate": "Activar",
+    "delete": "Eliminar",
+    "fetchError": "Error al cargar gastos fijos",
+    "pausedSuccess": "Gasto fijo pausado exitosamente",
+    "activatedSuccess": "Gasto fijo activado exitosamente",
+    "updateError": "Error al actualizar gasto fijo",
+    "deleteSuccess": "Gasto fijo eliminado exitosamente",
+    "deleteError": "Error al eliminar gasto fijo"
+  },
+  "customUnit": {
+    "days": "días"
+  },
+  "form": {
+    "createTitle": "Crear Nuevo Gasto Fijo",
+    "amount": "Cantidad",
+    "type": "Tipo",
+    "category": "Categoría",
+    "description": "Descripción",
+    "frequency": "Frecuencia",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha Final (Opcional)",
+    "dayOfMonth": "Día del Mes",
+    "dayOfWeek": "Día de la Semana",
+    "customDays": "Cada X Días",
+    "noEndDate": "Sin fecha final",
+    "save": "Guardar Gasto Fijo",
+    "cancel": "Cancelar",
+    "update": "Actualizar Gasto Fijo"
+  },
+  "payments": {
+    "pageTitle": "Pagos Pendientes",
+    "processAll": "Procesar Todos",
+    "total": "Total",
+    "all": "Todos",
+    "noPayments": "Sin Pagos Pendientes",
+    "allCaughtUp": "¡Estás al día con todos tus pagos!",
+    "noOverdue": "Sin Pagos Atrasados",
+    "greatJob": "¡Buen trabajo! No tienes pagos atrasados.",
+    "fetchError": "Error al cargar pagos",
+    "paymentSuccess": "Pago registrado exitosamente",
+    "paymentError": "Error al procesar pago",
+    "skipSuccess": "Pago omitido exitosamente",
+    "skipError": "Error al omitir pago",
+    "processAllSuccess": "Pagos procesados exitosamente:",
+    "processAllError": "Error al procesar pagos",
+    "skippedByUser": "Omitido por el usuario"
+  },
+  "paymentStatus": {
+    "pending": "Pendiente",
+    "overdue": "Atrasado",
+    "paid": "Pagado",
+    "skipped": "Omitido"
+  },
+  "payment": {
+    "markAsPaid": "Marcar como Pagado",
+    "skip": "Omitir",
+    "processing": "Procesando...",
+    "dueDate": "Fecha de Vencimiento",
+    "paidDate": "Fecha de Pago",
+    "notes": "Notas"
   }
 } 
