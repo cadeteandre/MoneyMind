@@ -89,5 +89,86 @@
     "title": "Keine Fixkosten",
     "description": "Sie haben noch keine Fixkosten erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
     "action": "Erste Fixkosten erstellen"
+  },
+  "page": {
+    "title": "Fixkosten",
+    "refresh": "Aktualisieren",
+    "newRecurring": "Neue Fixkosten"
+  },
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  },
+  "type": {
+    "income": "Einkommen",
+    "expense": "Ausgaben"
+  },
+  "list": {
+    "noRecurringTransactions": "Keine Fixkosten",
+    "createFirst": "Sie haben noch keine Fixkosten erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
+    "nextDue": "Nächste Fälligkeit",
+    "since": "Seit",
+    "edit": "Bearbeiten",
+    "pause": "Pausieren",
+    "activate": "Aktivieren",
+    "delete": "Löschen",
+    "fetchError": "Fehler beim Laden der Fixkosten",
+    "pausedSuccess": "Fixkosten erfolgreich pausiert",
+    "activatedSuccess": "Fixkosten erfolgreich aktiviert",
+    "updateError": "Fehler beim Aktualisieren der Fixkosten",
+    "deleteSuccess": "Fixkosten erfolgreich gelöscht",
+    "deleteError": "Fehler beim Löschen der Fixkosten"
+  },
+  "customUnit": {
+    "days": "Tage"
+  },
+  "form": {
+    "createTitle": "Neue Fixkosten erstellen",
+    "amount": "Betrag",
+    "type": "Typ",
+    "category": "Kategorie",
+    "description": "Beschreibung",
+    "frequency": "Häufigkeit",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum (Optional)",
+    "dayOfMonth": "Tag des Monats",
+    "dayOfWeek": "Wochentag",
+    "customDays": "Alle X Tage",
+    "noEndDate": "Kein Enddatum",
+    "save": "Fixkosten speichern",
+    "cancel": "Abbrechen",
+    "update": "Fixkosten aktualisieren"
+  },
+  "payments": {
+    "pageTitle": "Ausstehende Zahlungen",
+    "processAll": "Alle bearbeiten",
+    "total": "Gesamt",
+    "all": "Alle",
+    "noPayments": "Keine ausstehenden Zahlungen",
+    "allCaughtUp": "Sie sind mit allen Zahlungen auf dem neuesten Stand!",
+    "noOverdue": "Keine überfälligen Zahlungen",
+    "greatJob": "Großartig! Sie haben keine überfälligen Zahlungen.",
+    "fetchError": "Fehler beim Laden der Zahlungen",
+    "paymentSuccess": "Zahlung erfolgreich registriert",
+    "paymentError": "Fehler beim Verarbeiten der Zahlung",
+    "skipSuccess": "Zahlung erfolgreich übersprungen",
+    "skipError": "Fehler beim Überspringen der Zahlung",
+    "processAllSuccess": "Zahlungen erfolgreich verarbeitet:",
+    "processAllError": "Fehler beim Verarbeiten der Zahlungen",
+    "skippedByUser": "Vom Benutzer übersprungen"
+  },
+  "paymentStatus": {
+    "pending": "Ausstehend",
+    "overdue": "Überfällig",
+    "paid": "Bezahlt",
+    "skipped": "Übersprungen"
+  },
+  "payment": {
+    "markAsPaid": "Als bezahlt markieren",
+    "skip": "Überspringen",
+    "processing": "Wird verarbeitet...",
+    "dueDate": "Fälligkeitsdatum",
+    "paidDate": "Zahlungsdatum",
+    "notes": "Notizen"
   }
 } 

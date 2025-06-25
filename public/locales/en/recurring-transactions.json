@@ -89,5 +89,86 @@
     "title": "No Fixed Expenses",
     "description": "You haven't created any fixed expenses yet. Start by creating your first recurring transaction.",
     "action": "Create First Fixed Expense"
+  },
+  "page": {
+    "title": "Fixed Expenses",
+    "refresh": "Refresh",
+    "newRecurring": "New Fixed Expense"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "type": {
+    "income": "Income",
+    "expense": "Expense"
+  },
+  "list": {
+    "noRecurringTransactions": "No Fixed Expenses",
+    "createFirst": "You haven't created any fixed expenses yet. Start by creating your first recurring transaction.",
+    "nextDue": "Next due",
+    "since": "Since",
+    "edit": "Edit",
+    "pause": "Pause",
+    "activate": "Activate",
+    "delete": "Delete",
+    "fetchError": "Error loading fixed expenses",
+    "pausedSuccess": "Fixed expense paused successfully",
+    "activatedSuccess": "Fixed expense activated successfully",
+    "updateError": "Error updating fixed expense",
+    "deleteSuccess": "Fixed expense deleted successfully",
+    "deleteError": "Error deleting fixed expense"
+  },
+  "customUnit": {
+    "days": "days"
+  },
+  "form": {
+    "createTitle": "Create New Fixed Expense",
+    "amount": "Amount",
+    "type": "Type",
+    "category": "Category",
+    "description": "Description",
+    "frequency": "Frequency",
+    "startDate": "Start Date",
+    "endDate": "End Date (Optional)",
+    "dayOfMonth": "Day of Month",
+    "dayOfWeek": "Day of Week",
+    "customDays": "Every X Days",
+    "noEndDate": "No end date",
+    "save": "Save Fixed Expense",
+    "cancel": "Cancel",
+    "update": "Update Fixed Expense"
+  },
+  "payments": {
+    "pageTitle": "Pending Payments",
+    "processAll": "Process All",
+    "total": "Total",
+    "all": "All",
+    "noPayments": "No Pending Payments",
+    "allCaughtUp": "You're all caught up with your payments!",
+    "noOverdue": "No Overdue Payments",
+    "greatJob": "Great job! You have no overdue payments.",
+    "fetchError": "Error loading payments",
+    "paymentSuccess": "Payment recorded successfully",
+    "paymentError": "Error processing payment",
+    "skipSuccess": "Payment skipped successfully",
+    "skipError": "Error skipping payment",
+    "processAllSuccess": "Payments processed successfully:",
+    "processAllError": "Error processing payments",
+    "skippedByUser": "Skipped by user"
+  },
+  "paymentStatus": {
+    "pending": "Pending",
+    "overdue": "Overdue",
+    "paid": "Paid",
+    "skipped": "Skipped"
+  },
+  "payment": {
+    "markAsPaid": "Mark as Paid",
+    "skip": "Skip",
+    "processing": "Processing...",
+    "dueDate": "Due Date",
+    "paidDate": "Paid Date",
+    "notes": "Notes"
   }
 } 
