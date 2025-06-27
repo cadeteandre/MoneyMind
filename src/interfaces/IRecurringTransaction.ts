@@ -47,7 +47,7 @@ export interface IRecurringPayment {
   updatedAt: Date;
 }
 
-// Interface para criação de nova despesa fixa (sem campos auto-gerados)
+// Interface para criação de nova transação fixa (sem campos auto-gerados)
 export interface ICreateRecurringTransaction {
   amount: number;
   type: "INCOME" | "EXPENSE";

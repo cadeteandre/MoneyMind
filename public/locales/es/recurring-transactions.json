@@ -1,9 +1,9 @@
 {
-  "title": "Gastos Fijos",
-  "subtitle": "Gestiona tus transacciones recurrentes",
-  "createNew": "Crear Nuevo Gasto Fijo",
-  "edit": "Editar Gasto Fijo",
-  "delete": "Eliminar Gasto Fijo",
+  "title": "Transacciones Fijas",
+  "subtitle": "Gestiona tus ingresos y gastos recurrentes",
+  "createNew": "Crear Nueva Transacción Fija",
+  "edit": "Editar Transacción Fija",
+  "delete": "Eliminar Transacción Fija",
   "markAsPaid": "Marcar como Pagado",
   "pending": "Pendiente",
   "paid": "Pagado",
@@ -49,9 +49,9 @@
     "dayOfWeek": "Día de la Semana",
     "customDays": "Cada X Días",
     "noEndDate": "Sin fecha final",
-    "save": "Guardar Gasto Fijo",
+    "save": "Guardar Transacción Fija",
     "cancel": "Cancelar",
-    "update": "Actualizar Gasto Fijo"
+    "update": "Actualizar Transacción Fija"
   },
   "validation": {
     "amountRequired": "La cantidad es obligatoria",
@@ -65,20 +65,20 @@
     "customDaysInvalid": "Los días personalizados deben ser un número positivo"
   },
   "messages": {
-    "createSuccess": "Gasto fijo creado exitosamente",
-    "updateSuccess": "Gasto fijo actualizado exitosamente",
-    "deleteSuccess": "Gasto fijo eliminado exitosamente",
+    "createSuccess": "Transacción fija creada exitosamente",
+    "updateSuccess": "Transacción fija actualizada exitosamente",
+    "deleteSuccess": "Transacción fija eliminada exitosamente",
     "paymentSuccess": "Pago registrado exitosamente",
-    "pauseSuccess": "Gasto fijo pausado",
-    "resumeSuccess": "Gasto fijo reanudado",
-    "createError": "Error al crear gasto fijo",
-    "updateError": "Error al actualizar gasto fijo",
-    "deleteError": "Error al eliminar gasto fijo",
+    "pauseSuccess": "Transacción fija pausada",
+    "resumeSuccess": "Transacción fija reanudada",
+    "createError": "Error al crear transacción fija",
+    "updateError": "Error al actualizar transacción fija",
+    "deleteError": "Error al eliminar transacción fija",
     "paymentError": "Error al registrar pago",
-    "loadError": "Error al cargar gastos fijos"
+    "loadError": "Error al cargar transacciones fijas"
   },
   "stats": {
-    "totalFixedExpenses": "Total de Gastos Fijos",
+    "totalFixedExpenses": "Total de Transacciones Fijas",
     "monthlyTotal": "Total Mensual",
     "pendingThisMonth": "Pendiente Este Mes",
     "dueToday": "Vence Hoy",
@@ -86,14 +86,14 @@
     "overdue": "Atrasados"
   },
   "empty": {
-    "title": "Sin Gastos Fijos",
-    "description": "Aún no has creado ningún gasto fijo. Comienza creando tu primera transacción recurrente.",
-    "action": "Crear Primer Gasto Fijo"
+    "title": "Sin Transacciones Fijas",
+    "description": "Aún no has creado ninguna transacción fija. Comienza creando tu primera transacción recurrente.",
+    "action": "Crear Primera Transacción Fija"
   },
   "page": {
-    "title": "Gastos Fijos",
+    "title": "Transacciones Fijas",
     "refresh": "Actualizar",
-    "newRecurring": "Nuevo Gasto Fijo"
+    "newRecurring": "Nueva Transacción Fija"
   },
   "status": {
     "active": "Activo",
@@ -104,22 +104,24 @@
     "expense": "Gastos"
   },
   "list": {
-    "noRecurringTransactions": "Sin Gastos Fijos",
-    "createFirst": "Aún no has creado ningún gasto fijo. Comienza creando tu primera transacción recurrente.",
+    "noRecurringTransactions": "Sin Transacciones Fijas",
+    "createFirst": "Aún no has creado ninguna transacción fija. Comienza creando tu primera transacción recurrente.",
     "nextDue": "Próximo vencimiento",
     "since": "Desde",
     "edit": "Editar",
     "pause": "Pausar",
     "activate": "Activar",
     "delete": "Eliminar",
-    "fetchError": "Error al cargar gastos fijos",
-    "pausedSuccess": "Gasto fijo pausado exitosamente",
-    "activatedSuccess": "Gasto fijo activado exitosamente",
-    "updateError": "Error al actualizar gasto fijo",
-    "deleteSuccess": "Gasto fijo eliminado exitosamente",
-    "deleteError": "Error al eliminar gasto fijo",
+    "fetchError": "Error al cargar transacciones fijas",
+    "pausedSuccess": "Transacción fija pausada exitosamente",
+    "activatedSuccess": "Transacción fija activada exitosamente",
+    "updateError": "Error al actualizar transacción fija",
+    "deleteSuccess": "Transacción fija eliminada exitosamente",
+    "deleteError": "Error al eliminar transacción fija",
+    "failedToUpdate": "Error al actualizar",
+    "failedToDelete": "Error al eliminar transacción",
     "deleteConfirmTitle": "Confirmar eliminación",
-    "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar este gasto fijo? Esta acción no se puede deshacer.",
+    "deleteConfirmMessage": "¿Estás seguro de que quieres eliminar esta transacción fija? Esta acción no se puede deshacer.",
     "cancel": "Cancelar",
     "deleting": "Eliminando..."
   },
@@ -127,8 +129,8 @@
     "days": "días"
   },
   "form": {
-    "createTitle": "Crear Nuevo Gasto Fijo",
-    "editTitle": "Editar Gasto Fijo",
+    "createTitle": "Crear Nueva Transacción Fija",
+    "editTitle": "Editar Transacción Fija",
     "amount": "Cantidad",
     "type": "Tipo",
     "selectType": "Seleccionar tipo",
@@ -150,17 +152,17 @@
     "noEndDate": "Sin fecha final",
     "optional": "(opcional)",
     "isActive": "Activo",
-    "save": "Guardar Gasto Fijo",
+    "save": "Guardar Transacción Fija",
     "cancel": "Cancelar",
-    "update": "Actualizar Gasto Fijo",
-    "create": "Crear Gasto Fijo",
+    "update": "Actualizar Transacción Fija",
+    "create": "Crear Transacción Fija",
     "creating": "Creando...",
     "updating": "Actualizando...",
     "submitting": "Enviando...",
-    "createSuccess": "Gasto fijo creado exitosamente",
-    "updateSuccess": "Gasto fijo actualizado exitosamente",
-    "createError": "Error al crear gasto fijo",
-    "updateError": "Error al actualizar gasto fijo",
+    "createSuccess": "Transacción fija creada exitosamente",
+    "updateSuccess": "Transacción fija actualizada exitosamente",
+    "createError": "Error al crear transacción fija",
+    "updateError": "Error al actualizar transacción fija",
     "unknownError": "Error desconocido"
   },
   "weekdays": {
