@@ -76,7 +76,7 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
             <Badge variant={getStatusBadgeVariant(payment.status)}>
               {getStatusLabel(payment.status)}
             </Badge>
-            <Badge variant={payment.recurringTransaction.type === "INCOME" ? "default" : "destructive"}>
+            <Badge variant={payment.recurringTransaction.type === "INCOME" ? "success" : "destructive"}>
               {payment.recurringTransaction.type === "INCOME" ? t('type.income') : t('type.expense')}
             </Badge>
           </div>

@@ -190,9 +190,9 @@ export default function PendingPaymentsPage() {
       {/* Tabs para categorizar pagamentos */}
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">{t('payments.all')} ({Array.isArray(payments) ? payments.length : 0})</TabsTrigger>
-          <TabsTrigger value="overdue">{t('paymentStatus.overdue')} ({overduePayments.length})</TabsTrigger>
-          <TabsTrigger value="pending">{t('paymentStatus.pending')} ({pendingPayments.length})</TabsTrigger>
+          <TabsTrigger value="all" className="cursor-pointer">{t('payments.all')} ({Array.isArray(payments) ? payments.length : 0})</TabsTrigger>
+          <TabsTrigger value="overdue" className="cursor-pointer">{t('paymentStatus.overdue')} ({overduePayments.length})</TabsTrigger>
+          <TabsTrigger value="pending" className="cursor-pointer">{t('paymentStatus.pending')} ({pendingPayments.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="space-y-4 mt-6">
