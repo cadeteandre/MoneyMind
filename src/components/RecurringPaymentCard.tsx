@@ -68,49 +68,51 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
     (payment.status === 'PENDING' && new Date(payment.dueDate) < new Date());
 
   return (
-    <Card className={`p-4 ${isOverdue ? 'border-red-200 bg-red-50' : ''}`}>
-      <div className="flex justify-between items-start">
-        <div className="space-y-2 flex-1">
-          <div className="flex items-center gap-2">
-            <h3 className="font-medium">{payment.recurringTransaction.category}</h3>
-            <Badge variant={getStatusBadgeVariant(payment.status)}>
-              {getStatusLabel(payment.status)}
-            </Badge>
-            <Badge variant={payment.recurringTransaction.type === "INCOME" ? "success" : "destructive"}>
-              {payment.recurringTransaction.type === "INCOME" ? t('type.income') : t('type.expense')}
-            </Badge>
+    <Card className={`p-3 sm:p-4 ${isOverdue ? 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/20' : ''}`}>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-3 sm:space-y-0">
+        <div className="space-y-2 flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <h3 className="font-medium text-sm sm:text-base truncate">{payment.recurringTransaction.category}</h3>
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+              <Badge variant={getStatusBadgeVariant(payment.status)} className="text-xs">
+                {getStatusLabel(payment.status)}
+              </Badge>
+              <Badge variant={payment.recurringTransaction.type === "INCOME" ? "success" : "destructive"} className="text-xs">
+                {payment.recurringTransaction.type === "INCOME" ? t('type.income') : t('type.expense')}
+              </Badge>
+            </div>
           </div>
           
           {payment.recurringTransaction.description && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
               {payment.recurringTransaction.description}
             </p>
           )}
 
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              <span>{t('payment.dueDate')}: {format(new Date(payment.dueDate), "dd/MM/yyyy")}</span>
+              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <span className="truncate">{t('payment.dueDate')}: {format(new Date(payment.dueDate), "dd/MM/yyyy")}</span>
             </div>
             
             {payment.paidDate && (
               <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                <span>{t('payment.paidDate')}: {format(new Date(payment.paidDate), "dd/MM/yyyy")}</span>
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">{t('payment.paidDate')}: {format(new Date(payment.paidDate), "dd/MM/yyyy")}</span>
               </div>
             )}
           </div>
 
           {payment.notes && (
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-xs sm:text-sm text-muted-foreground italic line-clamp-2">
               {t('payment.notes')}: {payment.notes}
             </p>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="text-right">
-            <p className={`font-semibold text-lg ${
+        <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-start gap-2 sm:gap-3">
+          <div className="text-left sm:text-right">
+            <p className={`font-semibold text-base sm:text-lg ${
               payment.recurringTransaction.type === "INCOME" ? "text-green-600" : "text-red-600"
             }`}>
               {payment.recurringTransaction.type === "INCOME" ? "+" : "-"}
@@ -119,29 +121,31 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
           </div>
 
           {payment.status === 'PENDING' && !isProcessing && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-row sm:flex-col gap-2">
               <Button
                 size="sm"
                 onClick={() => onPay?.(payment)}
-                className="h-8"
+                className="h-8 text-xs px-3"
               >
-                <DollarSign className="h-4 w-4 mr-1" />
-                {t('payment.markAsPaid')}
+                <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                <span className="hidden sm:inline">{t('payment.markAsPaid')}</span>
+                <span className="sm:hidden">{t('payment.markAsPaidShort')}</span>
               </Button>
               
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => onSkip?.(payment)}
-                className="h-8"
+                className="h-8 text-xs px-3"
               >
-                {t('payment.skip')}
+                <span className="hidden sm:inline">{t('payment.skip')}</span>
+                <span className="sm:hidden">{t('payment.skipShort')}</span>
               </Button>
             </div>
           )}
 
           {isProcessing && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-xs sm:text-sm text-muted-foreground">
               {t('payment.processing')}
             </div>
           )}

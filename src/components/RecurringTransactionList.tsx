@@ -161,38 +161,40 @@ export default function RecurringTransactionList({
   return (
     <div className="space-y-4">
       {transactions.map((transaction) => (
-        <Card key={transaction.id} className="p-4 hover:shadow-md transition-shadow">
-          <div className="flex justify-between items-start">
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2">
-                <h3 className="font-medium text-base">{getTranslatedCategoryName(transaction.category)}</h3>
-                <Badge variant={transaction.isActive ? "default" : "secondary"}>
-                  {transaction.isActive ? t('status.active') : t('status.inactive')}
-                </Badge>
-                <Badge variant={transaction.type === "INCOME" ? "success" : "destructive"}>
-                  {transaction.type === "INCOME" ? t('type.income') : t('type.expense')}
-                </Badge>
+        <Card key={transaction.id} className="p-3 sm:p-4 hover:shadow-md transition-shadow relative">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-3 sm:space-y-0">
+            <div className="space-y-2 flex-1 min-w-0 sm:pr-12">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <h3 className="font-medium text-sm sm:text-base truncate">{getTranslatedCategoryName(transaction.category)}</h3>
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                  <Badge variant={transaction.isActive ? "default" : "secondary"} className="text-xs">
+                    {transaction.isActive ? t('status.active') : t('status.inactive')}
+                  </Badge>
+                  <Badge variant={transaction.type === "INCOME" ? "success" : "destructive"} className="text-xs">
+                    {transaction.type === "INCOME" ? t('type.income') : t('type.expense')}
+                  </Badge>
+                </div>
               </div>
               
               {transaction.description ? (
-                <p className="text-sm text-muted-foreground">{transaction.description}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{transaction.description}</p>
               ) : null}
               
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{getFrequencyLabel(transaction.frequency, transaction.customDays)}</span>
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span className="truncate">{getFrequencyLabel(transaction.frequency, transaction.customDays)}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{t('list.nextDue')}: {format(new Date(transaction.nextDueDate), "dd/MM/yyyy")}</span>
+                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span className="truncate">{t('list.nextDue')}: {format(new Date(transaction.nextDueDate), "dd/MM/yyyy")}</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <div className="text-right">
-                <p className={`font-semibold text-lg ${
+            <div className="flex flex-row items-center justify-between sm:justify-end gap-2 sm:gap-3">
+              <div className="text-left sm:text-right sm:mr-12">
+                <p className={`font-semibold text-base sm:text-lg ${
                   transaction.type === "INCOME" ? "text-green-600" : "text-red-600"
                 }`}>
                   {transaction.type === "INCOME" ? "+" : "-"}
@@ -205,7 +207,7 @@ export default function RecurringTransactionList({
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                  <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer flex-shrink-0 sm:absolute sm:top-3 sm:right-4">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -273,7 +275,7 @@ export default function RecurringTransactionList({
           }
         }}
       >
-        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto mx-4 sm:mx-0">
           <DialogHeader>
             <DialogTitle>{t('form.editTitle')}</DialogTitle>
           </DialogHeader>
@@ -301,7 +303,7 @@ export default function RecurringTransactionList({
           }
         }}
       >
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
           <DialogHeader>
             <DialogTitle>{t('list.deleteConfirmTitle')}</DialogTitle>
           </DialogHeader>
@@ -311,14 +313,14 @@ export default function RecurringTransactionList({
             </p>
             {deleteTransaction && (
               <div className="p-3 bg-muted rounded-lg mt-3">
-                <p className="font-medium">{getTranslatedCategoryName(deleteTransaction.category)}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-medium text-sm">{getTranslatedCategoryName(deleteTransaction.category)}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {formatCurrency(deleteTransaction.amount, userCurrency)} • {getFrequencyLabel(deleteTransaction.frequency, deleteTransaction.customDays)}
                 </p>
               </div>
             )}
           </div>
-          <div className="flex justify-end gap-3 mt-2">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-2">
             <Button variant="outline" className="cursor-pointer" onClick={() => setIsDeleteAlertOpen(false)}>
               {t('list.cancel')}
             </Button>

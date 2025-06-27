@@ -186,32 +186,34 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Tipo de Transação */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t('form.type')}</label>
-        <Select onValueChange={(value) => setValue("type", value as "INCOME" | "EXPENSE")}>
-          <SelectTrigger>
-            <SelectValue placeholder={t('form.selectType')} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="INCOME">{t('type.income')}</SelectItem>
-            <SelectItem value="EXPENSE">{t('type.expense')}</SelectItem>
-          </SelectContent>
-        </Select>
-        {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+      {/* Tipo de Transação e Valor */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">{t('form.type')}</label>
+          <Select onValueChange={(value) => setValue("type", value as "INCOME" | "EXPENSE")}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t('form.selectType')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="INCOME">{t('type.income')}</SelectItem>
+              <SelectItem value="EXPENSE">{t('type.expense')}</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
+        </div>
 
-      {/* Valor */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t('form.amount')}</label>
-        <Input
-          type="number"
-          step="0.01"
-          placeholder="0.00"
-          {...register("amount", { valueAsNumber: true })}
-        />
-        {errors.amount && <p className="text-sm text-red-500">{errors.amount.message}</p>}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">{t('form.amount')}</label>
+          <Input
+            type="number"
+            step="0.01"
+            placeholder="0.00"
+            className="text-sm"
+            {...register("amount", { valueAsNumber: true })}
+          />
+          {errors.amount && <p className="text-sm text-red-500">{errors.amount.message}</p>}
+        </div>
       </div>
 
       {/* Categoria */}
@@ -231,6 +233,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         <Textarea
           placeholder={t('form.descriptionPlaceholder')}
           {...register("description")}
+          className="min-h-[80px] resize-none text-sm"
         />
       </div>
 
@@ -254,7 +257,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
             placeholder="30"
             {...register("customDays", { valueAsNumber: true })}
           />
-          <p className="text-sm text-muted-foreground">{t('form.customDaysHelp')}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground">{t('form.customDaysHelp')}</p>
           {errors.customDays && <p className="text-sm text-red-500">{errors.customDays.message}</p>}
         </div>
       )}
@@ -264,7 +267,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         <div className="space-y-2">
           <label className="text-sm font-medium">{t('form.dayOfMonth')}</label>
           <Select onValueChange={(value) => setValue("dayOfMonth", parseInt(value))}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder={t('form.selectDayOfMonth')} />
             </SelectTrigger>
             <SelectContent>
@@ -284,7 +287,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         <div className="space-y-2">
           <label className="text-sm font-medium">{t('form.dayOfWeek')}</label>
           <Select onValueChange={(value) => setValue("dayOfWeek", parseInt(value))}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder={t('form.selectDayOfWeek')} />
             </SelectTrigger>
             <SelectContent>
@@ -301,101 +304,104 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         </div>
       )}
 
-      {/* Data de Início */}
-      <div className="space-y-2">
-        <label htmlFor="startDate-input" className="text-sm font-medium">{t('form.startDate')}</label>
-        <div 
-          className="relative cursor-pointer"
-          onClick={(e) => {
-            // Se não clicou no input em si, force o foco e abertura
-            const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
-            if (input && e.target !== input) {
-              input.focus();
-              input.showPicker?.(); // Método moderno para abrir o date picker
-            }
-          }}
-        >
-          <Input
-            id="startDate-input"
-            type="date"
-            className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
-            value={startDate ? format(startDate, "yyyy-MM-dd") : ""}
-            onChange={(e) => {
-              const newDate = e.target.value ? new Date(e.target.value) : null;
-              if (newDate) {
-                setValue("startDate", newDate);
+      {/* Datas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="space-y-2">
+          <label htmlFor="startDate-input" className="text-sm font-medium">{t('form.startDate')}</label>
+          <div 
+            className="relative cursor-pointer"
+            onClick={(e) => {
+              // Se não clicou no input em si, force o foco e abertura
+              const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
+              if (input && e.target !== input) {
+                input.focus();
+                input.showPicker?.(); // Método moderno para abrir o date picker
               }
             }}
-            onClick={(e) => {
-              // Garantir que o picker abra ao clicar no input
-              const input = e.target as HTMLInputElement;
-              input.showPicker?.();
-            }}
-          />
+          >
+            <Input
+              id="startDate-input"
+              type="date"
+              className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100 text-sm"
+              value={startDate ? format(startDate, "yyyy-MM-dd") : ""}
+              onChange={(e) => {
+                const newDate = e.target.value ? new Date(e.target.value) : null;
+                if (newDate) {
+                  setValue("startDate", newDate);
+                }
+              }}
+              onClick={(e) => {
+                // Garantir que o picker abra ao clicar no input
+                const input = e.target as HTMLInputElement;
+                input.showPicker?.();
+              }}
+            />
+          </div>
+          {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
         </div>
-        {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
-      </div>
 
-      {/* Data de Término (Opcional) */}
-      <div className="space-y-2">
-        <label htmlFor="endDate-input" className="text-sm font-medium">{t('form.endDate')} {t('form.optional')}</label>
-        <div 
-          className="relative cursor-pointer"
-          onClick={(e) => {
-            // Se não clicou no input em si, force o foco e abertura
-            const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
-            if (input && e.target !== input) {
-              input.focus();
-              input.showPicker?.(); // Método moderno para abrir o date picker
-            }
-          }}
-        >
-          <Input
-            id="endDate-input"
-            type="date"
-            className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
-            value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
-            min={startDate ? format(startDate, "yyyy-MM-dd") : undefined}
-            onChange={(e) => {
-              const newDate = e.target.value ? new Date(e.target.value) : undefined;
-              setValue("endDate", newDate);
-            }}
+        <div className="space-y-2">
+          <label htmlFor="endDate-input" className="text-sm font-medium">
+            {t('form.endDate')}
+          </label>
+          <div 
+            className="relative cursor-pointer"
             onClick={(e) => {
-              // Garantir que o picker abra ao clicar no input
-              const input = e.target as HTMLInputElement;
-              input.showPicker?.();
+              // Se não clicou no input em si, force o foco e abertura
+              const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
+              if (input && e.target !== input) {
+                input.focus();
+                input.showPicker?.(); // Método moderno para abrir o date picker
+              }
             }}
-          />
+          >
+            <Input
+              id="endDate-input"
+              type="date"
+              className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100 text-sm"
+              value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
+              min={startDate ? format(startDate, "yyyy-MM-dd") : undefined}
+              onChange={(e) => {
+                const newDate = e.target.value ? new Date(e.target.value) : undefined;
+                setValue("endDate", newDate);
+              }}
+              onClick={(e) => {
+                // Garantir que o picker abra ao clicar no input
+                const input = e.target as HTMLInputElement;
+                input.showPicker?.();
+              }}
+            />
+          </div>
         </div>
       </div>
 
       {/* Status Ativo */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 pt-2">
         <input
           type="checkbox"
           id="isActive"
           {...register("isActive")}
-          className="rounded border-gray-300"
+          className="rounded border-gray-300 h-4 w-4"
         />
-        <label htmlFor="isActive" className="text-sm font-medium">
+        <label htmlFor="isActive" className="text-sm font-medium cursor-pointer">
           {t('form.isActive')}
         </label>
       </div>
 
       {/* Botões */}
-      <div className="flex justify-end space-x-2 pt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 sm:pt-6">
         {onClose && (
           <Button 
             type="button" 
             variant="outline" 
             onClick={onClose}
             disabled={isSubmitting}
-            className="cursor-pointer"
+            className="cursor-pointer w-full sm:w-auto order-2 sm:order-1"
           >
             {t('form.cancel')}
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting} className="cursor-pointer">
+        <Button type="submit" disabled={isSubmitting} className="cursor-pointer w-full sm:w-auto order-1 sm:order-2">
           {isSubmitting ? t('form.submitting') : (isEditing ? t('form.update') : t('form.create'))}
         </Button>
       </div>

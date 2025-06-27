@@ -140,15 +140,16 @@ export default function PendingPaymentsPage() {
   const overduePayments = Array.isArray(payments) ? payments.filter(p => p.status === 'OVERDUE') : [];
 
   return (
-    <div className="space-y-6 p-4">
-      <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold">{t('payments.pageTitle')}</h1>
-        <div className="flex gap-2">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4">
+      <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:justify-between lg:items-center">
+        <h1 className="text-xl sm:text-2xl font-bold">{t('payments.pageTitle')}</h1>
+        <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={fetchData}
             disabled={isLoading}
+            className="w-full sm:w-auto"
           >
             <RotateCcw className="h-4 w-4 mr-2" />
             {t('page.refresh')}
@@ -158,55 +159,72 @@ export default function PendingPaymentsPage() {
             size="sm" 
             onClick={processAllPendingPayments}
             disabled={isLoading || !Array.isArray(payments) || payments.length === 0}
+            className="w-full sm:w-auto"
           >
             <DollarSign className="h-4 w-4 mr-2" />
-            {t('payments.processAll')}
+            <span className="hidden sm:inline">{t('payments.processAll')}</span>
+            <span className="sm:hidden">{t('payments.processAllShort')}</span>
           </Button>
         </div>
       </div>
 
       {/* Estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center gap-2">
-            <Badge variant="default">{t('paymentStatus.pending')}</Badge>
-            <span className="text-2xl font-bold">{pendingPayments.length}</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge variant="default" className="text-xs">{t('paymentStatus.pending')}</Badge>
+            </div>
+            <span className="text-xl sm:text-2xl font-bold">{pendingPayments.length}</span>
           </div>
         </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-2">
-            <Badge variant="destructive">{t('paymentStatus.overdue')}</Badge>
-            <span className="text-2xl font-bold">{overduePayments.length}</span>
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge variant="destructive" className="text-xs">{t('paymentStatus.overdue')}</Badge>
+            </div>
+            <span className="text-xl sm:text-2xl font-bold">{overduePayments.length}</span>
           </div>
         </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">{t('payments.total')}</Badge>
-            <span className="text-2xl font-bold">{Array.isArray(payments) ? payments.length : 0}</span>
+        <Card className="p-3 sm:p-4 sm:col-span-2 lg:col-span-1">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="text-xs">{t('payments.total')}</Badge>
+            </div>
+            <span className="text-xl sm:text-2xl font-bold">{Array.isArray(payments) ? payments.length : 0}</span>
           </div>
         </Card>
       </div>
 
       {/* Tabs para categorizar pagamentos */}
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all" className="cursor-pointer">{t('payments.all')} ({Array.isArray(payments) ? payments.length : 0})</TabsTrigger>
-          <TabsTrigger value="overdue" className="cursor-pointer">{t('paymentStatus.overdue')} ({overduePayments.length})</TabsTrigger>
-          <TabsTrigger value="pending" className="cursor-pointer">{t('paymentStatus.pending')} ({pendingPayments.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 h-auto">
+          <TabsTrigger value="all" className="cursor-pointer text-xs sm:text-sm p-2 sm:p-3">
+            <span className="hidden sm:inline">{t('payments.all')} ({Array.isArray(payments) ? payments.length : 0})</span>
+            <span className="sm:hidden">{t('payments.allShort')}</span>
+          </TabsTrigger>
+          <TabsTrigger value="overdue" className="cursor-pointer text-xs sm:text-sm p-2 sm:p-3">
+            <span className="hidden sm:inline">{t('paymentStatus.overdue')} ({overduePayments.length})</span>
+            <span className="sm:hidden">{t('payments.overdueShort')}</span>
+          </TabsTrigger>
+          <TabsTrigger value="pending" className="cursor-pointer text-xs sm:text-sm p-2 sm:p-3">
+            <span className="hidden sm:inline">{t('paymentStatus.pending')} ({pendingPayments.length})</span>
+            <span className="sm:hidden">{t('payments.pendingShort')}</span>
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="space-y-4 mt-6">
+        <TabsContent value="all" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           {isLoading ? (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="p-4">
-                  <div className="flex justify-between items-center">
+                <Card key={i} className="p-3 sm:p-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
                     <div className="space-y-2">
                       <Skeleton className="h-4 w-32" />
                       <Skeleton className="h-3 w-24" />
                       <Skeleton className="h-3 w-20" />
                     </div>
-                    <div className="flex flex-col items-end gap-2">
+                    <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
                       <Skeleton className="h-4 w-20" />
                       <Skeleton className="h-8 w-24" />
                     </div>
@@ -215,13 +233,13 @@ export default function PendingPaymentsPage() {
               ))}
             </div>
           ) : !Array.isArray(payments) || payments.length === 0 ? (
-            <div className="text-center py-8">
-              <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">{t('payments.noPayments')}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{t('payments.allCaughtUp')}</p>
+            <div className="text-center py-8 px-4">
+              <Calendar className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-base sm:text-lg font-semibold">{t('payments.noPayments')}</h3>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">{t('payments.allCaughtUp')}</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {payments.map((payment) => (
                 <RecurringPaymentCard
                   key={payment.id}
@@ -235,15 +253,15 @@ export default function PendingPaymentsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="overdue" className="space-y-4 mt-6">
+        <TabsContent value="overdue" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           {overduePayments.length === 0 ? (
-            <div className="text-center py-8">
-              <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">{t('payments.noOverdue')}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{t('payments.greatJob')}</p>
+            <div className="text-center py-8 px-4">
+              <Calendar className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-base sm:text-lg font-semibold">{t('payments.noOverdue')}</h3>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">{t('payments.greatJob')}</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {overduePayments.map((payment) => (
                 <RecurringPaymentCard
                   key={payment.id}
@@ -257,15 +275,15 @@ export default function PendingPaymentsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="pending" className="space-y-4 mt-6">
+        <TabsContent value="pending" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           {pendingPayments.length === 0 ? (
-            <div className="text-center py-8">
-              <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">{t('payments.noPending')}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{t('payments.nothingDue')}</p>
+            <div className="text-center py-8 px-4">
+              <Calendar className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-base sm:text-lg font-semibold">{t('payments.noPending')}</h3>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">{t('payments.nothingDue')}</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {pendingPayments.map((payment) => (
                 <RecurringPaymentCard
                   key={payment.id}

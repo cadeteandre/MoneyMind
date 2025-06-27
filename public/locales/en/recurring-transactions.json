@@ -37,22 +37,7 @@
     "friday": "Friday",
     "saturday": "Saturday"
   },
-  "form": {
-    "amount": "Amount",
-    "type": "Type",
-    "category": "Category",
-    "description": "Description",
-    "frequency": "Frequency",
-    "startDate": "Start Date",
-    "endDate": "End Date (Optional)",
-    "dayOfMonth": "Day of Month",
-    "dayOfWeek": "Day of Week",
-    "customDays": "Every X Days",
-    "noEndDate": "No end date",
-    "save": "Save Fixed Transaction",
-    "cancel": "Cancel",
-    "update": "Update Fixed Transaction"
-  },
+
   "validation": {
     "amountRequired": "Amount is required",
     "amountPositive": "Amount must be positive",
@@ -177,11 +162,17 @@
   "payments": {
     "pageTitle": "Pending Payments",
     "processAll": "Process All",
+    "processAllShort": "Process",
     "total": "Total",
     "all": "All",
+    "allShort": "All",
+    "pendingShort": "Pending",
+    "overdueShort": "Overdue",
     "noPayments": "No Pending Payments",
     "allCaughtUp": "You're all caught up with your payments!",
     "noOverdue": "No Overdue Payments",
+    "noPending": "No Pending Payments",
+    "nothingDue": "Nothing due today!",
     "greatJob": "Great job! You have no overdue payments.",
     "fetchError": "Error loading payments",
     "paymentSuccess": "Payment recorded successfully",
@@ -200,7 +191,9 @@
   },
   "payment": {
     "markAsPaid": "Mark as Paid",
+    "markAsPaidShort": "Pay",
     "skip": "Skip",
+    "skipShort": "Skip",
     "processing": "Processing...",
     "dueDate": "Due Date",
     "paidDate": "Paid Date",
