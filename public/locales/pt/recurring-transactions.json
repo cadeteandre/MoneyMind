@@ -37,22 +37,7 @@
     "friday": "Sexta",
     "saturday": "Sábado"
   },
-  "form": {
-    "amount": "Valor",
-    "type": "Tipo",
-    "category": "Categoria",
-    "description": "Descrição",
-    "frequency": "Frequência",
-    "startDate": "Data de Início",
-    "endDate": "Data Final (Opcional)",
-    "dayOfMonth": "Dia do Mês",
-    "dayOfWeek": "Dia da Semana",
-    "customDays": "A cada X Dias",
-    "noEndDate": "Sem data final",
-    "save": "Salvar Transação Fixa",
-    "cancel": "Cancelar",
-    "update": "Atualizar Transação Fixa"
-  },
+
   "validation": {
     "amountRequired": "Valor é obrigatório",
     "amountPositive": "Valor deve ser positivo",
@@ -177,11 +162,17 @@
   "payments": {
     "pageTitle": "Pagamentos Pendentes",
     "processAll": "Processar Todos",
+    "processAllShort": "Processar",
     "total": "Total",
     "all": "Todos",
+    "allShort": "Todos",
+    "pendingShort": "Pendentes",
+    "overdueShort": "Atrasados",
     "noPayments": "Nenhum Pagamento Pendente",
     "allCaughtUp": "Você está em dia com todos os pagamentos!",
     "noOverdue": "Nenhum Pagamento Atrasado",
+    "noPending": "Nenhum Pagamento Pendente",
+    "nothingDue": "Não há nada vencendo hoje!",
     "greatJob": "Ótimo trabalho! Você não tem pagamentos atrasados.",
     "fetchError": "Erro ao carregar pagamentos",
     "paymentSuccess": "Pagamento registrado com sucesso",
@@ -200,7 +191,9 @@
   },
   "payment": {
     "markAsPaid": "Marcar como Pago",
+    "markAsPaidShort": "Pagar",
     "skip": "Pular",
+    "skipShort": "Pular",
     "processing": "Processando...",
     "dueDate": "Vencimento",
     "paidDate": "Data do Pagamento",
