@@ -14,11 +14,7 @@ import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 import { CategorySelector } from '@/components/CategorySelector';
 import { FrequencySelector } from './FrequencySelector';
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   amount: z.number().positive().multipleOf(0.01),
@@ -31,7 +27,14 @@ const formSchema = z.object({
   dayOfMonth: z.number().min(1).max(31).optional(),
   dayOfWeek: z.number().min(0).max(6).optional(),
   startDate: z.date(),
-  endDate: z.date().optional(),
+  endDate: z.preprocess((val) => {
+    // Se for string vazia ou null/undefined, retornar undefined
+    if (!val || val === '') return undefined;
+    // Se for uma string de data válida, converter para Date
+    if (typeof val === 'string') return new Date(val);
+    // Se já for Date, manter como está
+    return val;
+  }, z.date().optional()),
   isActive: z.boolean(),
 });
 
@@ -73,7 +76,6 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
       endDate: transaction.endDate ? new Date(transaction.endDate) : undefined,
       isActive: transaction.isActive,
     } : {
-      startDate: new Date(),
       isActive: true,
     },
   });
@@ -91,6 +93,13 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
       setSelectedCategoryId(transaction.category);
     }
   }, [transaction, isEditing]);
+
+  // Set default startDate after component mounts to avoid hydration mismatch
+  useEffect(() => {
+    if (!transaction && !startDate) {
+      setValue("startDate", new Date());
+    }
+  }, [transaction, startDate, setValue]);
 
   // Função para lidar com mudança de categoria
   const handleCategoryChange = (categoryId: string, categoryName: string) => {
@@ -288,58 +297,70 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
 
       {/* Data de Início */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">{t('form.startDate')}</label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !startDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {startDate ? format(startDate, "PPP") : t('form.selectDate')}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={startDate}
-              onSelect={(date) => date && setValue("startDate", date)}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+        <label htmlFor="startDate-input" className="text-sm font-medium">{t('form.startDate')}</label>
+        <div 
+          className="relative cursor-pointer"
+          onClick={(e) => {
+            // Se não clicou no input em si, force o foco e abertura
+            const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
+            if (input && e.target !== input) {
+              input.focus();
+              input.showPicker?.(); // Método moderno para abrir o date picker
+            }
+          }}
+        >
+          <Input
+            id="startDate-input"
+            type="date"
+            className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
+            value={startDate ? format(startDate, "yyyy-MM-dd") : ""}
+            onChange={(e) => {
+              const newDate = e.target.value ? new Date(e.target.value) : null;
+              if (newDate) {
+                setValue("startDate", newDate);
+              }
+            }}
+            onClick={(e) => {
+              // Garantir que o picker abra ao clicar no input
+              const input = e.target as HTMLInputElement;
+              input.showPicker?.();
+            }}
+          />
+        </div>
         {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
       </div>
 
       {/* Data de Término (Opcional) */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">{t('form.endDate')} {t('form.optional')}</label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !endDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {endDate ? format(endDate, "PPP") : t('form.selectEndDate')}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={endDate}
-              onSelect={(date) => setValue("endDate", date)}
-              initialFocus
-              disabled={(date) => startDate && date < startDate}
-            />
-          </PopoverContent>
-        </Popover>
+        <label htmlFor="endDate-input" className="text-sm font-medium">{t('form.endDate')} {t('form.optional')}</label>
+        <div 
+          className="relative cursor-pointer"
+          onClick={(e) => {
+            // Se não clicou no input em si, force o foco e abertura
+            const input = e.currentTarget.querySelector('input[type="date"]') as HTMLInputElement;
+            if (input && e.target !== input) {
+              input.focus();
+              input.showPicker?.(); // Método moderno para abrir o date picker
+            }
+          }}
+        >
+          <Input
+            id="endDate-input"
+            type="date"
+            className="cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
+            value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
+            min={startDate ? format(startDate, "yyyy-MM-dd") : undefined}
+            onChange={(e) => {
+              const newDate = e.target.value ? new Date(e.target.value) : null;
+              setValue("endDate", newDate);
+            }}
+            onClick={(e) => {
+              // Garantir que o picker abra ao clicar no input
+              const input = e.target as HTMLInputElement;
+              input.showPicker?.();
+            }}
+          />
+        </div>
       </div>
 
       {/* Status Ativo */}
