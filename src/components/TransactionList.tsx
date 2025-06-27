@@ -241,7 +241,7 @@ export default function TransactionList({
                       <button
                         onClick={() => openReceipt(transaction)}
                         className="cursor-pointer text-blue-600 hover:underline flex items-center gap-1 ml-2"
-                        aria-label="View receipt"
+                        aria-label={t('viewReceiptAriaLabel')}
                       >
                         <Receipt className="h-3 w-3" />
                         <span>{t('receipt')}</span>
@@ -265,14 +265,14 @@ export default function TransactionList({
                         <button
                           onClick={() => openReceipt(transaction)}
                           className="cursor-pointer text-blue-600 hover:underline flex items-center gap-1 ml-2"
-                          aria-label="View receipt"
+                          aria-label={t('viewReceiptAriaLabel')}
                         >
                           <Receipt className="h-3 w-3" />
                           <span>{t('receipt')}</span>
                         </button>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Receipt</DialogTitle>
+                            <DialogTitle>{t('receiptModalTitle')}</DialogTitle>
                           </DialogHeader>
                           {imgUrl && (
                             <div className="flex flex-col items-center gap-2">
@@ -298,7 +298,7 @@ export default function TransactionList({
                                 ) : (
                                   <img
                                     src={imgUrl || "/placeholder.svg"}
-                                    alt="Receipt"
+                                    alt={t('receiptAltText')}
                                     className="max-w-full max-h-[60vh] mx-auto rounded shadow object-contain"
                                     onLoad={() => setImgLoaded(true)}
                                     onError={() => {
@@ -331,7 +331,7 @@ export default function TransactionList({
 
             <div className="ml-4">
               <DropdownMenu>
-                <DropdownMenuTrigger className="focus:outline-none" aria-label="Transaction options">
+                <DropdownMenuTrigger className="focus:outline-none" aria-label={t('transactionOptionsAriaLabel')}>
                   <MoreVertical className="h-5 w-5 text-gray-500 hover:text-gray-700 cursor-pointer" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -403,7 +403,7 @@ export default function TransactionList({
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{editTransaction && editTransaction.id ? "Edit Transaction" : "Add Transaction"}</DialogTitle>
+            <DialogTitle>{editTransaction && editTransaction.id ? t('editTransactionTitle') : t('addTransactionTitle')}</DialogTitle>
           </DialogHeader>
           {editTransaction && (
             <TransactionForm

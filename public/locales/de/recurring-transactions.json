@@ -1,9 +1,9 @@
 {
-  "title": "Fixkosten",
-  "subtitle": "Verwalten Sie Ihre wiederkehrenden Transaktionen",
-  "createNew": "Neue Fixkosten erstellen",
-  "edit": "Fixkosten bearbeiten",
-  "delete": "Fixkosten löschen",
+  "title": "Feste Transaktionen",
+  "subtitle": "Verwalten Sie Ihre wiederkehrenden Einnahmen und Ausgaben",
+  "createNew": "Neue Feste Transaktion erstellen",
+  "edit": "Feste Transaktion bearbeiten",
+  "delete": "Feste Transaktion löschen",
   "markAsPaid": "Als bezahlt markieren",
   "pending": "Ausstehend",
   "paid": "Bezahlt",
@@ -49,9 +49,9 @@
     "dayOfWeek": "Wochentag",
     "customDays": "Alle X Tage",
     "noEndDate": "Kein Enddatum",
-    "save": "Fixkosten speichern",
+    "save": "Feste Transaktion speichern",
     "cancel": "Abbrechen",
-    "update": "Fixkosten aktualisieren"
+    "update": "Feste Transaktion aktualisieren"
   },
   "validation": {
     "amountRequired": "Betrag ist erforderlich",
@@ -65,20 +65,20 @@
     "customDaysInvalid": "Benutzerdefinierte Tage müssen eine positive Zahl sein"
   },
   "messages": {
-    "createSuccess": "Fixkosten erfolgreich erstellt",
-    "updateSuccess": "Fixkosten erfolgreich aktualisiert",
-    "deleteSuccess": "Fixkosten erfolgreich gelöscht",
+    "createSuccess": "Feste Transaktion erfolgreich erstellt",
+    "updateSuccess": "Feste Transaktion erfolgreich aktualisiert",
+    "deleteSuccess": "Feste Transaktion erfolgreich gelöscht",
     "paymentSuccess": "Zahlung erfolgreich registriert",
-    "pauseSuccess": "Fixkosten pausiert",
-    "resumeSuccess": "Fixkosten fortgesetzt",
-    "createError": "Fehler beim Erstellen der Fixkosten",
-    "updateError": "Fehler beim Aktualisieren der Fixkosten",
-    "deleteError": "Fehler beim Löschen der Fixkosten",
+    "pauseSuccess": "Feste Transaktion pausiert",
+    "resumeSuccess": "Feste Transaktion fortgesetzt",
+    "createError": "Fehler beim Erstellen der Feste Transaktion",
+    "updateError": "Fehler beim Aktualisieren der Feste Transaktion",
+    "deleteError": "Fehler beim Löschen der Feste Transaktion",
     "paymentError": "Fehler beim Registrieren der Zahlung",
-    "loadError": "Fehler beim Laden der Fixkosten"
+    "loadError": "Fehler beim Laden der Feste Transaktion"
   },
   "stats": {
-    "totalFixedExpenses": "Gesamte Fixkosten",
+    "totalFixedExpenses": "Gesamte Feste Transaktionen",
     "monthlyTotal": "Monatssumme",
     "pendingThisMonth": "Ausstehend diesen Monat",
     "dueToday": "Fällig heute",
@@ -86,14 +86,14 @@
     "overdue": "Überfällig"
   },
   "empty": {
-    "title": "Keine Fixkosten",
-    "description": "Sie haben noch keine Fixkosten erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
-    "action": "Erste Fixkosten erstellen"
+    "title": "Keine Feste Transaktionen",
+    "description": "Sie haben noch keine Feste Transaktionen erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
+    "action": "Erste Feste Transaktion erstellen"
   },
   "page": {
-    "title": "Fixkosten",
+    "title": "Feste Transaktionen",
     "refresh": "Aktualisieren",
-    "newRecurring": "Neue Fixkosten"
+    "newRecurring": "Neue Feste Transaktion"
   },
   "status": {
     "active": "Aktiv",
@@ -104,31 +104,33 @@
     "expense": "Ausgaben"
   },
   "list": {
-    "noRecurringTransactions": "Keine Fixkosten",
-    "createFirst": "Sie haben noch keine Fixkosten erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
+    "noRecurringTransactions": "Keine Feste Transaktionen",
+    "createFirst": "Sie haben noch keine Feste Transaktionen erstellt. Beginnen Sie mit der Erstellung Ihrer ersten wiederkehrenden Transaktion.",
     "nextDue": "Nächste Fälligkeit",
     "since": "Seit",
     "edit": "Bearbeiten",
     "pause": "Pausieren",
     "activate": "Aktivieren",
     "delete": "Löschen",
-    "fetchError": "Fehler beim Laden der Fixkosten",
-    "pausedSuccess": "Fixkosten erfolgreich pausiert",
-    "activatedSuccess": "Fixkosten erfolgreich aktiviert",
-    "updateError": "Fehler beim Aktualisieren der Fixkosten",
-    "deleteSuccess": "Fixkosten erfolgreich gelöscht",
-    "deleteError": "Fehler beim Löschen der Fixkosten",
+    "fetchError": "Fehler beim Laden der Feste Transaktionen",
+    "pausedSuccess": "Feste Transaktion erfolgreich pausiert",
+    "activatedSuccess": "Feste Transaktion erfolgreich aktiviert",
+    "updateError": "Fehler beim Aktualisieren der Feste Transaktion",
+    "deleteSuccess": "Feste Transaktion erfolgreich gelöscht",
+    "deleteError": "Fehler beim Löschen der Feste Transaktion",
     "deleteConfirmTitle": "Löschung bestätigen",
-    "deleteConfirmMessage": "Sind Sie sicher, dass Sie diese Fixkosten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteConfirmMessage": "Sind Sie sicher, dass Sie diese Feste Transaktion löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
     "cancel": "Abbrechen",
-    "deleting": "Löschen..."
+    "deleting": "Löschen...",
+    "failedToUpdate": "Aktualisierung fehlgeschlagen",
+    "failedToDelete": "Löschen der Transaktion fehlgeschlagen"
   },
   "customUnit": {
     "days": "Tage"
   },
   "form": {
-    "createTitle": "Neue Fixkosten erstellen",
-    "editTitle": "Fixkosten bearbeiten",
+    "createTitle": "Neue Feste Transaktion erstellen",
+    "editTitle": "Feste Transaktion bearbeiten",
     "amount": "Betrag",
     "type": "Typ",
     "selectType": "Typ auswählen",
@@ -150,17 +152,17 @@
     "noEndDate": "Kein Enddatum",
     "optional": "(optional)",
     "isActive": "Aktiv",
-    "save": "Fixkosten speichern",
+    "save": "Feste Transaktion speichern",
     "cancel": "Abbrechen",
-    "update": "Fixkosten aktualisieren",
-    "create": "Fixkosten erstellen",
+    "update": "Feste Transaktion aktualisieren",
+    "create": "Feste Transaktion erstellen",
     "creating": "Erstellen...",
     "updating": "Aktualisieren...",
     "submitting": "Übertragen...",
-    "createSuccess": "Fixkosten erfolgreich erstellt",
-    "updateSuccess": "Fixkosten erfolgreich aktualisiert",
-    "createError": "Fehler beim Erstellen der Fixkosten",
-    "updateError": "Fehler beim Aktualisieren der Fixkosten",
+    "createSuccess": "Feste Transaktion erfolgreich erstellt",
+    "updateSuccess": "Feste Transaktion erfolgreich aktualisiert",
+    "createError": "Fehler beim Erstellen der Feste Transaktion",
+    "updateError": "Fehler beim Aktualisieren der Feste Transaktion",
     "unknownError": "Unbekannter Fehler"
   },
   "weekdays": {

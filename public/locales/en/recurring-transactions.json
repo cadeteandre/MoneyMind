@@ -1,9 +1,9 @@
 {
-  "title": "Fixed Expenses",
-  "subtitle": "Manage your recurring transactions",
-  "createNew": "Create New Fixed Expense",
-  "edit": "Edit Fixed Expense",
-  "delete": "Delete Fixed Expense",
+  "title": "Fixed Transactions",
+  "subtitle": "Manage your recurring income and expenses",
+  "createNew": "Create New Fixed Transaction",
+  "edit": "Edit Fixed Transaction",
+  "delete": "Delete Fixed Transaction",
   "markAsPaid": "Mark as Paid",
   "pending": "Pending",
   "paid": "Paid",
@@ -49,9 +49,9 @@
     "dayOfWeek": "Day of Week",
     "customDays": "Every X Days",
     "noEndDate": "No end date",
-    "save": "Save Fixed Expense",
+    "save": "Save Fixed Transaction",
     "cancel": "Cancel",
-    "update": "Update Fixed Expense"
+    "update": "Update Fixed Transaction"
   },
   "validation": {
     "amountRequired": "Amount is required",
@@ -65,20 +65,20 @@
     "customDaysInvalid": "Custom days must be a positive number"
   },
   "messages": {
-    "createSuccess": "Fixed expense created successfully",
-    "updateSuccess": "Fixed expense updated successfully",
-    "deleteSuccess": "Fixed expense deleted successfully",
+    "createSuccess": "Fixed transaction created successfully",
+    "updateSuccess": "Fixed transaction updated successfully",
+    "deleteSuccess": "Fixed transaction deleted successfully",
     "paymentSuccess": "Payment recorded successfully",
-    "pauseSuccess": "Fixed expense paused",
-    "resumeSuccess": "Fixed expense resumed",
-    "createError": "Error creating fixed expense",
-    "updateError": "Error updating fixed expense",
-    "deleteError": "Error deleting fixed expense",
+    "pauseSuccess": "Fixed transaction paused",
+    "resumeSuccess": "Fixed transaction resumed",
+    "createError": "Error creating fixed transaction",
+    "updateError": "Error updating fixed transaction",
+    "deleteError": "Error deleting fixed transaction",
     "paymentError": "Error recording payment",
-    "loadError": "Error loading fixed expenses"
+    "loadError": "Error loading fixed transactions"
   },
   "stats": {
-    "totalFixedExpenses": "Total Fixed Expenses",
+    "totalFixedTransactions": "Total Fixed Transactions",
     "monthlyTotal": "Monthly Total",
     "pendingThisMonth": "Pending This Month",
     "dueToday": "Due Today",
@@ -86,14 +86,14 @@
     "overdue": "Overdue"
   },
   "empty": {
-    "title": "No Fixed Expenses",
-    "description": "You haven't created any fixed expenses yet. Start by creating your first recurring transaction.",
-    "action": "Create First Fixed Expense"
+    "title": "No Fixed Transactions",
+    "description": "You haven't created any fixed transactions yet. Start by creating your first recurring transaction.",
+    "action": "Create First Fixed Transaction"
   },
   "page": {
-    "title": "Fixed Expenses",
+    "title": "Fixed Transactions",
     "refresh": "Refresh",
-    "newRecurring": "New Fixed Expense"
+    "newRecurring": "New Fixed Transaction"
   },
   "status": {
     "active": "Active",
@@ -104,22 +104,24 @@
     "expense": "Expense"
   },
   "list": {
-    "noRecurringTransactions": "No Fixed Expenses",
-    "createFirst": "You haven't created any fixed expenses yet. Start by creating your first recurring transaction.",
+    "noRecurringTransactions": "No Fixed Transactions",
+    "createFirst": "You haven't created any fixed transactions yet. Start by creating your first recurring transaction.",
     "nextDue": "Next due",
     "since": "Since",
     "edit": "Edit",
     "pause": "Pause",
     "activate": "Activate",
     "delete": "Delete",
-    "fetchError": "Error loading fixed expenses",
-    "pausedSuccess": "Fixed expense paused successfully",
-    "activatedSuccess": "Fixed expense activated successfully",
-    "updateError": "Error updating fixed expense",
-    "deleteSuccess": "Fixed expense deleted successfully",
-    "deleteError": "Error deleting fixed expense",
+    "fetchError": "Error loading fixed transactions",
+    "pausedSuccess": "Fixed transaction paused successfully",
+    "activatedSuccess": "Fixed transaction activated successfully",
+    "updateError": "Error updating fixed transaction",
+    "deleteSuccess": "Fixed transaction deleted successfully",
+    "deleteError": "Error deleting fixed transaction",
+    "failedToUpdate": "Failed to update",
+    "failedToDelete": "Failed to delete transaction",
     "deleteConfirmTitle": "Confirm deletion",
-    "deleteConfirmMessage": "Are you sure you want to delete this fixed expense? This action cannot be undone.",
+    "deleteConfirmMessage": "Are you sure you want to delete this fixed transaction? This action cannot be undone.",
     "cancel": "Cancel",
     "deleting": "Deleting..."
   },
@@ -127,8 +129,8 @@
     "days": "days"
   },
   "form": {
-    "createTitle": "Create New Fixed Expense",
-    "editTitle": "Edit Fixed Expense",
+    "createTitle": "Create New Fixed Transaction",
+    "editTitle": "Edit Fixed Transaction",
     "amount": "Amount",
     "type": "Type",
     "selectType": "Select type",
@@ -150,17 +152,17 @@
     "noEndDate": "No end date",
     "optional": "(optional)",
     "isActive": "Active",
-    "save": "Save Fixed Expense",
+    "save": "Save Fixed Transaction",
     "cancel": "Cancel",
-    "update": "Update Fixed Expense",
-    "create": "Create Fixed Expense",
+    "update": "Update Fixed Transaction",
+    "create": "Create Fixed Transaction",
     "creating": "Creating...",
     "updating": "Updating...",
     "submitting": "Submitting...",
-    "createSuccess": "Fixed expense created successfully",
-    "updateSuccess": "Fixed expense updated successfully",
-    "createError": "Error creating fixed expense",
-    "updateError": "Error updating fixed expense",
+    "createSuccess": "Fixed transaction created successfully",
+    "updateSuccess": "Fixed transaction updated successfully",
+    "createError": "Error creating fixed transaction",
+    "updateError": "Error updating fixed transaction",
     "unknownError": "Unknown error"
   },
   "weekdays": {

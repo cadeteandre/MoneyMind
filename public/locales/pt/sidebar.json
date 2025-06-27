@@ -1,9 +1,9 @@
 {
-  "dashboard": "Dashboard",
+  "dashboard": "Painel",
   "overview": "Visão Geral",
   "profile": "Perfil",
   "transactions": "Transações",
-  "recurringTransactions": "Despesas Fixas",
+  "recurringTransactions": "Transações Fixas",
   "pendingPayments": "Pagamentos Pendentes",
   "home": "Página Inicial",
   "demoMode": "Modo Demo",

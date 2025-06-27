@@ -21,6 +21,8 @@ import { Badge } from "@/components/ui/badge"
 import { useCurrency } from "./providers/currency-provider"
 import { useLanguage } from "./providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
+import { useCategories } from '@/hooks/useCategories'
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation'
 import { format } from "date-fns"
 
 interface RecurringTransactionListProps {
@@ -42,6 +44,21 @@ export default function RecurringTransactionList({
   const { userCurrency } = useCurrency();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'recurring-transactions');
+
+  // Hooks para tradução de categorias
+  const { categories } = useCategories({ type: 'ALL' });
+  const { translateCategoryName } = useCategoryTranslation();
+
+  // Função para traduzir nome da categoria
+  const getTranslatedCategoryName = (categoryName: string) => {
+    // Verificar se a categoria existe no banco (é padrão)
+    const categoryObj = categories.find(cat => cat.name === categoryName);
+    if (categoryObj && categoryObj.isDefault) {
+      return translateCategoryName(categoryName, true);
+    }
+    // Se não for categoria padrão, manter nome original
+    return categoryName;
+  };
 
   useEffect(() => {
     return () => {
@@ -74,7 +91,7 @@ export default function RecurringTransactionList({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...transaction, isActive: !transaction.isActive }),
       });
-      if (!response.ok) throw new Error('Failed to update');
+      if (!response.ok) throw new Error(t('list.failedToUpdate'));
       toast.success(transaction.isActive ? t('list.pausedSuccess') : t('list.activatedSuccess'));
       if (onTransactionUpdated) onTransactionUpdated();
     } catch (error) {
@@ -94,7 +111,7 @@ export default function RecurringTransactionList({
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete transaction")
+        throw new Error(t('list.failedToDelete'))
       }
 
       toast.success(t('list.deleteSuccess'))
@@ -148,7 +165,7 @@ export default function RecurringTransactionList({
           <div className="flex justify-between items-start">
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-medium text-base">{transaction.category}</h3>
+                <h3 className="font-medium text-base">{getTranslatedCategoryName(transaction.category)}</h3>
                 <Badge variant={transaction.isActive ? "default" : "secondary"}>
                   {transaction.isActive ? t('status.active') : t('status.inactive')}
                 </Badge>
@@ -294,7 +311,7 @@ export default function RecurringTransactionList({
             </p>
             {deleteTransaction && (
               <div className="p-3 bg-muted rounded-lg mt-3">
-                <p className="font-medium">{deleteTransaction.category}</p>
+                <p className="font-medium">{getTranslatedCategoryName(deleteTransaction.category)}</p>
                 <p className="text-sm text-muted-foreground">
                   {formatCurrency(deleteTransaction.amount, userCurrency)} • {getFrequencyLabel(deleteTransaction.frequency, deleteTransaction.customDays)}
                 </p>

@@ -1,9 +1,9 @@
 {
-  "title": "Despesas Fixas",
-  "subtitle": "Gerencie suas transações recorrentes",
-  "createNew": "Criar Nova Despesa Fixa",
-  "edit": "Editar Despesa Fixa",
-  "delete": "Excluir Despesa Fixa",
+  "title": "Transações Fixas",
+  "subtitle": "Gerencie sua renda e despesas recorrentes",
+  "createNew": "Criar Nova Transação Fixa",
+  "edit": "Editar Transação Fixa",
+  "delete": "Excluir Transação Fixa",
   "markAsPaid": "Marcar como Pago",
   "pending": "Pendente",
   "paid": "Pago",
@@ -49,9 +49,9 @@
     "dayOfWeek": "Dia da Semana",
     "customDays": "A cada X Dias",
     "noEndDate": "Sem data final",
-    "save": "Salvar Despesa Fixa",
+    "save": "Salvar Transação Fixa",
     "cancel": "Cancelar",
-    "update": "Atualizar Despesa Fixa"
+    "update": "Atualizar Transação Fixa"
   },
   "validation": {
     "amountRequired": "Valor é obrigatório",
@@ -65,20 +65,20 @@
     "customDaysInvalid": "Dias personalizados deve ser um número positivo"
   },
   "messages": {
-    "createSuccess": "Despesa fixa criada com sucesso",
-    "updateSuccess": "Despesa fixa atualizada com sucesso",
-    "deleteSuccess": "Despesa fixa excluída com sucesso",
+    "createSuccess": "Transação fixa criada com sucesso",
+    "updateSuccess": "Transação fixa atualizada com sucesso",
+    "deleteSuccess": "Transação fixa excluída com sucesso",
     "paymentSuccess": "Pagamento registrado com sucesso",
-    "pauseSuccess": "Despesa fixa pausada",
-    "resumeSuccess": "Despesa fixa retomada",
-    "createError": "Erro ao criar despesa fixa",
-    "updateError": "Erro ao atualizar despesa fixa",
-    "deleteError": "Erro ao excluir despesa fixa",
+    "pauseSuccess": "Transação fixa pausada",
+    "resumeSuccess": "Transação fixa retomada",
+    "createError": "Erro ao criar transação fixa",
+    "updateError": "Erro ao atualizar transação fixa",
+    "deleteError": "Erro ao excluir transação fixa",
     "paymentError": "Erro ao registrar pagamento",
-    "loadError": "Erro ao carregar despesas fixas"
+    "loadError": "Erro ao carregar transações fixas"
   },
   "stats": {
-    "totalFixedExpenses": "Total de Despesas Fixas",
+    "totalFixedExpenses": "Total de Transações Fixas",
     "monthlyTotal": "Total Mensal",
     "pendingThisMonth": "Pendente Este Mês",
     "dueToday": "Vence Hoje",
@@ -86,14 +86,14 @@
     "overdue": "Atrasados"
   },
   "empty": {
-    "title": "Nenhuma Despesa Fixa",
-    "description": "Você ainda não criou nenhuma despesa fixa. Comece criando sua primeira transação recorrente.",
-    "action": "Criar Primeira Despesa Fixa"
+    "title": "Nenhuma Transação Fixa",
+    "description": "Você ainda não criou nenhuma transação fixa. Comece criando sua primeira transação recorrente.",
+    "action": "Criar Primeira Transação Fixa"
   },
   "page": {
-    "title": "Despesas Fixas",
+    "title": "Transações Fixas",
     "refresh": "Atualizar",
-    "newRecurring": "Nova Despesa Fixa"
+    "newRecurring": "Nova Transação Fixa"
   },
   "status": {
     "active": "Ativo",
@@ -104,22 +104,24 @@
     "expense": "Despesa"
   },
   "list": {
-    "noRecurringTransactions": "Nenhuma Despesa Fixa",
-    "createFirst": "Você ainda não criou nenhuma despesa fixa. Comece criando sua primeira transação recorrente.",
+    "noRecurringTransactions": "Nenhuma Transação Fixa",
+    "createFirst": "Você ainda não criou nenhuma transação fixa. Comece criando sua primeira transação recorrente.",
     "nextDue": "Próximo vencimento",
     "since": "Desde",
     "edit": "Editar",
     "pause": "Pausar",
     "activate": "Ativar",
     "delete": "Excluir",
-    "fetchError": "Erro ao carregar despesas fixas",
-    "pausedSuccess": "Despesa fixa pausada com sucesso",
-    "activatedSuccess": "Despesa fixa ativada com sucesso",
-    "updateError": "Erro ao atualizar despesa fixa",
-    "deleteSuccess": "Despesa fixa excluída com sucesso",
-    "deleteError": "Erro ao excluir despesa fixa",
+    "fetchError": "Erro ao carregar transações fixas",
+    "pausedSuccess": "Transação fixa pausada com sucesso",
+    "activatedSuccess": "Transação fixa ativada com sucesso",
+    "updateError": "Erro ao atualizar transação fixa",
+    "deleteSuccess": "Transação fixa excluída com sucesso",
+    "deleteError": "Erro ao excluir transação fixa",
+    "failedToUpdate": "Falha ao atualizar",
+    "failedToDelete": "Falha ao excluir transação",
     "deleteConfirmTitle": "Confirmar exclusão",
-    "deleteConfirmMessage": "Tem certeza que deseja excluir esta despesa fixa? Esta ação não pode ser desfeita.",
+    "deleteConfirmMessage": "Tem certeza que deseja excluir esta transação fixa? Esta ação não pode ser desfeita.",
     "cancel": "Cancelar",
     "deleting": "Excluindo..."
   },
@@ -127,8 +129,8 @@
     "days": "dias"
   },
   "form": {
-    "createTitle": "Criar Nova Despesa Fixa",
-    "editTitle": "Editar Despesa Fixa",
+    "createTitle": "Criar Nova Transação Fixa",
+    "editTitle": "Editar Transação Fixa",
     "amount": "Valor",
     "type": "Tipo",
     "selectType": "Selecionar tipo",
@@ -150,17 +152,17 @@
     "noEndDate": "Sem data final",
     "optional": "(opcional)",
     "isActive": "Ativo",
-    "save": "Salvar Despesa Fixa",
+    "save": "Salvar Transação Fixa",
     "cancel": "Cancelar",
-    "update": "Atualizar Despesa Fixa",
-    "create": "Criar Despesa Fixa",
+    "update": "Atualizar Transação Fixa",
+    "create": "Criar Transação Fixa",
     "creating": "Criando...",
     "updating": "Atualizando...",
     "submitting": "Enviando...",
-    "createSuccess": "Despesa fixa criada com sucesso",
-    "updateSuccess": "Despesa fixa atualizada com sucesso",
-    "createError": "Erro ao criar despesa fixa",
-    "updateError": "Erro ao atualizar despesa fixa",
+    "createSuccess": "Transação fixa criada com sucesso",
+    "updateSuccess": "Transação fixa atualizada com sucesso",
+    "createError": "Erro ao criar transação fixa",
+    "updateError": "Erro ao atualizar transação fixa",
     "unknownError": "Erro desconhecido"
   },
   "weekdays": {

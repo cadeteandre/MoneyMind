@@ -89,7 +89,7 @@ export async function processRecurringTransactions(): Promise<{
           rt.customDays
         );
 
-        // Atualizar a despesa fixa com a nova data
+        // Atualizar a transação fixa com a nova data
         await prisma.recurringTransaction.update({
           where: { id: rt.id },
           data: {
