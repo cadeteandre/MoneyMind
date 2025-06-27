@@ -152,14 +152,14 @@ export default function RecurringTransactionList({
                 <Badge variant={transaction.isActive ? "default" : "secondary"}>
                   {transaction.isActive ? t('status.active') : t('status.inactive')}
                 </Badge>
-                <Badge variant={transaction.type === "INCOME" ? "default" : "destructive"}>
+                <Badge variant={transaction.type === "INCOME" ? "success" : "destructive"}>
                   {transaction.type === "INCOME" ? t('type.income') : t('type.expense')}
                 </Badge>
               </div>
               
-              {transaction.description && (
+              {transaction.description ? (
                 <p className="text-sm text-muted-foreground">{transaction.description}</p>
-              )}
+              ) : null}
               
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
@@ -188,7 +188,7 @@ export default function RecurringTransactionList({
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 w-8 p-0">
+                  <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -202,13 +202,13 @@ export default function RecurringTransactionList({
                       Object.defineProperty(closeEvent, "key", { value: "Escape" })
                       document.dispatchEvent(closeEvent)
                     }}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-muted"
                   >
                     <Edit className="mr-2 h-4 w-4" />
                     {t('list.edit')}
                   </DropdownMenuItem>
                   
-                  <DropdownMenuItem onClick={() => toggleActiveStatus(transaction)}>
+                  <DropdownMenuItem onClick={() => toggleActiveStatus(transaction)} className="cursor-pointer hover:bg-muted">
                     {transaction.isActive ? (
                       <>
                         <Pause className="mr-2 h-4 w-4" />
@@ -233,7 +233,7 @@ export default function RecurringTransactionList({
                       Object.defineProperty(closeEvent, "key", { value: "Escape" })
                       document.dispatchEvent(closeEvent)
                     }}
-                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    className="cursor-pointer text-red-600 focus:text-red-600 hover:bg-muted"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     {t('list.delete')}

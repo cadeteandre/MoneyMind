@@ -27,18 +27,24 @@ const formSchema = z.object({
   dayOfMonth: z.number().min(1).max(31).optional(),
   dayOfWeek: z.number().min(0).max(6).optional(),
   startDate: z.date(),
-  endDate: z.preprocess((val) => {
-    // Se for string vazia ou null/undefined, retornar undefined
-    if (!val || val === '') return undefined;
-    // Se for uma string de data válida, converter para Date
-    if (typeof val === 'string') return new Date(val);
-    // Se já for Date, manter como está
-    return val;
-  }, z.date().optional()),
+  endDate: z.union([z.date(), z.undefined()]).optional(),
   isActive: z.boolean(),
 });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = {
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+  category: string;
+  categoryId?: string;
+  description?: string;
+  frequency: "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "QUARTERLY" | "SEMIANNUALLY" | "ANNUALLY" | "CUSTOM";
+  customDays?: number;
+  dayOfMonth?: number;
+  dayOfWeek?: number;
+  startDate: Date;
+  endDate?: Date;
+  isActive: boolean;
+};
 
 export interface RecurringTransactionFormProps {
   onSuccess?: () => void;
@@ -351,7 +357,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
             value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
             min={startDate ? format(startDate, "yyyy-MM-dd") : undefined}
             onChange={(e) => {
-              const newDate = e.target.value ? new Date(e.target.value) : null;
+              const newDate = e.target.value ? new Date(e.target.value) : undefined;
               setValue("endDate", newDate);
             }}
             onClick={(e) => {
@@ -384,11 +390,12 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
             variant="outline" 
             onClick={onClose}
             disabled={isSubmitting}
+            className="cursor-pointer"
           >
             {t('form.cancel')}
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting} className="cursor-pointer">
           {isSubmitting ? t('form.submitting') : (isEditing ? t('form.update') : t('form.create'))}
         </Button>
       </div>
