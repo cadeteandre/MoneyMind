@@ -4,20 +4,7 @@ CREATE TYPE "RecurrenceFrequency" AS ENUM ('WEEKLY', 'BIWEEKLY', 'MONTHLY', 'QUA
 -- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'OVERDUE', 'SKIPPED');
 
--- AlterTable
-ALTER TABLE "Transaction" ADD COLUMN     "categoryId" TEXT;
-
--- CreateTable
-CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "type" "TransactionType" NOT NULL,
-    "isDefault" BOOLEAN NOT NULL DEFAULT false,
-    "userId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
-);
+-- Note: Category table and categoryId column already exist in production, skipping their creation
 
 -- CreateTable
 CREATE TABLE "RecurringTransaction" (
@@ -60,18 +47,6 @@ CREATE TABLE "RecurringPayment" (
 );
 
 -- CreateIndex
-CREATE INDEX "Category_type_idx" ON "Category"("type");
-
--- CreateIndex
-CREATE INDEX "Category_isDefault_idx" ON "Category"("isDefault");
-
--- CreateIndex
-CREATE INDEX "Category_userId_idx" ON "Category"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Category_name_userId_key" ON "Category"("name", "userId");
-
--- CreateIndex
 CREATE INDEX "RecurringTransaction_userId_idx" ON "RecurringTransaction"("userId");
 
 -- CreateIndex
@@ -98,13 +73,7 @@ CREATE INDEX "RecurringPayment_dueDate_idx" ON "RecurringPayment"("dueDate");
 -- CreateIndex
 CREATE INDEX "RecurringPayment_paidDate_idx" ON "RecurringPayment"("paidDate");
 
--- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
+-- AddForeignKey (only for RecurringTransaction, Category relationship already exists)
 ALTER TABLE "RecurringTransaction" ADD CONSTRAINT "RecurringTransaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
