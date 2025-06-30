@@ -72,5 +72,20 @@
     "addTransaction": "Add Transaction",
     "export": "Export",
     "settings": "Settings"
+  },
+  "recurringWidget": {
+    "title": "Upcoming Payments",
+    "viewAll": "View All",
+    "noUpcoming": "No upcoming payments",
+    "createFirst": "Create Fixed Transaction",
+    "managePayments": "Manage Payments",
+    "overdue": "Overdue",
+    "pending": "Pending",
+    "weekly": "Weekly",
+    "biweekly": "Biweekly",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "semiannually": "Semiannually",
+    "annually": "Annually"
   }
 } 

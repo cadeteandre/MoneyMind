@@ -69,8 +69,23 @@
   "savingsRate": "Sparquote",
   "activeCategories": "Aktive Kategorien",
   "actions": {
-    "addTransaction": "Transaktion Hinzufügen",
+    "addTransaction": "Transaktion hinzufügen",
     "export": "Exportieren",
     "settings": "Einstellungen"
+  },
+  "recurringWidget": {
+    "title": "Anstehende Zahlungen",
+    "viewAll": "Alle anzeigen",
+    "noUpcoming": "Keine anstehenden Zahlungen",
+    "createFirst": "Feste Transaktion erstellen",
+    "managePayments": "Zahlungen verwalten",
+    "overdue": "Überfällig",
+    "pending": "Ausstehend",
+    "weekly": "Wöchentlich",
+    "biweekly": "Zweiwöchentlich",
+    "monthly": "Monatlich",
+    "quarterly": "Vierteljährlich",
+    "semiannually": "Halbjährlich",
+    "annually": "Jährlich"
   }
 } 

@@ -1,8 +1,10 @@
 {
-  "dashboard": "Dashboard",
+  "dashboard": "Painel",
   "overview": "Visão Geral",
   "profile": "Perfil",
   "transactions": "Transações",
+  "recurringTransactions": "Transações Fixas",
+  "pendingPayments": "Pagamentos Pendentes",
   "home": "Página Inicial",
   "demoMode": "Modo Demo",
   "readyToStart": "Pronto para começar?",

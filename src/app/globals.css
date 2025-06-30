@@ -218,4 +218,73 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  /* Text truncation utilities for better mobile layout */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Enhanced mobile-first responsive utilities */
+  .container-mobile {
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-mobile {
+      max-width: 640px;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-mobile {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-mobile {
+      max-width: 1024px;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  /* Mobile-optimized spacing */
+  .space-mobile > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .space-mobile > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .space-mobile > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 1.5rem;
+    }
+  }
 }
