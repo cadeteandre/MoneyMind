@@ -9,6 +9,8 @@ import { formatCurrency } from "@/lib/utils";
 import { useCurrency } from "./providers/currency-provider";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation';
+import { useCategories } from '@/hooks/useCategories';
 import { format } from "date-fns";
 import Link from "next/link";
 import { Skeleton } from "./ui/skeleton";
@@ -31,6 +33,21 @@ export const RecurringTransactionsWidget: React.FC = () => {
   const { userCurrency } = useCurrency();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
+
+  // Hooks para tradução de categorias
+  const { categories } = useCategories({ type: 'ALL' });
+  const { translateCategoryName } = useCategoryTranslation();
+
+  // Função para traduzir nome da categoria
+  const getTranslatedCategoryName = (categoryName: string) => {
+    // Verificar se a categoria existe no banco (é padrão)
+    const categoryObj = categories.find(cat => cat.name === categoryName);
+    if (categoryObj && categoryObj.isDefault) {
+      return translateCategoryName(categoryName, true);
+    }
+    // Se não for categoria padrão, manter nome original
+    return categoryName;
+  };
 
   const fetchUpcomingPayments = async () => {
     setIsLoading(true);
@@ -148,7 +165,7 @@ export const RecurringTransactionsWidget: React.FC = () => {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <h4 className="font-medium text-sm">
-                      {payment.recurringTransaction.category}
+                      {getTranslatedCategoryName(payment.recurringTransaction.category)}
                     </h4>
                     {getStatusBadge(payment)}
                   </div>
