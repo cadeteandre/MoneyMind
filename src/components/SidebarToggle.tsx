@@ -4,7 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { 
+  Menu, 
+  X, 
+  LayoutDashboard, 
+  Receipt, 
+  RotateCcw, 
+  Clock, 
+  User, 
+  Home 
+} from "lucide-react";
 import { ThemeToggle } from './theme-toggle';
 import { useLanguage } from './providers/language-provider';
 import { LanguageSelector } from './LanguageSelector';
@@ -80,67 +89,73 @@ export default function SidebarToggle() {
           <li>
             <Link
               href="/dashboard"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('overview')}
+              <LayoutDashboard className="h-5 w-5 flex-shrink-0" />
+              <span>{t('overview')}</span>
             </Link>
           </li>
           <li>
             <Link
               href="/dashboard/transactions"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('transactions')}
+              <Receipt className="h-5 w-5 flex-shrink-0" />
+              <span>{t('transactions')}</span>
             </Link>
           </li>
           <li>
             <Link
               href="/dashboard/recurring-transactions"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('recurringTransactions')}
+              <RotateCcw className="h-5 w-5 flex-shrink-0" />
+              <span>{t('recurringTransactions')}</span>
             </Link>
           </li>
           <li>
             <Link
               href="/dashboard/pending-payments"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('pendingPayments')}
+              <Clock className="h-5 w-5 flex-shrink-0" />
+              <span>{t('pendingPayments')}</span>
             </Link>
           </li>
           <li>
             <Link
               href="/dashboard/profile"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('profile')}
+              <User className="h-5 w-5 flex-shrink-0" />
+              <span>{t('profile')}</span>
             </Link>
           </li>
           <li>
             <Link
               href="/"
-              className="block px-4 py-2 rounded-lg transition-colors 
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors 
                       text-gray-700 hover:bg-gray-300 hover:text-gray-900
                       dark:text-gray-300 dark:hover:bg-black dark:hover:text-white"
               onClick={handleLinkClick}
             >
-              {t('home')}
+              <Home className="h-5 w-5 flex-shrink-0" />
+              <span>{t('home')}</span>
             </Link>
           </li>
         </ul>
