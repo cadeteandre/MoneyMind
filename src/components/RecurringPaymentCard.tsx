@@ -9,6 +9,8 @@ import { formatCurrency } from "@/lib/utils";
 import { useCurrency } from "./providers/currency-provider";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
+import { useCategoryTranslation } from '@/hooks/useCategoryTranslation';
+import { useCategories } from '@/hooks/useCategories';
 import { format } from "date-fns";
 
 interface RecurringPaymentCardProps {
@@ -33,6 +35,21 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
   const { userCurrency } = useCurrency();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'recurring-transactions');
+  
+  // Hooks para tradução de categorias
+  const { categories } = useCategories({ type: 'ALL' });
+  const { translateCategoryName } = useCategoryTranslation();
+
+  // Função para traduzir nome da categoria
+  const getTranslatedCategoryName = (categoryName: string) => {
+    // Verificar se a categoria existe no banco (é padrão)
+    const categoryObj = categories.find(cat => cat.name === categoryName);
+    if (categoryObj && categoryObj.isDefault) {
+      return translateCategoryName(categoryName, true);
+    }
+    // Se não for categoria padrão, manter nome original
+    return categoryName;
+  };
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
@@ -72,7 +89,7 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-3 sm:space-y-0">
         <div className="space-y-2 flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-            <h3 className="font-medium text-sm sm:text-base truncate">{payment.recurringTransaction.category}</h3>
+            <h3 className="font-medium text-sm sm:text-base truncate">{getTranslatedCategoryName(payment.recurringTransaction.category)}</h3>
             <div className="flex flex-wrap items-center gap-1 sm:gap-2">
               <Badge variant={getStatusBadgeVariant(payment.status)} className="text-xs">
                 {getStatusLabel(payment.status)}
