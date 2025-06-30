@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,19 +15,19 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { Skeleton } from "./ui/skeleton";
 
-interface UpcomingPayment {
+type UpcomingPayment = {
   id: string;
-  dueDate: Date;
   amount: number;
-  status: string;
+  dueDate: string;
+  status: 'PENDING' | 'OVERDUE';
   recurringTransaction: {
+    frequency: string;
     category: string;
     type: "INCOME" | "EXPENSE";
-    frequency: string;
   };
-}
+};
 
-export const RecurringTransactionsWidget: React.FC = () => {
+export const RecurringTransactionsWidget = React.memo(() => {
   const [upcomingPayments, setUpcomingPayments] = useState<UpcomingPayment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { userCurrency } = useCurrency();
@@ -38,18 +38,20 @@ export const RecurringTransactionsWidget: React.FC = () => {
   const { categories } = useCategories({ type: 'ALL' });
   const { translateCategoryName } = useCategoryTranslation();
 
-  // Função para traduzir nome da categoria
-  const getTranslatedCategoryName = (categoryName: string) => {
-    // Verificar se a categoria existe no banco (é padrão)
-    const categoryObj = categories.find(cat => cat.name === categoryName);
-    if (categoryObj && categoryObj.isDefault) {
-      return translateCategoryName(categoryName, true);
-    }
-    // Se não for categoria padrão, manter nome original
-    return categoryName;
-  };
+  // Função para traduzir nome da categoria memoizada
+  const getTranslatedCategoryName = React.useMemo(() => {
+    return (categoryName: string) => {
+      // Verificar se a categoria existe no banco (é padrão)
+      const categoryObj = categories.find(cat => cat.name === categoryName);
+      if (categoryObj && categoryObj.isDefault) {
+        return translateCategoryName(categoryName, true);
+      }
+      // Se não for categoria padrão, manter nome original
+      return categoryName;
+    };
+  }, [categories, translateCategoryName]);
 
-  const fetchUpcomingPayments = async () => {
+  const fetchUpcomingPayments = React.useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/recurring-payments?status=PENDING,OVERDUE&limit=5');
@@ -67,30 +69,32 @@ export const RecurringTransactionsWidget: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchUpcomingPayments();
-  }, []);
+  }, [fetchUpcomingPayments]);
+
+  const getStatusBadge = (payment: UpcomingPayment) => {
+    if (payment.status === 'OVERDUE') {
+      return <Badge variant="destructive" className="text-xs">{t('recurringWidget.overdue')}</Badge>;
+    }
+    return <Badge variant="default" className="text-xs">{t('recurringWidget.pending')}</Badge>;
+  };
 
   const getFrequencyLabel = (frequency: string) => {
     switch (frequency) {
-      case 'WEEKLY': return t('recurringWidget.weekly');
-      case 'BIWEEKLY': return t('recurringWidget.biweekly');
-      case 'MONTHLY': return t('recurringWidget.monthly');
-      case 'QUARTERLY': return t('recurringWidget.quarterly');
-      case 'SEMIANNUALLY': return t('recurringWidget.semiannually');
-      case 'ANNUALLY': return t('recurringWidget.annually');
-      default: return frequency;
+      case 'WEEKLY':
+        return t('frequency.weekly');
+      case 'MONTHLY':
+        return t('frequency.monthly');
+      case 'QUARTERLY':
+        return t('frequency.quarterly');
+      case 'YEARLY':
+        return t('frequency.yearly');
+      default:
+        return frequency;
     }
-  };
-
-  const getStatusBadge = (payment: UpcomingPayment) => {
-    const isOverdue = new Date(payment.dueDate) < new Date();
-    if (isOverdue) {
-      return <Badge variant="destructive">{t('recurringWidget.overdue')}</Badge>;
-    }
-    return <Badge variant="default">{t('recurringWidget.pending')}</Badge>;
   };
 
   return (
@@ -122,38 +126,24 @@ export const RecurringTransactionsWidget: React.FC = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      
+      <CardContent className="pt-2">
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-3 w-32" />
+                  <Skeleton className="h-3 w-16" />
                 </div>
-                <div className="text-right space-y-2">
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-3 w-20" />
-                </div>
+                <Skeleton className="h-4 w-16" />
               </div>
             ))}
           </div>
         ) : upcomingPayments.length === 0 ? (
           <div className="text-center py-6">
             <Calendar className="mx-auto h-8 w-8 text-muted-foreground" />
-            <p className="mt-2 text-sm text-muted-foreground">
-              {t('recurringWidget.noUpcoming')}
-            </p>
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-3"
-              asChild
-            >
-              <Link href="/dashboard/recurring-transactions">
-                {t('recurringWidget.createFirst')}
-              </Link>
-            </Button>
+            <p className="mt-2 text-sm text-muted-foreground">{t('recurringWidget.noUpcoming')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -210,4 +200,6 @@ export const RecurringTransactionsWidget: React.FC = () => {
       </CardContent>
     </Card>
   );
-}; 
+});
+
+RecurringTransactionsWidget.displayName = 'RecurringTransactionsWidget'; 
