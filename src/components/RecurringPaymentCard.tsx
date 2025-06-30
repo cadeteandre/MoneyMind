@@ -1,6 +1,8 @@
 "use client";
 
+import React from "react";
 import type { IRecurringPayment } from "@/interfaces/IRecurringTransaction";
+import type { ICategory } from "@/interfaces/ICategory";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +12,6 @@ import { useCurrency } from "./providers/currency-provider";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
 import { useCategoryTranslation } from '@/hooks/useCategoryTranslation';
-import { useCategories } from '@/hooks/useCategories';
 import { format } from "date-fns";
 
 interface RecurringPaymentCardProps {
@@ -24,32 +25,34 @@ interface RecurringPaymentCardProps {
   onPay?: (payment: IRecurringPayment) => void;
   onSkip?: (payment: IRecurringPayment) => void;
   isProcessing?: boolean;
+  categories?: ICategory[]; // Nova prop opcional para evitar múltiplas chamadas da API
 }
 
-export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
+export const RecurringPaymentCard = React.memo<RecurringPaymentCardProps>(({
   payment,
   onPay,
   onSkip,
   isProcessing = false,
+  categories = [],
 }) => {
   const { userCurrency } = useCurrency();
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'recurring-transactions');
   
-  // Hooks para tradução de categorias
-  const { categories } = useCategories({ type: 'ALL' });
   const { translateCategoryName } = useCategoryTranslation();
 
-  // Função para traduzir nome da categoria
-  const getTranslatedCategoryName = (categoryName: string) => {
-    // Verificar se a categoria existe no banco (é padrão)
-    const categoryObj = categories.find(cat => cat.name === categoryName);
-    if (categoryObj && categoryObj.isDefault) {
-      return translateCategoryName(categoryName, true);
-    }
-    // Se não for categoria padrão, manter nome original
-    return categoryName;
-  };
+  // Função para traduzir nome da categoria usando as categorias passadas como prop
+  const getTranslatedCategoryName = React.useMemo(() => {
+    return (categoryName: string) => {
+      // Verificar se a categoria existe no banco (é padrão)
+      const categoryObj = categories.find(cat => cat.name === categoryName);
+      if (categoryObj && categoryObj.isDefault) {
+        return translateCategoryName(categoryName, true);
+      }
+      // Se não for categoria padrão, manter nome original
+      return categoryName;
+    };
+  }, [categories, translateCategoryName]);
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
@@ -170,4 +173,6 @@ export const RecurringPaymentCard: React.FC<RecurringPaymentCardProps> = ({
       </div>
     </Card>
   );
-}; 
+});
+
+RecurringPaymentCard.displayName = 'RecurringPaymentCard'; 
