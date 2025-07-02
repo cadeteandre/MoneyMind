@@ -160,8 +160,8 @@
   },
   "payments": {
     "pageTitle": "Ausstehende Zahlungen",
-    "processAll": "Alle Verarbeiten",
-    "processAllShort": "Verarbeiten",
+    "payAllPending": "Alle Ausstehenden Bezahlen",
+    "payAllPendingShort": "Alle Bezahlen",
     "total": "Gesamt",
     "all": "Alle",
     "allShort": "Alle",
@@ -178,9 +178,30 @@
     "paymentError": "Fehler bei der Verarbeitung der Zahlung",
     "skipSuccess": "Zahlung erfolgreich übersprungen",
     "skipError": "Fehler beim Überspringen der Zahlung",
-    "processAllSuccess": "Zahlungen erfolgreich verarbeitet:",
-    "processAllError": "Fehler bei der Verarbeitung der Zahlungen",
-    "skippedByUser": "Vom Benutzer übersprungen"
+    "payAllSuccess": "Alle Zahlungen erfolgreich verarbeitet:",
+    "payAllError": "Fehler bei der Verarbeitung der Zahlungen",
+    "skippedByUser": "Vom Benutzer übersprungen",
+    "confirmPay": {
+      "title": "Zahlung Bestätigen",
+      "description": "Dies markiert die Zahlung als bezahlt und erstellt einen Transaktionsdatensatz. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Zahlung Bestätigen",
+      "cancel": "Abbrechen",
+      "processing": "Verarbeitung..."
+    },
+    "confirmSkip": {
+      "title": "Überspringen Bestätigen",
+      "description": "Dies überspringt diese Zahlung ohne eine Transaktion zu erstellen. Die nächste Zahlung wird entsprechend der wiederkehrenden Frequenz geplant.",
+      "confirm": "Zahlung Überspringen",
+      "cancel": "Abbrechen",
+      "processing": "Verarbeitung..."
+    },
+    "confirmPayAll": {
+      "title": "Alle Ausstehenden Zahlungen Bezahlen",
+      "description": "Dies markiert alle ausstehenden Zahlungen als bezahlt und erstellt Transaktionsdatensätze für jede einzelne. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Alle Bezahlen",
+      "cancel": "Abbrechen",
+      "processing": "Alle Verarbeiten..."
+    }
   },
   "paymentStatus": {
     "pending": "Ausstehend",
