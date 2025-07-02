@@ -21,6 +21,7 @@ import { filteredTransactions } from "@/lib/utils"
 import { useLanguage } from "@/components/providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
 import { RecurringTransactionsWidget } from "@/components/RecurringTransactionsWidget"
+import { useCategories } from '@/hooks/useCategories'
 
 // Definir o tipo de Transaction compatível com TransactionList
 type TransactionWithDownload = ITransaction;
@@ -28,6 +29,9 @@ type TransactionWithDownload = ITransaction;
 export default function DashboardClient() {
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
+  
+  // Hook para carregar categorias antecipadamente
+  const { categories } = useCategories({ type: 'ALL' });
   
   // Estado para cada modal
   const [isHeaderModalOpen, setIsHeaderModalOpen] = useState(false)
@@ -381,6 +385,7 @@ export default function DashboardClient() {
                     transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter).slice(0, 3)}
                     onTransactionUpdated={() => fetchData()}
                     isLoading={isLoading}
+                    categories={categories}
                   />
                 )}
               </CardContent>
@@ -527,6 +532,7 @@ export default function DashboardClient() {
                     transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter)}
                     onTransactionUpdated={() => fetchData()}
                     isLoading={isLoading}
+                    categories={categories}
                   />
                 </div>
               )}

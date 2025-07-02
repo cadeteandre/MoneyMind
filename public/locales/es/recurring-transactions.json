@@ -160,8 +160,8 @@
   },
   "payments": {
     "pageTitle": "Pagos Pendientes",
-    "processAll": "Procesar Todos",
-    "processAllShort": "Procesar",
+    "payAllPending": "Pagar Todos Pendientes",
+    "payAllPendingShort": "Pagar Todos",
     "total": "Total",
     "all": "Todos",
     "allShort": "Todos",
@@ -178,9 +178,30 @@
     "paymentError": "Error al procesar pago",
     "skipSuccess": "Pago omitido con éxito",
     "skipError": "Error al omitir pago",
-    "processAllSuccess": "Pagos procesados con éxito:",
-    "processAllError": "Error al procesar pagos",
-    "skippedByUser": "Omitido por el usuario"
+    "payAllSuccess": "Todos los pagos procesados con éxito:",
+    "payAllError": "Error al procesar pagos",
+    "skippedByUser": "Omitido por el usuario",
+    "confirmPay": {
+      "title": "Confirmar Pago",
+      "description": "Esto marcará el pago como pagado y creará un registro de transacción. Esta acción no se puede deshacer.",
+      "confirm": "Confirmar Pago",
+      "cancel": "Cancelar",
+      "processing": "Procesando..."
+    },
+    "confirmSkip": {
+      "title": "Confirmar Omitir",
+      "description": "Esto omitirá este pago sin crear una transacción. El próximo pago se programará según la frecuencia recurrente.",
+      "confirm": "Omitir Pago",
+      "cancel": "Cancelar",
+      "processing": "Procesando..."
+    },
+    "confirmPayAll": {
+      "title": "Pagar Todos los Pagos Pendientes",
+      "description": "Esto marcará todos los pagos pendientes como pagados y creará registros de transacción para cada uno. Esta acción no se puede deshacer.",
+      "confirm": "Pagar Todos",
+      "cancel": "Cancelar",
+      "processing": "Procesando Todos..."
+    }
   },
   "paymentStatus": {
     "pending": "Pendiente",
