@@ -88,7 +88,8 @@ export default function PendingPaymentsPage() {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/recurring-payments?status=PENDING,OVERDUE');
+      // Remove status filter and include overdue explicitly, remove limit
+      const response = await fetch('/api/recurring-payments?includeOverdue=true&limit=50');
       if (!response.ok) throw new Error('Failed to fetch');
       const data = await response.json();
       const payments = data.payments || [];

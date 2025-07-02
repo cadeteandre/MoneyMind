@@ -59,7 +59,38 @@ export async function POST(req: Request) {
 
     // Calculate the next due date
     const start = new Date(startDate);
-    const nextDueDate = calculateNextDueDate(start, frequency, dayOfMonth, dayOfWeek, customDays);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zerar horas para comparação de datas
+    start.setHours(0, 0, 0, 0);
+    
+    let nextDueDate: Date;
+    
+    if (start <= today) {
+      // Se a data de início é hoje ou no passado, o primeiro pagamento está pendente
+      // Usar a própria startDate como primeiro vencimento
+      nextDueDate = new Date(startDate);
+      
+      // Para frequências com dia específico, ajustar para o dia correto se necessário
+      if (frequency === 'MONTHLY' || frequency === 'QUARTERLY' || frequency === 'SEMIANNUALLY' || frequency === 'ANNUALLY') {
+        if (dayOfMonth !== null && dayOfMonth !== undefined) {
+          const lastDayOfMonth = new Date(nextDueDate.getFullYear(), nextDueDate.getMonth() + 1, 0).getDate();
+          const targetDay = Math.min(dayOfMonth, lastDayOfMonth);
+          nextDueDate.setDate(targetDay);
+        }
+      } else if (frequency === 'WEEKLY' || frequency === 'BIWEEKLY') {
+        if (dayOfWeek !== null && dayOfWeek !== undefined) {
+          const currentDayOfWeek = nextDueDate.getDay();
+          if (currentDayOfWeek !== dayOfWeek) {
+            // Se não é o dia correto da semana, ajustar para o próximo dia correto
+            const daysToAdd = (dayOfWeek - currentDayOfWeek + 7) % 7;
+            nextDueDate.setDate(nextDueDate.getDate() + daysToAdd);
+          }
+        }
+      }
+    } else {
+      // Se a data de início é no futuro, calcular normalmente
+      nextDueDate = calculateNextDueDate(start, frequency, dayOfMonth, dayOfWeek, customDays);
+    }
 
     // Create the recurring transaction
     const recurringTransaction = await prisma.recurringTransaction.create({
