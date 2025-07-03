@@ -93,7 +93,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
 
   const frequency = watch("frequency");
   const startDate = watch("startDate");
-  const endDate = watch("endDate");
+  // const endDate = watch("endDate"); // Temporariamente comentado
   const isEditing = !!transaction;
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -143,7 +143,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         dayOfMonth: data.dayOfMonth,
         dayOfWeek: data.dayOfWeek,
         startDate: data.startDate,
-        endDate: data.endDate,
+        // endDate: data.endDate, // Temporariamente comentado
       };
 
       const response = await fetch(endpoint, {
@@ -170,7 +170,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
         dayOfMonth: undefined,
         dayOfWeek: undefined,
         startDate: new Date(),
-        endDate: undefined,
+        // endDate: undefined, // Temporariamente comentado
         isActive: true,
       });
 
@@ -310,7 +310,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
       )}
 
       {/* Datas */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 sm:gap-4">
         <div className="space-y-2">
           <label htmlFor="startDate-input" className="text-sm font-medium">{t('form.startDate')}</label>
           <div 
@@ -345,6 +345,8 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
           {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
         </div>
 
+        {/* Temporariamente removido - Data de Fim */}
+        {/* 
         <div className="space-y-2">
           <label htmlFor="endDate-input" className="text-sm font-medium">
             {t('form.endDate')}
@@ -378,6 +380,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
             />
           </div>
         </div>
+        */}
       </div>
 
       {/* Status Ativo */}
