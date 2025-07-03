@@ -38,12 +38,13 @@
     "saturday": "Sábado"
   },
   "validation": {
-    "amountRequired": "La cantidad es obligatoria",
-    "amountPositive": "La cantidad debe ser positiva",
-    "typeRequired": "El tipo es obligatorio",
-    "categoryRequired": "La categoría es obligatoria",
-    "frequencyRequired": "La frecuencia es obligatoria",
-    "startDateRequired": "La fecha de inicio es obligatoria",
+    "amountRequired": "El monto es requerido",
+    "amountPositive": "El monto debe ser positivo",
+    "typeRequired": "El tipo es requerido",
+    "categoryRequired": "La categoría es requerida",
+    "frequencyRequired": "La frecuencia es requerida",
+    "startDateRequired": "La fecha de inicio es requerida",
+    "startDateMinToday": "La fecha de inicio no puede ser anterior a hoy",
     "dayOfMonthInvalid": "El día del mes debe estar entre 1 y 31",
     "dayOfWeekInvalid": "El día de la semana debe estar entre 0 y 6",
     "customDaysInvalid": "Los días personalizados deben ser un número positivo"
