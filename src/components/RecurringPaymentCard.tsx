@@ -140,7 +140,7 @@ export const RecurringPaymentCard = React.memo<RecurringPaymentCardProps>(({
             </p>
           </div>
 
-          {payment.status === 'PENDING' && !isProcessing && (
+          {(payment.status === 'PENDING' || payment.status === 'OVERDUE') && !isProcessing && (
             <div className="flex flex-row sm:flex-col gap-2">
               <Button
                 size="sm"

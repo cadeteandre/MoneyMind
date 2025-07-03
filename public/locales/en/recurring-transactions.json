@@ -45,6 +45,7 @@
     "categoryRequired": "Category is required",
     "frequencyRequired": "Frequency is required",
     "startDateRequired": "Start date is required",
+    "startDateMinToday": "Start date cannot be before today",
     "dayOfMonthInvalid": "Day of month must be between 1 and 31",
     "dayOfWeekInvalid": "Day of week must be between 0 and 6",
     "customDaysInvalid": "Custom days must be a positive number"
@@ -161,8 +162,8 @@
   },
   "payments": {
     "pageTitle": "Pending Payments",
-    "processAll": "Process All",
-    "processAllShort": "Process",
+    "payAllPending": "Pay All Pending",
+    "payAllPendingShort": "Pay All",
     "total": "Total",
     "all": "All",
     "allShort": "All",
@@ -179,9 +180,30 @@
     "paymentError": "Error processing payment",
     "skipSuccess": "Payment skipped successfully",
     "skipError": "Error skipping payment",
-    "processAllSuccess": "Payments processed successfully:",
-    "processAllError": "Error processing payments",
-    "skippedByUser": "Skipped by user"
+    "payAllSuccess": "All payments processed successfully:",
+    "payAllError": "Error processing payments",
+    "skippedByUser": "Skipped by user",
+    "confirmPay": {
+      "title": "Confirm Payment",
+      "description": "This will mark the payment as paid and create a transaction record. This action cannot be undone.",
+      "confirm": "Confirm Payment",
+      "cancel": "Cancel",
+      "processing": "Processing..."
+    },
+    "confirmSkip": {
+      "title": "Confirm Skip",
+      "description": "This will skip this payment without creating a transaction. The next payment will be scheduled according to the recurring frequency.",
+      "confirm": "Skip Payment",
+      "cancel": "Cancel",
+      "processing": "Processing..."
+    },
+    "confirmPayAll": {
+      "title": "Pay All Pending Payments",
+      "description": "This will mark all pending payments as paid and create transaction records for each one. This action cannot be undone.",
+      "confirm": "Pay All",
+      "cancel": "Cancel",
+      "processing": "Processing All..."
+    }
   },
   "paymentStatus": {
     "pending": "Pending",

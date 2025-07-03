@@ -22,6 +22,7 @@ import { useLanguage } from "./providers/language-provider"
 import { useTranslation } from '@/app/i18n/client'
 import { useCategories } from '@/hooks/useCategories'
 import { useCategoryTranslation } from '@/hooks/useCategoryTranslation'
+import type { ICategory } from "@/interfaces/ICategory"
 
 // Usar a interface do frontend
 type Transaction = ITransaction;
@@ -30,12 +31,14 @@ interface TransactionListProps {
   transactions: Transaction[]
   onTransactionUpdated?: () => void
   isLoading?: boolean
+  categories?: ICategory[]
 }
 
 export default function TransactionList({
   transactions,
   onTransactionUpdated,
   isLoading = false,
+  categories,
 }: TransactionListProps) {
   const [openId, setOpenId] = useState<string | null>(null)
   const [imgUrl, setImgUrl] = useState<string | null>(null)
@@ -52,13 +55,16 @@ export default function TransactionList({
   const { t } = useTranslation(userLocale, 'transactions');
   
   // Hooks para tradução de categorias
-  const { categories } = useCategories({ type: 'ALL' });
+  const { categories: hookCategories } = useCategories({ type: 'ALL' });
   const { translateCategoryName } = useCategoryTranslation();
+
+  // Usar categorias da prop ou do hook
+  const availableCategories = categories || hookCategories;
 
   // Função para traduzir nome da categoria
   const getTranslatedCategoryName = (categoryName: string) => {
     // Verificar se a categoria existe no banco (é padrão)
-    const categoryObj = categories.find(cat => cat.name === categoryName);
+    const categoryObj = availableCategories.find(cat => cat.name === categoryName);
     if (categoryObj && categoryObj.isDefault) {
       return translateCategoryName(categoryName, true);
     }
@@ -107,16 +113,16 @@ export default function TransactionList({
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete transaction")
+        throw new Error(t('messages.deleteError'))
       }
 
-      toast.success("Transaction deleted successfully")
+      toast.success(t('messages.deleteSuccess'))
       setIsDeleteAlertOpen(false)
       setDeleteTransaction(null)
       if (onTransactionUpdated) onTransactionUpdated()
     } catch (error) {
       console.error("Error deleting transaction:", error)
-      toast.error("Failed to delete transaction")
+      toast.error(t('messages.deleteError'))
     } finally {
       setIsDeleting(false)
     }

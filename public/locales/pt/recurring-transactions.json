@@ -45,6 +45,7 @@
     "categoryRequired": "Categoria é obrigatória",
     "frequencyRequired": "Frequência é obrigatória",
     "startDateRequired": "Data de início é obrigatória",
+    "startDateMinToday": "Data de início não pode ser anterior à data atual",
     "dayOfMonthInvalid": "Dia do mês deve estar entre 1 e 31",
     "dayOfWeekInvalid": "Dia da semana deve estar entre 0 e 6",
     "customDaysInvalid": "Dias personalizados deve ser um número positivo"
@@ -161,8 +162,8 @@
   },
   "payments": {
     "pageTitle": "Pagamentos Pendentes",
-    "processAll": "Processar Todos",
-    "processAllShort": "Processar",
+    "payAllPending": "Pagar Todos Pendentes",
+    "payAllPendingShort": "Pagar Todos",
     "total": "Total",
     "all": "Todos",
     "allShort": "Todos",
@@ -179,9 +180,30 @@
     "paymentError": "Erro ao processar pagamento",
     "skipSuccess": "Pagamento pulado com sucesso",
     "skipError": "Erro ao pular pagamento",
-    "processAllSuccess": "Pagamentos processados com sucesso:",
-    "processAllError": "Erro ao processar pagamentos",
-    "skippedByUser": "Pulado pelo usuário"
+    "payAllSuccess": "Todos os pagamentos processados com sucesso:",
+    "payAllError": "Erro ao processar pagamentos",
+    "skippedByUser": "Pulado pelo usuário",
+    "confirmPay": {
+      "title": "Confirmar Pagamento",
+      "description": "Isso marcará o pagamento como pago e criará um registro de transação. Esta ação não pode ser desfeita.",
+      "confirm": "Confirmar Pagamento",
+      "cancel": "Cancelar",
+      "processing": "Processando..."
+    },
+    "confirmSkip": {
+      "title": "Confirmar Pular",
+      "description": "Isso pulará este pagamento sem criar uma transação. O próximo pagamento será agendado de acordo com a frequência recorrente.",
+      "confirm": "Pular Pagamento",
+      "cancel": "Cancelar",
+      "processing": "Processando..."
+    },
+    "confirmPayAll": {
+      "title": "Pagar Todos os Pagamentos Pendentes",
+      "description": "Isso marcará todos os pagamentos pendentes como pagos e criará registros de transação para cada um. Esta ação não pode ser desfeita.",
+      "confirm": "Pagar Todos",
+      "cancel": "Cancelar",
+      "processing": "Processando Todos..."
+    }
   },
   "paymentStatus": {
     "pending": "Pendente",

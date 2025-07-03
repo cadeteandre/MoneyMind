@@ -26,5 +26,9 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "deleting": "Eliminando..."
+  },
+  "messages": {
+    "deleteSuccess": "Transacción eliminada con éxito",
+    "deleteError": "Error al eliminar transacción"
   }
 } 

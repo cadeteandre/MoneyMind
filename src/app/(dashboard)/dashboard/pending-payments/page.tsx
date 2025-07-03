@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import type { IRecurringPayment } from "@/interfaces/IRecurringTransaction";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RecurringPaymentCard } from "@/components/RecurringPaymentCard";
 import { Calendar, RotateCcw, DollarSign } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,7 +26,24 @@ type PaymentWithTransaction = IRecurringPayment & {
 export default function PendingPaymentsPage() {
   const [payments, setPayments] = useState<PaymentWithTransaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [processingPayments, setProcessingPayments] = useState<Set<string>>(new Set());
+  
+  // Confirmation dialogs
+  const [payConfirmDialog, setPayConfirmDialog] = useState<{
+    isOpen: boolean;
+    payment: IRecurringPayment | null;
+    isProcessing: boolean;
+  }>({ isOpen: false, payment: null, isProcessing: false });
+  
+  const [skipConfirmDialog, setSkipConfirmDialog] = useState<{
+    isOpen: boolean;
+    payment: IRecurringPayment | null;
+    isProcessing: boolean;
+  }>({ isOpen: false, payment: null, isProcessing: false });
+  
+  const [payAllConfirmDialog, setPayAllConfirmDialog] = useState<{
+    isOpen: boolean;
+    isProcessing: boolean;
+  }>({ isOpen: false, isProcessing: false });
 
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'recurring-transactions');
@@ -42,8 +60,23 @@ export default function PendingPaymentsPage() {
       return { pendingPayments: [], overduePayments: [], totalPayments: 0 };
     }
     
-    const pending = payments.filter(p => p.status === 'PENDING');
-    const overdue = payments.filter(p => p.status === 'OVERDUE');
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today for comparison
+    
+    // Separate payments into overdue and pending based on due date
+    const overdue: PaymentWithTransaction[] = [];
+    const pending: PaymentWithTransaction[] = [];
+    
+    payments.forEach(payment => {
+      const dueDate = new Date(payment.dueDate);
+      dueDate.setHours(23, 59, 59, 999);
+      
+      if (dueDate < today || payment.status === 'OVERDUE') {
+        overdue.push(payment);
+      } else {
+        pending.push(payment);
+      }
+    });
     
     return {
       pendingPayments: pending,
@@ -55,7 +88,8 @@ export default function PendingPaymentsPage() {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/recurring-payments?status=PENDING,OVERDUE');
+      // Remove status filter and include overdue explicitly, remove limit
+      const response = await fetch('/api/recurring-payments?includeOverdue=true&limit=50');
       if (!response.ok) throw new Error('Failed to fetch');
       const data = await response.json();
       const payments = data.payments || [];
@@ -71,7 +105,7 @@ export default function PendingPaymentsPage() {
 
   const handlePayment = useCallback(async (payment: IRecurringPayment) => {
     try {
-      setProcessingPayments(prev => new Set(prev).add(payment.id));
+      setPayConfirmDialog(prev => ({ ...prev, isProcessing: true }));
       
       const response = await fetch(`/api/recurring-transactions/${payment.recurringTransactionId}/pay`, {
         method: 'POST',
@@ -89,22 +123,19 @@ export default function PendingPaymentsPage() {
       }
 
       toast.success(t('payments.paymentSuccess'));
+      setPayConfirmDialog({ isOpen: false, payment: null, isProcessing: false });
       fetchData();
     } catch (error) {
       console.error("Error processing payment:", error);
       toast.error(error instanceof Error ? error.message : t('payments.paymentError'));
     } finally {
-      setProcessingPayments(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(payment.id);
-        return newSet;
-      });
+      setPayConfirmDialog(prev => ({ ...prev, isProcessing: false }));
     }
   }, [t, fetchData]);
 
   const handleSkipPayment = useCallback(async (payment: IRecurringPayment) => {
     try {
-      setProcessingPayments(prev => new Set(prev).add(payment.id));
+      setSkipConfirmDialog(prev => ({ ...prev, isProcessing: true }));
       
       // Usar endpoint específico para pular pagamento sem criar transação
       const response = await fetch(`/api/recurring-transactions/${payment.recurringTransactionId}/skip`, {
@@ -122,38 +153,53 @@ export default function PendingPaymentsPage() {
       }
 
       toast.success(t('payments.skipSuccess'));
+      setSkipConfirmDialog({ isOpen: false, payment: null, isProcessing: false });
       fetchData();
     } catch (error) {
       console.error("Error skipping payment:", error);
       toast.error(error instanceof Error ? error.message : t('payments.skipError'));
     } finally {
-      setProcessingPayments(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(payment.id);
-        return newSet;
-      });
+      setSkipConfirmDialog(prev => ({ ...prev, isProcessing: false }));
     }
   }, [t, fetchData]);
 
-  const processAllPendingPayments = useCallback(async () => {
+  const payAllPendingPayments = useCallback(async () => {
     try {
-      const response = await fetch('/api/recurring-transactions/process', {
+      setPayAllConfirmDialog(prev => ({ ...prev, isProcessing: true }));
+      
+      const response = await fetch('/api/recurring-payments/pay-all', {
         method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to process payments');
+        throw new Error(errorData.error || 'Failed to pay all payments');
       }
 
       const result = await response.json();
-      toast.success(`${t('payments.processAllSuccess')} ${result.processed}`);
+      toast.success(`${t('payments.payAllSuccess')} ${result.results.succeeded}`);
+      setPayAllConfirmDialog({ isOpen: false, isProcessing: false });
       fetchData();
     } catch (error) {
-      console.error("Error processing all payments:", error);
-      toast.error(error instanceof Error ? error.message : t('payments.processAllError'));
+      console.error("Error paying all payments:", error);
+      toast.error(error instanceof Error ? error.message : t('payments.payAllError'));
+    } finally {
+      setPayAllConfirmDialog(prev => ({ ...prev, isProcessing: false }));
     }
   }, [t, fetchData]);
+
+  // Handlers for opening confirmation dialogs
+  const openPayConfirmDialog = useCallback((payment: IRecurringPayment) => {
+    setPayConfirmDialog({ isOpen: true, payment, isProcessing: false });
+  }, []);
+
+  const openSkipConfirmDialog = useCallback((payment: IRecurringPayment) => {
+    setSkipConfirmDialog({ isOpen: true, payment, isProcessing: false });
+  }, []);
+
+  const openPayAllConfirmDialog = useCallback(() => {
+    setPayAllConfirmDialog({ isOpen: true, isProcessing: false });
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -197,9 +243,9 @@ export default function PendingPaymentsPage() {
           <RecurringPaymentCard
             key={payment.id}
             payment={payment}
-            onPay={handlePayment}
-            onSkip={handleSkipPayment}
-            isProcessing={processingPayments.has(payment.id)}
+            onPay={openPayConfirmDialog}
+            onSkip={openSkipConfirmDialog}
+            isProcessing={false}
             categories={categories} // Passar categorias como prop para evitar múltiplas chamadas
           />
         ))}
@@ -207,7 +253,7 @@ export default function PendingPaymentsPage() {
     );
     PaymentsListComponent.displayName = 'PaymentsListComponent';
     return PaymentsListComponent;
-  }, [handlePayment, handleSkipPayment, processingPayments, categories]);
+  }, [openPayConfirmDialog, openSkipConfirmDialog, categories]);
 
   // Skeleton component memoizado
   const LoadingSkeleton = useMemo(() => {
@@ -265,13 +311,13 @@ export default function PendingPaymentsPage() {
           
           <Button 
             size="sm" 
-            onClick={processAllPendingPayments}
+            onClick={openPayAllConfirmDialog}
             disabled={isLoadingComplete || totalPayments === 0}
             className="w-full sm:w-auto"
           >
             <DollarSign className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">{t('payments.processAll')}</span>
-            <span className="sm:hidden">{t('payments.processAllShort')}</span>
+            <span className="hidden sm:inline">{t('payments.payAllPending')}</span>
+            <span className="sm:hidden">{t('payments.payAllPendingShort')}</span>
           </Button>
         </div>
       </div>
@@ -331,6 +377,117 @@ export default function PendingPaymentsPage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Pay Confirmation Dialog */}
+      <Dialog open={payConfirmDialog.isOpen} onOpenChange={(open) => {
+        if (!payConfirmDialog.isProcessing) {
+          setPayConfirmDialog({ isOpen: open, payment: null, isProcessing: false });
+        }
+      }}>
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
+          <DialogHeader>
+            <DialogTitle>{t('payments.confirmPay.title')}</DialogTitle>
+          </DialogHeader>
+          <div className="py-3">
+            <p className="text-sm text-muted-foreground">
+              {t('payments.confirmPay.description')}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-2">
+            <Button 
+              variant="outline" 
+              className="cursor-pointer" 
+              onClick={() => setPayConfirmDialog({ isOpen: false, payment: null, isProcessing: false })}
+              disabled={payConfirmDialog.isProcessing}
+            >
+              {t('payments.confirmPay.cancel')}
+            </Button>
+            <Button 
+              onClick={() => payConfirmDialog.payment && handlePayment(payConfirmDialog.payment)} 
+              disabled={payConfirmDialog.isProcessing}
+              className="cursor-pointer"
+            >
+              {payConfirmDialog.isProcessing ? t('payments.confirmPay.processing') : t('payments.confirmPay.confirm')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Skip Confirmation Dialog */}
+      <Dialog open={skipConfirmDialog.isOpen} onOpenChange={(open) => {
+        if (!skipConfirmDialog.isProcessing) {
+          setSkipConfirmDialog({ isOpen: open, payment: null, isProcessing: false });
+        }
+      }}>
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
+          <DialogHeader>
+            <DialogTitle>{t('payments.confirmSkip.title')}</DialogTitle>
+          </DialogHeader>
+          <div className="py-3">
+            <p className="text-sm text-muted-foreground">
+              {t('payments.confirmSkip.description')}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-2">
+            <Button 
+              variant="outline" 
+              className="cursor-pointer" 
+              onClick={() => setSkipConfirmDialog({ isOpen: false, payment: null, isProcessing: false })}
+              disabled={skipConfirmDialog.isProcessing}
+            >
+              {t('payments.confirmSkip.cancel')}
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => skipConfirmDialog.payment && handleSkipPayment(skipConfirmDialog.payment)} 
+              disabled={skipConfirmDialog.isProcessing}
+              className="cursor-pointer"
+            >
+              {skipConfirmDialog.isProcessing ? t('payments.confirmSkip.processing') : t('payments.confirmSkip.confirm')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Pay All Confirmation Dialog */}
+      <Dialog open={payAllConfirmDialog.isOpen} onOpenChange={(open) => {
+        if (!payAllConfirmDialog.isProcessing) {
+          setPayAllConfirmDialog({ isOpen: open, isProcessing: false });
+        }
+      }}>
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
+          <DialogHeader>
+            <DialogTitle>{t('payments.confirmPayAll.title')}</DialogTitle>
+          </DialogHeader>
+          <div className="py-3">
+            <p className="text-sm text-muted-foreground">
+              {t('payments.confirmPayAll.description')}
+            </p>
+            <div className="mt-3 p-3 bg-muted rounded-lg">
+              <p className="text-sm font-medium">
+                {t('payments.total')}: {totalPayments} {t('payments.all').toLowerCase()}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-2">
+            <Button 
+              variant="outline" 
+              className="cursor-pointer" 
+              onClick={() => setPayAllConfirmDialog({ isOpen: false, isProcessing: false })}
+              disabled={payAllConfirmDialog.isProcessing}
+            >
+              {t('payments.confirmPayAll.cancel')}
+            </Button>
+            <Button 
+              onClick={payAllPendingPayments} 
+              disabled={payAllConfirmDialog.isProcessing}
+              className="cursor-pointer"
+            >
+              {payAllConfirmDialog.isProcessing ? t('payments.confirmPayAll.processing') : t('payments.confirmPayAll.confirm')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

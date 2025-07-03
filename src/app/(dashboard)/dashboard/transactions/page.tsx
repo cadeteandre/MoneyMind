@@ -13,6 +13,7 @@ import FilterContainer from "@/components/FilterContainer";
 import { filteredTransactions } from "@/lib/utils";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
+import { useCategories } from '@/hooks/useCategories';
 
 export default function TransactionsPage() {
   const [isTransactionsHeaderModalOpen, setIsTransactionsHeaderModalOpen] = useState(false)
@@ -27,6 +28,9 @@ export default function TransactionsPage() {
 
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'dashboard');
+  
+  // Hook para carregar categorias antecipadamente
+  const { categories } = useCategories({ type: 'ALL' });
 
   const fetchData = async (startDate?: Date, endDate?: Date) => {
     setIsLoading(true)
@@ -199,6 +203,7 @@ export default function TransactionsPage() {
               transactions={filteredTransactions(transactions, searchTerm, typeFilter, categoryFilter)}
               onTransactionUpdated={() => fetchData(dateRange.startDate, dateRange.endDate)}
               isLoading={isLoading}
+              categories={categories}
             />
           </div>
         )}
