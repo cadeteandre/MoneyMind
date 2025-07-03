@@ -45,6 +45,7 @@
     "categoryRequired": "Categoria é obrigatória",
     "frequencyRequired": "Frequência é obrigatória",
     "startDateRequired": "Data de início é obrigatória",
+    "startDateMinToday": "Data de início não pode ser anterior à data atual",
     "dayOfMonthInvalid": "Dia do mês deve estar entre 1 e 31",
     "dayOfWeekInvalid": "Dia da semana deve estar entre 0 e 6",
     "customDaysInvalid": "Dias personalizados deve ser um número positivo"

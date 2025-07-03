@@ -44,6 +44,7 @@
     "categoryRequired": "Kategorie ist erforderlich",
     "frequencyRequired": "Häufigkeit ist erforderlich",
     "startDateRequired": "Startdatum ist erforderlich",
+    "startDateMinToday": "Startdatum kann nicht vor heute liegen",
     "dayOfMonthInvalid": "Tag des Monats muss zwischen 1 und 31 liegen",
     "dayOfWeekInvalid": "Wochentag muss zwischen 0 und 6 liegen",
     "customDaysInvalid": "Benutzerdefinierte Tage müssen eine positive Zahl sein"

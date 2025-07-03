@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import type { IRecurringTransaction, ICreateRecurringTransaction } from "@/interfaces/IRecurringTransaction";
 import { useLanguage } from "./providers/language-provider";
 import { useTranslation } from '@/app/i18n/client';
@@ -16,7 +16,7 @@ import { CategorySelector } from '@/components/CategorySelector';
 import { FrequencySelector } from './FrequencySelector';
 import { format } from "date-fns";
 
-const formSchema = z.object({
+const createFormSchema = (t: (key: string) => string) => z.object({
   amount: z.number().positive().multipleOf(0.01),
   type: z.enum(["INCOME", "EXPENSE"]),
   category: z.string().min(1),
@@ -26,7 +26,9 @@ const formSchema = z.object({
   customDays: z.number().positive().optional(),
   dayOfMonth: z.number().min(1).max(31).optional(),
   dayOfWeek: z.number().min(0).max(6).optional(),
-  startDate: z.date(),
+  startDate: z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), {
+    message: t('validation.startDateMinToday')
+  }),
   endDate: z.union([z.date(), z.undefined()]).optional(),
   isActive: z.boolean(),
 });
@@ -60,6 +62,9 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
   const { userLocale } = useLanguage();
   const { t } = useTranslation(userLocale, 'recurring-transactions');
   
+  // Create schema with translations
+  const formSchema = useMemo(() => createFormSchema(t), [t]);
+
   const {
     register,
     handleSubmit,

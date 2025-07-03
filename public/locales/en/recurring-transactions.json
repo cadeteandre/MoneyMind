@@ -45,6 +45,7 @@
     "categoryRequired": "Category is required",
     "frequencyRequired": "Frequency is required",
     "startDateRequired": "Start date is required",
+    "startDateMinToday": "Start date cannot be before today",
     "dayOfMonthInvalid": "Day of month must be between 1 and 31",
     "dayOfWeekInvalid": "Day of week must be between 0 and 6",
     "customDaysInvalid": "Custom days must be a positive number"
