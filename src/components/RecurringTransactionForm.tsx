@@ -16,7 +16,7 @@ import { CategorySelector } from '@/components/CategorySelector';
 import { FrequencySelector } from './FrequencySelector';
 import { format } from "date-fns";
 
-const createFormSchema = (t: (key: string) => string) => z.object({
+const createFormSchema = (t: (key: string) => string, isEditing: boolean = false) => z.object({
   amount: z.number().positive().multipleOf(0.01),
   type: z.enum(["INCOME", "EXPENSE"]),
   category: z.string().min(1),
@@ -26,9 +26,11 @@ const createFormSchema = (t: (key: string) => string) => z.object({
   customDays: z.number().positive().optional(),
   dayOfMonth: z.number().min(1).max(31).optional(),
   dayOfWeek: z.number().min(0).max(6).optional(),
-  startDate: z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), {
-    message: t('validation.startDateMinToday')
-  }),
+  startDate: isEditing 
+    ? z.date()
+    : z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), {
+        message: t('validation.startDateMinToday')
+      }),
   endDate: z.union([z.date(), z.undefined()]).optional(),
   isActive: z.boolean(),
 });
@@ -63,7 +65,7 @@ export const RecurringTransactionForm: React.FC<RecurringTransactionFormProps> =
   const { t } = useTranslation(userLocale, 'recurring-transactions');
   
   // Create schema with translations
-  const formSchema = useMemo(() => createFormSchema(t), [t]);
+  const formSchema = useMemo(() => createFormSchema(t, !!transaction), [t, transaction]);
 
   const {
     register,
