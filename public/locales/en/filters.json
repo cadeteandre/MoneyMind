@@ -18,5 +18,7 @@
   "last6Months": "Last 6 Months",
   "thisYear": "This Year",
   "lastYear": "Last Year",
-  "customRange": "Custom Range"
+  "customRange": "Custom Range",
+  "startDate": "Start Date",
+  "endDate": "End Date"
 } 

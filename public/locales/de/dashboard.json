@@ -86,6 +86,15 @@
     "monthly": "Monatlich",
     "quarterly": "Vierteljährlich",
     "semiannually": "Halbjährlich",
-    "annually": "Jährlich"
+    "annually": "Jährlich",
+    "frequency": {
+      "weekly": "Wöchentlich",
+      "biweekly": "Zweiwöchentlich",
+      "monthly": "Monatlich",
+      "quarterly": "Vierteljährlich",
+      "semiannually": "Halbjährlich",
+      "annually": "Jährlich",
+      "custom": "Benutzerdefiniert"
+    }
   }
 } 
