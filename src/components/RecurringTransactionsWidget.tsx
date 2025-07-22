@@ -85,13 +85,19 @@ export const RecurringTransactionsWidget = React.memo(() => {
   const getFrequencyLabel = (frequency: string) => {
     switch (frequency) {
       case 'WEEKLY':
-        return t('frequency.weekly');
+        return t('recurringWidget.frequency.weekly');
+      case 'BIWEEKLY':
+        return t('recurringWidget.frequency.biweekly');
       case 'MONTHLY':
-        return t('frequency.monthly');
+        return t('recurringWidget.frequency.monthly');
       case 'QUARTERLY':
-        return t('frequency.quarterly');
-      case 'YEARLY':
-        return t('frequency.yearly');
+        return t('recurringWidget.frequency.quarterly');
+      case 'SEMIANNUALLY':
+        return t('recurringWidget.frequency.semiannually');
+      case 'ANNUALLY':
+        return t('recurringWidget.frequency.annually');
+      case 'CUSTOM':
+        return t('recurringWidget.frequency.custom');
       default:
         return frequency;
     }
