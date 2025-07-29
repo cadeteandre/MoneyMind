@@ -8,7 +8,8 @@
   "pieChart": {
     "title": "Expenses by Category",
     "noData": "No expense data available",
-    "others": "Others",
+    "others": "Small Categories",
+    "fallbackOthers": "Minor Categories",
     "transactions": "transaction(s)",
     "groupedCategories": "Grouped categories"
   }

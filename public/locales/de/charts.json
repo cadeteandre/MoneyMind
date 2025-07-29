@@ -8,7 +8,8 @@
   "pieChart": {
     "title": "Ausgaben nach Kategorie",
     "noData": "Keine Ausgabendaten verfügbar",
-    "others": "Andere",
+    "others": "Kleine Kategorien",
+    "fallbackOthers": "Sonstige Kategorien",
     "transactions": "Transaktion(en)",
     "groupedCategories": "Gruppierte Kategorien"
   }
