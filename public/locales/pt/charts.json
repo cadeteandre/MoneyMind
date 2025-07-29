@@ -8,7 +8,8 @@
   "pieChart": {
     "title": "Despesas por Categoria",
     "noData": "Sem dados de despesas disponíveis",
-    "others": "Outros",
+    "others": "Categorias Pequenas",
+    "fallbackOthers": "Categorias Menores",
     "transactions": "transação(ões)",
     "groupedCategories": "Categorias agrupadas"
   }
