@@ -47,6 +47,23 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
     return categoryName;
   };
 
+  // Função inteligente para obter o rótulo do agrupamento automático
+  const getAutoGroupLabel = React.useMemo(() => {
+    if (!data || !t) return 'Outros';
+    
+    // Verificar se alguma categoria real, quando traduzida, conflita com a tradução padrão do agrupamento
+    const defaultAutoGroupLabel = t('pieChart.others');
+    const hasConflict = data.some(item => {
+      const translatedCategoryName = getTranslatedCategoryName(item.category);
+      return translatedCategoryName === defaultAutoGroupLabel;
+    });
+    
+    // Se há conflito, usar o fallback. Senão, usar a tradução padrão
+    return hasConflict 
+      ? (t('pieChart.fallbackOthers') || 'Categorias Menores')
+      : defaultAutoGroupLabel;
+  }, [data, t, categories]);
+
   // Normalize and aggregate data by category
   const normalizedData = React.useMemo(() => {
     const categoryMap = new Map<string, CategorySummary>();
@@ -82,7 +99,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
       const otherTotal = otherCategories.reduce((sum, item) => sum + item.total, 0);
       const otherCount = otherCategories.reduce((sum, item) => sum + item.count, 0);
       mainCategories.push({
-        category: t ? t('pieChart.others') : 'Outros',
+        category: getAutoGroupLabel,
         total: otherTotal,
         count: otherCount,
         // Adicione um campo opcional para detalhamento futuro
@@ -91,7 +108,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
     }
 
     return mainCategories;
-  }, [data, t]);
+  }, [data, getAutoGroupLabel]);
 
   // If there's no data, show a message
   if (!normalizedData || normalizedData.length === 0) {
@@ -114,7 +131,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
       const totalValue = normalizedData.reduce((sum, item) => sum + item.total, 0);
       const percent = ((data.total / totalValue) * 100).toFixed(1);
       
-      const displayName = data.category === (t ? t('pieChart.others') : 'Outros') 
+      const displayName = data.category === getAutoGroupLabel 
         ? data.category 
         : getTranslatedCategoryName(data.category);
 
@@ -208,7 +225,7 @@ export default function ExpensePieChart({ data }: ExpensePieChartProps) {
         <div className="grid grid-cols-1 gap-1 text-sm">
           {normalizedData.map((entry, index) => {
             const percent = ((entry.total / normalizedData.reduce((sum, item) => sum + item.total, 0)) * 100).toFixed(1);
-            const displayName = entry.category === (t ? t('pieChart.others') : 'Outros') 
+            const displayName = entry.category === getAutoGroupLabel 
               ? entry.category 
               : getTranslatedCategoryName(entry.category);
             
